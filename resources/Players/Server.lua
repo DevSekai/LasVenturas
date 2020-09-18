@@ -77,7 +77,7 @@ AddEventHandler('CreateIdentity', function(Mdp, Identity)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateIdentity")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateIdentity.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -104,7 +104,7 @@ AddEventHandler('CreateSkin', function(Mdp, PlySkin)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateSkin")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateSkin.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -138,22 +138,31 @@ AddEventHandler('GiveItem', function(Target, Mdp, ItemName, ItemCount)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	local ItemGiven = xPlayer.getInventoryItem(ItemName)
-	if Mdp == "Ntm" then
-		if xTarget.canCarryItem(ItemName, ItemCount) then
-			xPlayer.removeInventoryItem(ItemName, ItemCount)
-			xPlayer.showNotification("Vous avez donner x"..ItemCount.." "..ItemGiven.label.." à "..xTarget.name)
-			xTarget.addInventoryItem(ItemName, ItemCount)
-			xTarget.showNotification("Vous avez recu x"..ItemCount.." "..ItemGiven.label.." de "..xPlayer.name)
+	local ItemCount = xPlayer.getInventoryItem(ItemName).count
+	if ItemCount > 0 then
+		if Mdp == "Ntm" then
+			if xTarget.canCarryItem(ItemName, ItemCount) then
+				xPlayer.removeInventoryItem(ItemName, ItemCount)
+				xPlayer.showNotification("Vous avez donner x"..ItemCount.." "..ItemGiven.label.." à "..xTarget.name)
+				xTarget.addInventoryItem(ItemName, ItemCount)
+				xTarget.showNotification("Vous avez recu x"..ItemCount.." "..ItemGiven.label.." de "..xPlayer.name)
+			else
+				xPlayer.showNotification(xTarget.name.." n'a pas assez de place dans l'inventaire.")
+				xTarget.showNotification("Vous n'avez pas assez de place dans l'inventaire pour recevoir l'objet de "..xPlayer.name)
+			end
 		else
-			xPlayer.showNotification(xTarget.name.." n'a pas assez de place dans l'inventaire.")
-			xTarget.showNotification("Vous n'avez pas assez de place dans l'inventaire pour recevoir l'objet de "..xPlayer.name)
+			local playerId = source
+			local PlyName = GetPlayerName(playerId)
+			local PlyIp = GetPlayerEndpoint(playerId)
+			TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			DropPlayer(playerId, "Utilisation d'un executor.")
 		end
 	else
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem")
-		DropPlayer(playerId, "Utilisation d'un executor.")
+		TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem.\nDescription : Le joueur a voulu donner un item qu'il n'as pas sur lui.")
+		DropPlayer(playerId, "Détection d'un cheat.")
 	end
 end)
 
@@ -164,12 +173,18 @@ AddEventHandler('UseItem', function(Mdp, ItemName)
 	if Mdp == "Ntm" then
 		if ItemCount > 0 then
 			ESX.UseItem(source, ItemName)
+		else
+			local playerId = source
+			local PlyName = GetPlayerName(playerId)
+			local PlyIp = GetPlayerEndpoint(playerId)
+			TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			DropPlayer(playerId, "Détection d'un cheat.")
 		end
 	else
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu utiliser un item qu'il n'as pas sur lui.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -177,14 +192,23 @@ end)
 RegisterNetEvent('RemoveItem')
 AddEventHandler('RemoveItem', function(Mdp, ItemName, ItemCount)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	if Mdp == "Ntm" then
-		xPlayer.removeInventoryItem(ItemName, ItemCount)
+	local ItemCount = xPlayer.getInventoryItem(ItemName).count
+	if ItemCount > 0 then
+		if Mdp == "Ntm" then
+			xPlayer.removeInventoryItem(ItemName, ItemCount)
+		else
+			local playerId = source
+			local PlyName = GetPlayerName(playerId)
+			local PlyIp = GetPlayerEndpoint(playerId)
+			TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			DropPlayer(playerId, "Utilisation d'un executor.")
+		end
 	else
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem")
-		DropPlayer(playerId, "Utilisation d'un executor.")
+		TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem.\nDescription : Le joueur a voulu jeter un item qu'il n'a pas sur lui.")
+		DropPlayer(playerId, "Détection d'un cheat.")
 	end
 end)
 
