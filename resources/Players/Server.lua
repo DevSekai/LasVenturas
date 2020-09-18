@@ -138,8 +138,8 @@ AddEventHandler('GiveItem', function(Target, Mdp, ItemName, ItemCount)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	local ItemGiven = xPlayer.getInventoryItem(ItemName)
-	local ItemCount = xPlayer.getInventoryItem(ItemName).count
-	if ItemCount > 0 then
+	local ItemQte = xPlayer.getInventoryItem(ItemName).count
+	if ItemQte > 0 then
 		if Mdp == "Ntm" then
 			if xTarget.canCarryItem(ItemName, ItemCount) then
 				xPlayer.removeInventoryItem(ItemName, ItemCount)
@@ -169,9 +169,9 @@ end)
 RegisterNetEvent('UseItem')
 AddEventHandler('UseItem', function(Mdp, ItemName)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	local ItemCount = xPlayer.getInventoryItem(ItemName).count
+	local ItemQte = xPlayer.getInventoryItem(ItemName).count
 	if Mdp == "Ntm" then
-		if ItemCount > 0 then
+		if ItemQte > 0 then
 			ESX.UseItem(source, ItemName)
 		else
 			local playerId = source
@@ -192,8 +192,8 @@ end)
 RegisterNetEvent('RemoveItem')
 AddEventHandler('RemoveItem', function(Mdp, ItemName, ItemCount)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	local ItemCount = xPlayer.getInventoryItem(ItemName).count
-	if ItemCount > 0 then
+	local ItemQte = xPlayer.getInventoryItem(ItemName).count
+	if ItemQte > 0 then
 		if Mdp == "Ntm" then
 			xPlayer.removeInventoryItem(ItemName, ItemCount)
 		else
@@ -236,6 +236,82 @@ AddEventHandler('UpdatePlySkin', function(Mdp, PlySkin)
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
 		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UpdatePlySkin")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('GiveWeapon')
+AddEventHandler('GiveWeapon', function(Target, Mdp, WeaponLabel, WeaponName, Ammo)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Target)
+	if Mdp == "Ntm" then
+			xPlayer.removeWeapon(WeaponName, Ammo)
+            xTarget.addWeapon(WeaponName, Ammo)
+			xPlayer.showNotification("Vous avez donner "..WeaponLabel.." à "..xTarget.name)
+			xTarget.showNotification("Vous avez recu "..WeaponLabel.." de "..xPlayer.name)
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('RemoveWeapon')
+AddEventHandler('RemoveWeapon', function(Mdp, WeaponName, Ammo)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Target)
+	if Mdp == "Ntm" then
+		xPlayer.removeWeapon(WeaponName, Ammo)
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('GiveMoney')
+AddEventHandler('GiveMoney', function(Target, Mdp, MoneyType, Amount)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Target)
+    local xPlayerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+		if xPlayerMoney >= Amount then
+			xPlayer.removeAccountMoney(MoneyType, Amount)
+            xTarget.addAccountMoney(MoneyType, Amount)
+			xPlayer.showNotification("Vous avez donner "..Amount.." $ à "..xTarget.name)
+			xTarget.showNotification("Vous avez recu "..Amount.." $ de "..xPlayer.name)
+		else
+			xPlayer.showNotification("Vous n'avez pas assez d'argent.")
+		end
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('RemoveMoney')
+AddEventHandler('RemoveMoney', function(Mdp, MoneyType, Amount)
+	local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+		if xPlayerMoney >= Amount then
+			xPlayer.removeAccountMoney(MoneyType, Amount)
+			xPlayer.showNotification("Vous avez jeter "..Amount.." $")
+		else
+			xPlayer.showNotification("Vous n'avez pas assez d'argent.")
+		end
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)

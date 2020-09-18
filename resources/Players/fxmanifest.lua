@@ -22,9 +22,9 @@ client_scripts {
 }
 
 client_scripts {
-    'MenuIdentity.lua',
-    'MenuSkin.lua',
-    'MenuPersonal.lua',
+    'Menu/MenuIdentity.lua',
+    'Menu/MenuSkin.lua',
+    'Menu/MenuPersonal.lua',
 	'Client.lua',
 }
 server_scripts {
