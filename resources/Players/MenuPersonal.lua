@@ -2,14 +2,19 @@ PlyGroup = ""
 PlyWeight = ""
 MdpPersonal = "Ntm"
 invItems = {}
+invWeapon = {}
 
 RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
 RMenu:Get('Personnal', 'Principal'):SetSubtitle("~y~Menu personnel")
 RMenu:Get('Personnal', 'Principal'):DisplayGlare(false);
 
 RMenu.Add('Personnal', 'Inventory', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
-RMenu:Get('Personnal', 'Inventory'):SetSubtitle("~y~Sexe")
+RMenu:Get('Personnal', 'Inventory'):SetSubtitle("~y~Inventaire")
 RMenu:Get('Personnal', 'Inventory'):DisplayGlare(false);
+
+RMenu.Add('Personnal', 'Weaponry', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'Weaponry'):SetSubtitle("~y~Gestion des armes")
+RMenu:Get('Personnal', 'Weaponry'):DisplayGlare(false);
 
 Citizen.CreateThread(function ()
 	while true do
@@ -21,7 +26,8 @@ Citizen.CreateThread(function ()
 			end)
 		end
 		if 	RageUI.Visible(RMenu:Get('Personnal', 'Principal')) or 
-			RageUI.Visible(RMenu:Get('Personnal', 'Inventory')) 
+			RageUI.Visible(RMenu:Get('Personnal', 'Inventory')) or
+			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry'))
 		then
 			OpenPersonalMenu()
 		end 
@@ -44,6 +50,17 @@ function OpenPersonalMenu()
 				end)
 			end,
         },RMenu:Get('Personnal', 'Inventory'))
+        RageUI.Item.Button("Gestion des armes", "", {}, true, {
+        	onSelected = function()
+				invWeapon = {}
+			    ESX.TriggerServerCallback('getPlayerInventory', function(loadout)
+					for i=1, #loadout.weapons, 1 do
+					    local weapon = loadout.weapons[i]
+						table.insert(invWeapon, {label = ESX.GetWeaponLabel(weapon.name), value = weapon.name, itemType = 'item_weapon', amount = weapon.ammo})
+					end
+				end)
+			end,
+        },RMenu:Get('Personnal', 'Weaponry'))
         RageUI.Item.Button("Update Skin", "", {}, true, {
         	onSelected = function()
 				ESX.TriggerServerCallback('GetPlySkin', function(Skin)
@@ -84,7 +101,7 @@ function OpenPersonalMenu()
 							local QuantiteToGive = KeyboardInput("Quantité", 20)
 							if tonumber(QuantiteToGive) ~= nil then
 								if tonumber(QuantiteToGive) <= v.count then
-									TriggerServerEvent('GiveItem', GetPlayerServerId(PlayerId()), MdpPersonal, itemName, tonumber(QuantiteToGive))
+									TriggerServerEvent('GiveItem', GetPlayerServerId(closestPlayer), MdpPersonal, itemName, tonumber(QuantiteToGive))
 									invItems = {}
 								    ESX.TriggerServerCallback('getPlayerInventory', function(inventory)
 										for i=1, #inventory.items, 1 do
@@ -125,6 +142,20 @@ function OpenPersonalMenu()
 						else
 							ESX.ShowNotification("Vous ne pouvez pas effectuez cette action")
 						end
+					end
+				end,
+			})
+	    end
+    end)
+
+	RageUI.IsVisible(RMenu:Get('Personnal', 'Weaponry'), function()
+	    for _,v in pairs (invWeapon) do
+			RageUI.Item.List(v.label.." x"..v.amount, {"~b~Donner munitions~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+				onSelected = function(Index, Items)
+					weaponName = v.value
+					if Index == 1 then
+					elseif Index == 2 then
+					else
 					end
 				end,
 			})
