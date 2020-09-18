@@ -172,3 +172,11 @@ function ApplySkin(Ped, Skin)
 	if Result.PantalonIndex and Result.PantalonIndex2 then SetPedComponentVariation(PlayerPedId(Ped), 4, Result.PantalonIndex, Result.PantalonIndex2, 2) end
 	if Result.ChaussureIndex and Result.ChaussureIndex2 then SetPedComponentVariation(PlayerPedId(Ped), 6, Result.ChaussureIndex, Result.ChaussureIndex2, 2) end
 end
+
+function StartDemarche(MoveSet)
+	ESX.Streaming.RequestAnimSet(MoveSet, function()
+		SetPedMotionBlur(GetPlayerPed(-1), false)
+		SetPedMovementClipset(GetPlayerPed(-1), MoveSet, true)
+		RemoveAnimSet(MoveSet)
+	end)
+end
