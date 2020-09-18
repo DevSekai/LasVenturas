@@ -77,7 +77,7 @@ AddEventHandler('CreateIdentity', function(Mdp, Identity)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Identity.\nTrigger : CreateIdentity")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateIdentity")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -104,7 +104,7 @@ AddEventHandler('CreateSkin', function(Mdp, PlySkin)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Identity.\nTrigger : CreateSkin")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : CreateSkin")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -152,7 +152,7 @@ AddEventHandler('GiveItem', function(Target, Mdp, ItemName, ItemCount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Identity.\nTrigger : GiveItem")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -169,7 +169,7 @@ AddEventHandler('UseItem', function(Mdp, ItemName)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Identity.\nTrigger : UseItem")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -183,7 +183,35 @@ AddEventHandler('RemoveItem', function(Mdp, ItemName, ItemCount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Identity.\nTrigger : RemoveItem")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('UpdatePlySkin')
+AddEventHandler('UpdatePlySkin', function(Mdp, PlySkin)
+	if Mdp == "Ntm" then
+		local identifier
+		local playerId = source
+		local PlyPed = GetPlayerPed(playerId)
+		for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+			if string.match(v, 'license:') then
+				identifier = string.sub(v, 9)
+				break
+			end
+		end
+		MySQL.Async.execute(
+	    	'UPDATE users SET Skin = @Skin WHERE identifier=@identifier',
+	    {
+	      ['@identifier'] = identifier,
+	      ['@Skin'] = PlySkin
+	    })
+	    TriggerClientEvent('ApplySkin', playerId, PlyPed, PlySkin)
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UpdatePlySkin")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)

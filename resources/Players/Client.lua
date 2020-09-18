@@ -146,16 +146,20 @@ AddEventHandler('ApplySkin', function(Ped, Skin)
 end)
 
 function ApplySkin(Ped, Skin)
-	Result = json.decode(Skin)
-	RequestModel(Result.PedIndex)
-	while not HasModelLoaded(Result.PedIndex) do
-		RequestModel(Result.PedIndex)
-		Citizen.Wait(0)
-	end
-	if Result.PedIndex then SetPlayerModel(PlayerId(Ped), Result.PedIndex) end
 	FreezeEntityPosition(PlayerPedId(Ped), false)
 	SetEntityVisible(PlayerPedId(Ped), true)
 	SetEntityCollision(PlayerPedId(Ped), true)
+	Result = json.decode(Skin)
+	GoodPed = GetEntityModel(PlayerId(Ped))
+
+	if GoodPed ~= Result.PedIndex then
+		RequestModel(Result.PedIndex)
+		while not HasModelLoaded(Result.PedIndex) do
+			RequestModel(Result.PedIndex)
+			Citizen.Wait(0)
+		end 
+		SetPlayerModel(PlayerId(Ped), Result.PedIndex) 
+	end
 	if Result.DadIndex and Result.MotherIndex then SetPedHeadBlendData(PlayerPedId(Ped), Result.DadIndex, Result.MotherIndex, nil, Result.DadIndex, Result.MotherIndex, nil, 0.5, 0.5, nil, true) end
 	if Result.CheuveuxIndex then SetPedComponentVariation(PlayerPedId(Ped), 2, Result.CheuveuxIndex, 1, 2) end
 	if Result.OeilIndex then SetPedEyeColor(PlayerPedId(Ped), Result.OeilIndex, 0, 1) end

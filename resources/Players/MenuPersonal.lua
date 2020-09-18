@@ -44,6 +44,15 @@ function OpenPersonalMenu()
 				end)
 			end,
         },RMenu:Get('Personnal', 'Inventory'))
+        RageUI.Item.Button("Update Skin", "", {}, true, {
+        	onSelected = function()
+				ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+					Result = json.decode(Skin)
+					Result.BarbeIndex = 8
+					TriggerServerEvent('UpdatePlySkin', MdpPersonal, json.encode(Result))
+			    end)
+			end,
+        })
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
