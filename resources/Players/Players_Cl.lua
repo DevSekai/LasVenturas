@@ -1,5 +1,6 @@
 ESX = nil
-InMenu = false
+InMenu, PlayerSpawn, MdpClien, HasDamaged = false, false, "Ntm", false
+PlyStatut = {}
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -20,12 +21,129 @@ AddEventHandler('playerSpawned', function()
 			SetEntityVisible(PlayerPedId(), false)
 		end
 	end)
+	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
+		Result = json.decode(Statut)
+		PlyStatut = Statut
+        SendNUIMessage({
+        	pauseMenu = IsPauseMenuActive(),
+            Hunger = Result.Hunger,
+            Thrist = Result.Thrist
+        })
+        PlayerSpawn = true
+	end)
 end)
+
+RegisterNetEvent('AddHunger')
+AddEventHandler('AddHunger', function(Ammount)
+	if PlyStatut.Hunger + Ammount <= 100 then
+		NewHunger = PlyStatut.Hunger + Ammount
+		NewThrist = PlyStatut.Thrist
+		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	    SendNUIMessage({
+	      	pauseMenu = IsPauseMenuActive(),
+	        Hunger = NewHunger,
+	        Thrist = NewThrist
+	    })
+	else
+		NewHunger = 100
+		NewThrist = PlyStatut.Thrist
+		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	    SendNUIMessage({
+	      	pauseMenu = IsPauseMenuActive(),
+	        Hunger = NewHunger,
+	        Thrist = NewThrist
+	    })
+	end
+end)
+
+RegisterNetEvent('AddThrist')
+AddEventHandler('AddThrist', function(Ammount)
+	if PlyStatut.Thrist + Ammount <= 100 then
+		NewHunger = PlyStatut.Hunger
+		NewThrist = PlyStatut.Thrist + Ammount
+		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	    SendNUIMessage({
+	      	pauseMenu = IsPauseMenuActive(),
+	        Hunger = NewHunger,
+	        Thrist = NewThrist
+	    })
+	else
+		NewHunger = PlyStatut.Hunger
+		NewThrist = 100
+		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	    SendNUIMessage({
+	      	pauseMenu = IsPauseMenuActive(),
+	        Hunger = NewHunger,
+	        Thrist = NewThrist
+	    })
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(7 * 60 * 1000)
+		if PlyStatut.Hunger >= 1 and PlyStatut.Thrist >= 2 then
+			NewHunger = PlyStatut.Hunger - 1
+			NewThrist = PlyStatut.Thrist - 2
+			PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+			if PlyStatut.Hunger == 0 or PlyStatut.Thrist == 0 then
+				TriggerServerEvent('SendStatut', MdpClien, 0, 0)
+		        SendNUIMessage({
+		        	pauseMenu = IsPauseMenuActive(),
+		            Hunger = PlyStatut.Hunger,
+		            Thrist = PlyStatut.Thrist
+		        })
+				HungerThristDamage()
+			end
+			TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	        SendNUIMessage({
+	        	pauseMenu = IsPauseMenuActive(),
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		end
+	end
+end)
+
+function RevivePly()
+	SetEntityHealth(PlayerPedId(), 200)
+	NewHunger = 100
+	NewThrist = 100
+	PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+	TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
+	SendNUIMessage({
+		pauseMenu = IsPauseMenuActive(),
+		Hunger = NewHunger,
+		Thrist = NewThrist
+	})
+end
+
+function HungerThristDamage()
+HasDamaged = true
+	while HasDamaged do
+		Citizen.Wait(1000)
+		PlyHealth = GetEntityHealth(PlayerPedId())
+		GetHealth = 2
+		if PlyHealth ~= 0 then
+			if PlyHealth <= 100 then
+				GetHealth = 4
+			end
+			NewHealth = PlyHealth - GetHealth
+			SetEntityHealth(PlayerPedId(), NewHealth)
+		else
+			HasDamaged = false
+		end
+	end
+end
 
 function SpawnPlayer()
 	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
 		Result = json.decode(Coords)
-		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z - 0.98, true, true, true)
+		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
 		SetEntityHeading(PlayerPedId(), Result.heading)
 	end)
 	ESX.TriggerServerCallback('GetPlySkin', function(Skin)

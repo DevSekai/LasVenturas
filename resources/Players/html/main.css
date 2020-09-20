@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css?family=Exo&display=swap');
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+.ui {
+    font-family: 'Exo', sans-serif;
+    position: absolute;
+    right: 10;
+    bottom: 10;
+    color: white;
+}
+
+.Hunger {
+    font-family: 'Exo', sans-serif;
+    margin-top: 2px;
+    width: 240px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: white;
+}
+
+.Hunger > #Hunger-level {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.Thrist {
+    font-family: 'Exo', sans-serif;
+    margin-top: 2px;
+    width: 240px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: white;
+}
+
+.Thrist > #Thrist-level {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}

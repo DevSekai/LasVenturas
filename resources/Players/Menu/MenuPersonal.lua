@@ -151,6 +151,11 @@ function OpenPersonalMenu()
 	        RageUI.Item.Button("Gestion du véhicule", "", {}, true, {
 	        },RMenu:Get('Personnal', 'Vehicle'))
         end
+	        RageUI.Item.Button("Test hunger", "", {}, true, {
+				onSelected = function(Index, Items)
+					RevivePly()
+				end,
+	        })
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()

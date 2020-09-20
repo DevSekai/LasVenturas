@@ -1,4 +1,5 @@
 ESX = nil
+PlyStatut = {}
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
@@ -44,6 +45,22 @@ ESX.RegisterServerCallback('GetPlySkin', function(source, cb)
 		end
 	end
 	MySQL.Async.fetchScalar('SELECT Skin FROM users WHERE identifier = @identifier', {
+		['@identifier'] = identifier
+	}, function(result)
+		cb(result)
+	end)
+end)
+
+ESX.RegisterServerCallback('GetPlyStatut', function(source, cb)
+	local identifier
+	local playerId = source
+	for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+		if string.match(v, 'license:') then
+			identifier = string.sub(v, 9)
+			break
+		end
+	end
+	MySQL.Async.fetchScalar('SELECT Statut FROM users WHERE identifier = @identifier', {
 		['@identifier'] = identifier
 	}, function(result)
 		cb(result)
@@ -314,4 +331,35 @@ AddEventHandler('RemoveMoney', function(Mdp, MoneyType, Amount)
 		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
+end)
+
+RegisterNetEvent('SendStatut')
+AddEventHandler('SendStatut', function(Mdp, NewHunger, NewThrist)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if Mdp == "Ntm" then
+		PlyStatut[source] = {Hunger = NewHunger, Thrist = NewThrist}
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : SendStatut.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+AddEventHandler('playerDropped', function()
+	local identifier
+	local playerId = source
+	for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+		if string.match(v, 'license:') then
+			identifier = string.sub(v, 9)
+			break
+		end
+	end
+	MySQL.Async.execute(
+    	'UPDATE users SET Statut = @Statut WHERE identifier= @identifier',
+    {
+      ['@identifier'] = identifier,
+      ['@Statut'] = json.encode(PlyStatut[source])
+    })
 end)
