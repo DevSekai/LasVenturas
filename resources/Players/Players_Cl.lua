@@ -90,6 +90,8 @@ Citizen.CreateThread(function()
 			NewHunger = PlyStatut.Hunger - 1
 			NewThrist = PlyStatut.Thrist - 2
 			PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
+			if PlyStatut.Hunger <= 50 then ESX.ShowNotification("Vous commencez à avoir faim.") end
+			if PlyStatut.Thrist <= 50 then ESX.ShowNotification("Vous commencez à avoir soif.") end
 			if PlyStatut.Hunger == 0 or PlyStatut.Thrist == 0 then
 				TriggerServerEvent('SendStatut', MdpClien, 0, 0)
 		        SendNUIMessage({
