@@ -25,10 +25,6 @@ RMenu.Add('Personnal', 'Vehicle', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'P
 RMenu:Get('Personnal', 'Vehicle'):SetSubtitle("~y~Gestion du véhicule")
 RMenu:Get('Personnal', 'Vehicle'):DisplayGlare(false);
 
-RMenu.Add('Personnal', 'Divers', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
-RMenu:Get('Personnal', 'Divers'):SetSubtitle("~y~Divers")
-RMenu:Get('Personnal', 'Divers'):DisplayGlare(false);
-
 Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
@@ -52,6 +48,7 @@ end)
 
 function OpenPersonalMenu()
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Principal'), function()
+		RageUI.Item.Separator("[~y~Votre ID~s~] : "..GetPlayerServerId(PlayerId()))
         RageUI.Item.Button("Inventaire", "", {}, true, {
         	onSelected = function()
 				invItems = {}
@@ -151,8 +148,6 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-	    RageUI.Item.Button("Divers", "", {}, true, {
-	    },RMenu:Get('Personnal', 'Divers'))
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
@@ -379,9 +374,5 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-    end)
-
-	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
-		RageUI.Item.Separator("[~y~Votre ID~s~] : "..GetPlayerServerId(PlayerId()))
     end)
 end
