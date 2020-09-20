@@ -4,7 +4,7 @@ MdpPersonal = "Ntm"
 invItems, invWeapon, invMoney, invSale, invBank = {}, {}, {}, {}, {}
 DemarcheList = {"~y~Normal M~s~","~y~Normal F~s~","~y~Arrogante~s~","~y~Blesse~s~","~y~Business~s~","~y~Casual~s~","~y~Choc~s~","~y~Determine~s~","~y~Depressif~s~","~y~Depressif F~s~","~y~Fatigue~s~","~y~Fier~s~","~y~Hobo~s~","~y~Hipster~s~","~y~Intimide~s~","~y~Impertinent~s~","~y~Mangeuse d'homme~s~","~y~Malheureux~s~","~y~Muscle~s~","~y~Petite course~s~","~y~Pressee~s~","~y~Sombre~s~","~y~Trop mange~s~"}
 GpsList = {"~y~Supprimer le trajet~s~","~y~Agence d'interim~s~","~y~Auto école~s~","~y~Benny's~s~","~y~Hôpitale's~s~","~y~Parking central~s~","~y~Poste de police~s~"}
-
+VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","Toutes"}
 RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
 RMenu:Get('Personnal', 'Principal'):SetSubtitle("~y~Menu personnel")
 RMenu:Get('Personnal', 'Principal'):DisplayGlare(false);
@@ -21,6 +21,14 @@ RMenu.Add('Personnal', 'Wallet', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Pr
 RMenu:Get('Personnal', 'Wallet'):SetSubtitle("~y~Porte-feuille")
 RMenu:Get('Personnal', 'Wallet'):DisplayGlare(false);
 
+RMenu.Add('Personnal', 'Vehicle', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'Vehicle'):SetSubtitle("~y~Gestion du véhicule")
+RMenu:Get('Personnal', 'Vehicle'):DisplayGlare(false);
+
+RMenu.Add('Personnal', 'Divers', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'Divers'):SetSubtitle("~y~Divers")
+RMenu:Get('Personnal', 'Divers'):DisplayGlare(false);
+
 Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
@@ -33,7 +41,9 @@ Citizen.CreateThread(function ()
 		if 	RageUI.Visible(RMenu:Get('Personnal', 'Principal')) or 
 			RageUI.Visible(RMenu:Get('Personnal', 'Inventory')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry')) or
-			RageUI.Visible(RMenu:Get('Personnal', 'Wallet'))
+			RageUI.Visible(RMenu:Get('Personnal', 'Wallet')) or
+			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId()) or
+			RageUI.Visible(RMenu:Get('Personnal', 'Divers'))
 		then
 			OpenPersonalMenu()
 		end 
@@ -97,6 +107,10 @@ function OpenPersonalMenu()
 			    end)
 			end,
         })]]
+        if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then
+	        RageUI.Item.Button("Gestion du véhicule", "", {}, true, {
+	        },RMenu:Get('Personnal', 'Vehicle'))
+        end
 		RageUI.Item.List("Démarches", DemarcheList, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if Index == 1 then StartDemarche("move_m@confident")
@@ -137,12 +151,14 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
+	    RageUI.Item.Button("Divers", "", {}, true, {
+	    },RMenu:Get('Personnal', 'Divers'))
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
 	    RageUI.Item.Separator("[~y~"..PlyWeight.."~s~ Kg / ~y~"..ESX.PlayerData.maxWeight .."~s~ Kg]")
 	    for _,v in pairs (invItems) do
-			RageUI.Item.List(v.label.." x"..v.count, {"~y~Utiliser~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("~w~[~y~"..v.label.."~w~] x"..v.count, {"~y~Utiliser~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					itemName = v.value
 					if Index == 1 then
@@ -190,7 +206,7 @@ function OpenPersonalMenu()
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Weaponry'), function()
 	    for _,v in pairs (invWeapon) do
-			RageUI.Item.List(v.label.." x"..v.amount, {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("~w~[~y~"..v.label.."~w~] x"..v.amount, {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					if Index == 1 then
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -215,7 +231,7 @@ function OpenPersonalMenu()
 		    RageUI.Item.Separator("[~y~"..v.label.."~s~] : "..v.amount.." $")
 		end
 	    for _,v in pairs (invMoney) do
-			RageUI.Item.List("	[~y~"..v.label.."~s~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("	~w~[~y~"..v.label.."~w~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					local Amount = KeyboardInput("Quantité", 20)
 					if tonumber(Amount) ~= nil then
@@ -242,7 +258,7 @@ function OpenPersonalMenu()
 			})
 	    end
 	    for _,v in pairs (invSale) do
-			RageUI.Item.List("	[~y~"..v.label.."~s~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("	~w~[~y~"..v.label.."~w~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					local Amount = KeyboardInput("Quantité", 20)
 					if tonumber(Amount) ~= nil then
@@ -268,5 +284,104 @@ function OpenPersonalMenu()
 				end,
 			})
 	    end
+    end)
+
+	RageUI.IsVisible(RMenu:Get('Personnal', 'Vehicle'), function()
+		plyInVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+		if plyInVeh then
+			CarPlate = GetVehicleNumberPlateText(plyInVeh)
+			CarHealth = GetEntityHealth(plyInVeh) / 10
+			CarModel = GetDisplayNameFromVehicleModel(GetEntityModel(plyInVeh))
+			ActualSpeed = math.floor(GetEntitySpeed(plyInVeh)* 3.6 + 0.5)
+			EngineState = GetIsVehicleEngineRunning(plyInVeh)
+			if EngineState then
+				Engine = "[~g~Allumer~w~]"
+			else
+				Engine = "[~g~Eteind~w~]"
+			end
+			if not Limitateur then
+				LimitateurState = ActualSpeed.." Km/H [~r~Désactiver~w~]"
+			else
+				LimitateurState = ActualSpeed.." Km/H [~g~Activer~w~]"
+			end
+		end
+	    if CarModel then RageUI.Item.Separator("[~y~Modèle~s~] : "..CarModel) end
+	    if CarHealth then RageUI.Item.Separator("[~y~Etat du véhicule~s~] : "..CarHealth.."%") end
+	    if CarPlate then RageUI.Item.Separator("[~y~Plaque d'immatriculation~s~] : "..CarPlate) end
+		RageUI.Item.Checkbox("~w~	[~y~Limiteur de vitesse~w~] : "..LimitateurState, "", Limitateur, {}, {
+			onSelected = function(Index)
+				if IsPedSittingInAnyVehicle(PlayerPedId()) then
+					Limitateur = not Limitateur
+					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+					RegulSpeed = GetEntitySpeed(plyVeh)
+					if not Limitateur then
+	        			maxSpeed = GetVehicleHandlingFloat(plyInVeh,"CHandlingData","fInitialDriveMaxFlatVel")
+						SetVehicleMaxSpeed(plyVeh, maxSpeed)
+					else
+						SetVehicleMaxSpeed(plyVeh, RegulSpeed)
+					end
+				end
+			end,
+		})
+		RageUI.Item.Checkbox("~w~	[~y~Etat moteur~w~] : "..Engine, "", EngineState, {}, {
+			onSelected = function(Index)
+				if IsPedSittingInAnyVehicle(PlayerPedId()) then
+					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+					if EngineState then
+						SetVehicleEngineOn(plyVeh, false, false, true)
+						SetVehicleUndriveable(plyVeh, true)
+					else
+						SetVehicleEngineOn(plyVeh, true, false, true)
+						SetVehicleUndriveable(plyVeh, false)
+					end
+				end
+			end,
+		})
+		RageUI.Item.List("	~w~[~y~Ouvrir une porte~w~]", VhcDoors, 1, nil, {}, true, {
+			onSelected = function(Index, Items)
+				if IsPedSittingInAnyVehicle(PlayerPedId()) then
+					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+					if Index == 1 then SetVehicleDoorOpen(plyVeh, 4, false, false)
+					elseif Index == 2 then SetVehicleDoorOpen(plyVeh, 5, false, false)
+					elseif Index == 3 then SetVehicleDoorOpen(plyVeh, 0, false, false)
+					elseif Index == 4 then SetVehicleDoorOpen(plyVeh, 1, false, false)
+					elseif Index == 5 then SetVehicleDoorOpen(plyVeh, 2, false, false)
+					elseif Index == 6 then SetVehicleDoorOpen(plyVeh, 3, false, false)
+					else 
+						SetVehicleDoorOpen(plyVeh, 0, false, false)
+						SetVehicleDoorOpen(plyVeh, 1, false, false)
+						SetVehicleDoorOpen(plyVeh, 2, false, false)
+						SetVehicleDoorOpen(plyVeh, 3, false, false)
+						SetVehicleDoorOpen(plyVeh, 4, false, false)
+						SetVehicleDoorOpen(plyVeh, 5, false, false)
+					end
+				end
+			end,
+		})
+		RageUI.Item.List("	~w~[~y~Fermer une porte~w~]", VhcDoors, 1, nil, {}, true, {
+			onSelected = function(Index, Items)
+				if IsPedSittingInAnyVehicle(PlayerPedId()) then
+					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+					if Index == 1 then SetVehicleDoorShut(plyVeh, 4, false, false)
+					elseif Index == 2 then SetVehicleDoorShut(plyVeh, 5, false, false)
+					elseif Index == 3 then SetVehicleDoorShut(plyVeh, 0, false, false)
+					elseif Index == 4 then SetVehicleDoorShut(plyVeh, 1, false, false)
+					elseif Index == 5 then SetVehicleDoorShut(plyVeh, 2, false, false)
+					elseif Index == 6 then SetVehicleDoorShut(plyVeh, 3, false, false)
+					else 
+						SetVehicleDoorShut(plyVeh, 0, false, false)
+						SetVehicleDoorShut(plyVeh, 1, false, false)
+						SetVehicleDoorShut(plyVeh, 2, false, false)
+						SetVehicleDoorShut(plyVeh, 3, false, false)
+						SetVehicleDoorShut(plyVeh, 4, false, false)
+						SetVehicleDoorShut(plyVeh, 5, false, false)
+					end
+				end
+			end,
+		})
+    end)
+
+	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
+		RageUI.Item.Separator("[~y~Votre ID~s~] : "..GetPlayerServerId(PlayerId()))
     end)
 end
