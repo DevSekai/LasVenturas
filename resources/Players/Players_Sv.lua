@@ -67,6 +67,31 @@ ESX.RegisterServerCallback('GetPlyStatut', function(source, cb)
 	end)
 end)
 
+ESX.RegisterServerCallback('getUserBanque', function(source, cb)
+	local identifier
+	local playerId = source
+	for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+		if string.match(v, 'license:') then
+			identifier = string.sub(v, 9)
+			break
+		end
+	end
+	MySQL.Async.fetchScalar('SELECT accounts FROM users WHERE identifier = @identifier', {
+		['@identifier'] = identifier
+	}, function(Accounts)
+		MySQL.Async.fetchScalar('SELECT FirstName FROM users WHERE identifier = @identifier', {
+			['@identifier'] = identifier
+		}, function(FirstName)
+			MySQL.Async.fetchScalar('SELECT LastName FROM users WHERE identifier = @identifier', {
+				['@identifier'] = identifier
+			}, function(LastName)
+				Name = {Accounts = json.decode(Accounts), FirstName = FirstName, LastName = LastName}
+				cb(json.encode(Name))
+			end)
+		end)
+	end)
+end)
+
 RegisterNetEvent('CreateIdentity')
 AddEventHandler('CreateIdentity', function(Mdp, Identity)
 	if Mdp == "Ntm" then
@@ -359,7 +384,73 @@ AddEventHandler('playerDropped', function()
 	MySQL.Async.execute(
     	'UPDATE users SET Statut = @Statut WHERE identifier= @identifier',
     {
-      ['@identifier'] = identifier,
-      ['@Statut'] = json.encode(PlyStatut[source])
-    })
+	    ['@identifier'] = identifier,
+	    ['@Statut'] = json.encode(PlyStatut[source])
+	})
+end)
+
+RegisterNetEvent('DepositBank')
+AddEventHandler('DepositBank', function(Mdp, Amount)
+	local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+		if xPlayerMoney >= Amount then
+	        xPlayer.addAccountMoney('bank', Amount)
+			xPlayer.removeAccountMoney('money', Amount)
+			xPlayer.showNotification("Vous avez déposer ~g~"..Amount.." $~s~ sur votre compte bancaire.")
+		else
+			xPlayer.showNotification("Montant invalide.")
+		end
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : DepositBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('TransfereBank')
+AddEventHandler('TransfereBank', function(Mdp, Target, Amount)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Target)
+    local xPlayerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+		if xPlayerMoney >= Amount then
+	        xTarget.addAccountMoney('money', Amount)
+			xPlayer.removeAccountMoney('bank', Amount)
+			xPlayer.showNotification("Vous avez transférer ~g~"..Amount.." $~s~ sur le compte bancaire de "..xTarget.name..".")
+			xTarget.showNotification("Vous avez recu ~g~"..Amount.." $~s~ sur votre compte bancaire de la part de "..xPlayer.name..".")
+			TriggerClientEvent('RefreshPlyBank', Target, Amount)
+		else
+			xPlayer.showNotification("Montant invalide.")
+		end
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : TransfereBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('WithdrawBank')
+AddEventHandler('WithdrawBank', function(Mdp, Amount)
+	local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+		if xPlayerMoney >= Amount then
+	        xPlayer.addAccountMoney('money', Amount)
+			xPlayer.removeAccountMoney('bank', Amount)
+			xPlayer.showNotification("Vous avez retirer ~g~"..Amount.." $~s~ sur votre compte bancaire.")
+		else
+			xPlayer.showNotification("Montant invalide.")
+		end
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : WithdrawBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
 end)

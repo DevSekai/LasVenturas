@@ -6,7 +6,7 @@ DemarcheList = {"~y~Classique~s~","~y~Arrogante~s~","~y~Blesse~s~","~y~Business~
 GpsList = {"~y~Supprimer le trajet~s~","~y~Agence d'interim~s~","~y~Auto école~s~","~y~Benny's~s~","~y~Hôpitale's~s~","~y~Parking central~s~","~y~Poste de police~s~"}
 VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
 VhcWindows = {"~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
-Display = false
+Display, Blip = false, false
 
 RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
 RMenu:Get('Personnal', 'Principal'):SetSubtitle("~y~Menu personnel")
@@ -400,7 +400,7 @@ function OpenPersonalMenu()
 					end
 				end
 			end,
-		}) VhcWindows = {"~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","Toutes"}
+		})
 		RageUI.Item.List("	~w~[~y~Fermer une fenêtre~w~]", VhcWindows, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
@@ -421,7 +421,7 @@ function OpenPersonalMenu()
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
-		RageUI.Item.Checkbox("~w~	[~y~Afficher/Cacher HUD~w~]", "", false, {}, {
+		RageUI.Item.Checkbox("[~y~Afficher/Cacher HUD]", "", false, {}, {
 			onSelected = function(Index)
 				if not Display then
 					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
@@ -447,6 +447,17 @@ function OpenPersonalMenu()
 			        DisplayRadar(true)
 			        HudHiden = false
 			        Display = false
+			    end
+			end,
+		})
+		RageUI.Item.Checkbox("[~y~Afficher/Cacher blips]", "", true, {}, {
+			onSelected = function(Index)
+				if not Blip then
+			    	TriggerEvent('DeleteAllBlip')
+			    	Blip = true
+			    else
+					TriggerEvent('ShowAllBlip')
+			        Blip = false
 			    end
 			end,
 		})

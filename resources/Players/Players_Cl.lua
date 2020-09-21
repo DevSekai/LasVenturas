@@ -36,27 +36,6 @@ AddEventHandler('playerSpawned', function()
         PlayerSpawn = true
 	end)
 end)
-
-AddEventHandler('onResourceStart', function()
-	HasDamaged, HasFaim, HasSoif = true, true, true
-	while ESX == nil do
-		Citizen.Wait(1)
-	end
-	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
-		Result = json.decode(Statut)
-		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
-		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
-		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
-        SendNUIMessage({
-        	Display = true,
-        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
-			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
-            Hunger = Result.Hunger,
-            Thrist = Result.Thrist
-        })
-        PlayerSpawn = true
-	end)
-end)
 -----------------------------------------------------------------------------
 ----------------Status-------------------------------------
 RegisterNetEvent('AddHunger')
