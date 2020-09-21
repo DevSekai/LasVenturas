@@ -162,7 +162,7 @@ CREATE TABLE `users` (
   `identifier` varchar(40) NOT NULL,
   `accounts` longtext DEFAULT NULL,
   `group` varchar(50) DEFAULT 'user',
-  `Statut` varchar(255) NOT NULL DEFAULT 'test',
+  `Statut` varchar(255) NOT NULL DEFAULT '{"Hunger":100,"Thrist":100}',
   `Sexe` varchar(6) DEFAULT NULL,
   `FirstName` varchar(20) DEFAULT NULL,
   `LastName` varchar(20) DEFAULT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`identifier`, `accounts`, `group`, `Statut`, `Sexe`, `FirstName`, `LastName`, `Birthday`, `Taille`, `Skin`, `inventory`, `job`, `job_grade`, `loadout`, `position`) VALUES
-('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"money\":8470,\"bank\":29929,\"black_money\":4999}', 'admin', 'null', 'Homme', 'Yan', 'Labray', '15/03/1996', 186, '{\"TshirtIndex\":11,\"PedIndex\":\"mp_m_freemode_01\",\"VesteIndex\":3,\"VesteIndex2\":5,\"PantalonIndex2\":2,\"OeilIndex\":9,\"ArmsIndex\":4,\"PantalonIndex\":13,\"DadIndex\":4,\"TshirtIndex2\":9,\"ChaussureIndex2\":3,\"BarbeIndex\":8,\"ChaussureIndex\":5,\"CheuveuxIndex\":6,\"CouleurIndex\":3,\"MotherIndex\":5}', '[]', 'unemployed', 0, '[]', '{\"y\":593.1,\"x\":-3009.3,\"heading\":20.7,\"z\":19.3}');
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"money\":8470,\"bank\":29929,\"black_money\":4999}', 'admin', '{"Hunger":100,"Thrist":100}', 'Homme', 'Yan', 'Labray', '15/03/1996', 186, '{\"TshirtIndex\":11,\"PedIndex\":\"mp_m_freemode_01\",\"VesteIndex\":3,\"VesteIndex2\":5,\"PantalonIndex2\":2,\"OeilIndex\":9,\"ArmsIndex\":4,\"PantalonIndex\":13,\"DadIndex\":4,\"TshirtIndex2\":9,\"ChaussureIndex2\":3,\"BarbeIndex\":8,\"ChaussureIndex\":5,\"CheuveuxIndex\":6,\"CouleurIndex\":3,\"MotherIndex\":5}', '[]', 'unemployed', 0, '[]', '{\"y\":593.1,\"x\":-3009.3,\"heading\":20.7,\"z\":19.3}');
 
 --
 -- Index pour les tables déchargées

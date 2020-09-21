@@ -2,7 +2,7 @@ MdpBanque = "Ntm"
 PlyInfo = {}
 RMenu.Add('Banque', 'Principal', RageUI.CreateMenu("", "", 600, nil, "root_cause", "banner"), true)
 RMenu:Get('Banque', 'Principal'):SetSubtitle("~y~Compte bancaire")
-RMenu:Get('CrationPerso', 'Identity'):SetSizeWidth(200)
+RMenu:Get('Banque', 'Principal'):SetSizeWidth(200)
 RMenu:Get('Banque', 'Principal'):DisplayGlare(false);
 RMenu:Get('Banque', 'Principal').Closable = false;
 

@@ -1,7 +1,7 @@
 SexeChoosen, FirstName, LastName, Birthday, Height = "Homme", "Non renseigner", "Non renseigner", "JJ/MM/AAAA", "Non renseigner"
 SexeChoose = {"Homme", "Femme"}
 SexeIndex = 1
-MdpIdentity = "Test"
+MdpIdentity = "Ntm"
 
 RMenu.Add('CrationPerso', 'Identity', RageUI.CreateMenu("", "", 600, nil, "root_cause", "banner"), true)
 RMenu:Get('CrationPerso', 'Identity'):SetSubtitle("~y~Création de l'identité")
