@@ -1,5 +1,5 @@
 ESX = nil
-InMenu, PlayerSpawn, MdpClien, HasDamaged = false, false, "Ntm", false
+InMenu, PlayerSpawn, MdpClien, HasDamaged, HasFaim, HasSoif, HudHiden = false, false, "Ntm", false, false, false, false
 PlyStatut = {}
 
 Citizen.CreateThread(function ()
@@ -23,9 +23,13 @@ AddEventHandler('playerSpawned', function()
 	end)
 	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
 		Result = json.decode(Statut)
-		PlyStatut = Statut
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
+		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
         SendNUIMessage({
-        	pauseMenu = IsPauseMenuActive(),
+        	Display = true,
+        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
             Hunger = Result.Hunger,
             Thrist = Result.Thrist
         })
@@ -33,80 +37,206 @@ AddEventHandler('playerSpawned', function()
 	end)
 end)
 
+AddEventHandler('onResourceStart', function()
+	HasDamaged, HasFaim, HasSoif = true, true, true
+	while ESX == nil do
+		Citizen.Wait(1)
+	end
+	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
+		Result = json.decode(Statut)
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
+		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
+        SendNUIMessage({
+        	Display = true,
+        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+            Hunger = Result.Hunger,
+            Thrist = Result.Thrist
+        })
+        PlayerSpawn = true
+	end)
+end)
+-----------------------------------------------------------------------------
+----------------Status-------------------------------------
 RegisterNetEvent('AddHunger')
 AddEventHandler('AddHunger', function(Ammount)
+	HasFaim = false
 	if PlyStatut.Hunger + Ammount <= 100 then
 		NewHunger = PlyStatut.Hunger + Ammount
 		NewThrist = PlyStatut.Thrist
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
 		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	    SendNUIMessage({
-	      	pauseMenu = IsPauseMenuActive(),
-	        Hunger = NewHunger,
-	        Thrist = NewThrist
-	    })
+		if HudHiden then
+	        SendNUIMessage({
+      			Display = false,
+      			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		else
+	        SendNUIMessage({
+	   			Display = true,
+     			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		end
 	else
 		NewHunger = 100
 		NewThrist = PlyStatut.Thrist
 		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
 		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	    SendNUIMessage({
-	      	pauseMenu = IsPauseMenuActive(),
-	        Hunger = NewHunger,
-	        Thrist = NewThrist
-	    })
+		if HudHiden then
+	        SendNUIMessage({
+      			Display = false,
+      			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		else
+	        SendNUIMessage({
+	   			Display = true,
+     			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		end
 	end
 end)
 
 RegisterNetEvent('AddThrist')
 AddEventHandler('AddThrist', function(Ammount)
+	HasSoif = false
 	if PlyStatut.Thrist + Ammount <= 100 then
 		NewHunger = PlyStatut.Hunger
 		NewThrist = PlyStatut.Thrist + Ammount
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
 		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	    SendNUIMessage({
-	      	pauseMenu = IsPauseMenuActive(),
-	        Hunger = NewHunger,
-	        Thrist = NewThrist
-	    })
+		if HudHiden then
+	        SendNUIMessage({
+      			Display = false,
+      			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		else
+	        SendNUIMessage({
+	   			Display = true,
+     			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		end
 	else
 		NewHunger = PlyStatut.Hunger
 		NewThrist = 100
 		PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
 		TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	    SendNUIMessage({
-	      	pauseMenu = IsPauseMenuActive(),
-	        Hunger = NewHunger,
-	        Thrist = NewThrist
-	    })
+		if HudHiden then
+	        SendNUIMessage({
+      			Display = false,
+      			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		else
+	        SendNUIMessage({
+	   			Display = true,
+     			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = NewHunger,
+	            Thrist = NewThrist
+	        })
+		end
 	end
 end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(7 * 60 * 1000)
-		if PlyStatut.Hunger >= 1 and PlyStatut.Thrist >= 2 then
+		Citizen.Wait(1000)
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+		if HudHiden then
+	        SendNUIMessage({
+      			Display = false,
+      			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = PlyStatut.Hunger,
+	            Thrist = PlyStatut.Thrist
+	        })
+		else
+	        SendNUIMessage({
+	   			Display = true,
+     			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+				DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+	            Hunger = PlyStatut.Hunger,
+	            Thrist = PlyStatut.Thrist
+	        })
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(2 * 60 * 1000)
+		if PlyStatut.Hunger >= 0 and PlyStatut.Thrist >= 0 then
 			NewHunger = PlyStatut.Hunger - 1
 			NewThrist = PlyStatut.Thrist - 2
+			Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 			PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
-			if PlyStatut.Hunger <= 50 then ESX.ShowNotification("Vous commencez à avoir faim.") end
-			if PlyStatut.Thrist <= 50 then ESX.ShowNotification("Vous commencez à avoir soif.") end
-			if PlyStatut.Hunger == 0 or PlyStatut.Thrist == 0 then
-				TriggerServerEvent('SendStatut', MdpClien, 0, 0)
-		        SendNUIMessage({
-		        	pauseMenu = IsPauseMenuActive(),
-		            Hunger = PlyStatut.Hunger,
-		            Thrist = PlyStatut.Thrist
-		        })
+			if PlyStatut.Hunger <= 0 or PlyStatut.Thrist <= 0 then
+				if PlyStatut.Hunger <= 0 then HasFaim = true end
+				if PlyStatut.Thrist <= 0 then HasSoif = true end
+				if PlyStatut.Hunger <= 30 then ESX.ShowNotification("Vous avez faim.") end
+				if PlyStatut.Thrist <= 30 then ESX.ShowNotification("Vous avez soif.") end
+				TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
+				if HudHiden then
+			        SendNUIMessage({
+	        			Display = false,
+	        			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+			            Hunger = NewHunger,
+			            Thrist = NewThrist
+			        })
+
+				else
+			        SendNUIMessage({
+	        			Display = true,
+	        			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+			            Hunger = NewHunger,
+			            Thrist = NewThrist
+			        })
+			    end
 				HungerThristDamage()
 			end
 			TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	        SendNUIMessage({
-	        	pauseMenu = IsPauseMenuActive(),
-	            Hunger = NewHunger,
-	            Thrist = NewThrist
-	        })
+			if HudHiden then
+		        SendNUIMessage({
+	       			Display = false,
+	       			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+					DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+		            Hunger = NewHunger,
+		            Thrist = NewThrist
+		        })
+			else
+		        SendNUIMessage({
+	       			Display = true,
+	       			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+					DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+		            Hunger = NewHunger,
+		            Thrist = NewThrist
+		        })
+			end
 		end
 	end
 end)
@@ -115,33 +245,51 @@ function RevivePly()
 	SetEntityHealth(PlayerPedId(), 200)
 	NewHunger = 100
 	NewThrist = 100
+	Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 	PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
 	TriggerServerEvent('SendStatut', MdpClien, NewHunger, NewThrist)
-	SendNUIMessage({
-		pauseMenu = IsPauseMenuActive(),
-		Hunger = NewHunger,
-		Thrist = NewThrist
-	})
+	if HudHiden then
+        SendNUIMessage({
+   			Display = false,
+   			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+            Hunger = NewHunger,
+            Thrist = NewThrist
+        })
+	else
+        SendNUIMessage({
+   			Display = true,
+   			ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+            Hunger = NewHunger,
+            Thrist = NewThrist
+        })
+	end
 end
 
 function HungerThristDamage()
 HasDamaged = true
 	while HasDamaged do
 		Citizen.Wait(1000)
-		PlyHealth = GetEntityHealth(PlayerPedId())
-		GetHealth = 2
-		if PlyHealth ~= 0 then
-			if PlyHealth <= 100 then
-				GetHealth = 4
+		if HasFaim or HasSoif then
+			PlyHealth = GetEntityHealth(PlayerPedId())
+			GetHealth = 5
+			if PlyHealth ~= 0 then
+				if PlyHealth <= 100 then
+					GetHealth = 10
+				end
+				NewHealth = PlyHealth - GetHealth
+				SetEntityHealth(PlayerPedId(), NewHealth)
+			else
+				HasDamaged = false
 			end
-			NewHealth = PlyHealth - GetHealth
-			SetEntityHealth(PlayerPedId(), NewHealth)
 		else
 			HasDamaged = false
 		end
 	end
 end
-
+-----------------------------------------------------------------------------
+----------------Utils-------------------------------------
 function SpawnPlayer()
 	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
 		Result = json.decode(Coords)

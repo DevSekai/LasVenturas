@@ -6,7 +6,7 @@ DemarcheList = {"~y~Classique~s~","~y~Arrogante~s~","~y~Blesse~s~","~y~Business~
 GpsList = {"~y~Supprimer le trajet~s~","~y~Agence d'interim~s~","~y~Auto école~s~","~y~Benny's~s~","~y~Hôpitale's~s~","~y~Parking central~s~","~y~Poste de police~s~"}
 VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
 VhcWindows = {"~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
-
+Display = false
 
 RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
 RMenu:Get('Personnal', 'Principal'):SetSubtitle("~y~Menu personnel")
@@ -28,6 +28,10 @@ RMenu.Add('Personnal', 'Vehicle', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'P
 RMenu:Get('Personnal', 'Vehicle'):SetSubtitle("~y~Gestion du véhicule")
 RMenu:Get('Personnal', 'Vehicle'):DisplayGlare(false);
 
+RMenu.Add('Personnal', 'Divers', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'Divers'):SetSubtitle("~y~Divers")
+RMenu:Get('Personnal', 'Divers'):DisplayGlare(false);
+
 Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
@@ -41,8 +45,8 @@ Citizen.CreateThread(function ()
 			RageUI.Visible(RMenu:Get('Personnal', 'Inventory')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Wallet')) or
-			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId()) or
-			RageUI.Visible(RMenu:Get('Personnal', 'Divers'))
+			RageUI.Visible(RMenu:Get('Personnal', 'Divers')) or
+			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId())
 		then
 			OpenPersonalMenu()
 		end 
@@ -151,11 +155,8 @@ function OpenPersonalMenu()
 	        RageUI.Item.Button("Gestion du véhicule", "", {}, true, {
 	        },RMenu:Get('Personnal', 'Vehicle'))
         end
-	        RageUI.Item.Button("Test hunger", "", {}, true, {
-				onSelected = function(Index, Items)
-					RevivePly()
-				end,
-	        })
+	    RageUI.Item.Button("Divers", "", {}, true, {
+	    },RMenu:Get('Personnal', 'Divers'))
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
@@ -415,6 +416,38 @@ function OpenPersonalMenu()
 						RollUpWindow(plyVeh, 3)
 					end
 				end
+			end,
+		})
+    end)
+
+	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
+		RageUI.Item.Checkbox("~w~	[~y~Afficher/Cacher HUD~w~]", "", false, {}, {
+			onSelected = function(Index)
+				if not Display then
+					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+			        SendNUIMessage({
+			        	Display = true,
+			        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+						Hunger = PlyStatut.Hunger,
+						Thrist = PlyStatut.Thrist
+			        })
+			        DisplayRadar(false)
+			        HudHiden = true
+			        Display = true
+			    else
+					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+			        SendNUIMessage({
+			        	Display = false,
+			        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+						Hunger = PlyStatut.Hunger,
+						Thrist = PlyStatut.Thrist
+			        })
+			        DisplayRadar(true)
+			        HudHiden = false
+			        Display = false
+			    end
 			end,
 		})
     end)
