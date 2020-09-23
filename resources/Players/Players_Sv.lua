@@ -454,3 +454,107 @@ AddEventHandler('WithdrawBank', function(Mdp, Amount)
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
+
+ESX.RegisterServerCallback('GetPlyTatoo', function(source, cb)
+	local identifier
+	local playerId = source
+	for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+		if string.match(v, 'license:') then
+			identifier = string.sub(v, 9)
+			break
+		end
+	end
+	MySQL.Async.fetchAll('SELECT * FROM users_tatoo WHERE Identifier = @Identifier', {
+		['@Identifier'] = identifier
+	}, function(result)
+		if result then
+			cb(result)
+		end
+	end)
+end)
+
+ESX.RegisterServerCallback('getAccessoire', function(source, cb)
+    local identifier
+    local playerId = source
+    for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
+    end
+    MySQL.Async.fetchAll(
+        'SELECT * FROM users_accessories WHERE Identifier = @Identifier',
+        {
+            ['@Identifier'] = identifier
+        },
+    function(result)
+        cb(result)
+    end)
+end)
+
+RegisterNetEvent('RenameAcc')
+AddEventHandler('RenameAcc', function(Mdp, Id, Label)
+	if Mdp == "Ntm" then
+		local identifier
+		local playerId = source
+		for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+			if string.match(v, 'license:') then
+				identifier = string.sub(v, 9)
+				break
+			end
+		end
+		MySQL.Async.execute(
+	    	'UPDATE users_accessories SET Label = @Label WHERE Id = @Id',
+	    {
+		    ['@Label'] = Label,
+		    ['@Id'] = Id
+		})
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RenameAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('GiveAcc')
+AddEventHandler('GiveAcc', function(Mdp, Target, Id)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Target)
+	if Mdp == "Ntm" then
+		MySQL.Async.execute(
+	    	'UPDATE users_accessories SET Identifier = @Identifier WHERE Id = @Id',
+	    {
+		    ['@Identifier'] = xTarget.identifier,
+		    ['@Id'] = Id
+		})
+		xPlayer.showNotification("Vous avez donner un accessoire à "..xTarget.name)
+		xTarget.showNotification("Vous avez recu un accesoire de "..xPlayer.name)
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterNetEvent('DelAcc')
+AddEventHandler('DelAcc', function(Mdp, Id)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if Mdp == "Ntm" then
+		MySQL.Async.execute(
+	    	'DELETE FROM users_accessories where Id = @Id',
+	    {
+		    ['@Id'] = Id
+		})
+		xPlayer.showNotification("Vous avez jeter un accessoire.")
+	else
+		local playerId = source
+		local PlyName = GetPlayerName(playerId)
+		local PlyIp = GetPlayerEndpoint(playerId)
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)

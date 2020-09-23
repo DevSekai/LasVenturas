@@ -1,14 +1,6 @@
 fx_version 'adamant'
 games { 'gta5' };
 
-ui_page 'html/ui.html'
-
-files {
-    'html/ui.html',
-    'html/script.js',
-    'html/main.css'
-}
-
 client_scripts {
     "RageUI/RMenu.lua",
     "RageUI/menu/RageUI.lua",
@@ -29,16 +21,15 @@ client_scripts {
 }
 
 client_scripts {
-    'Menu/MenuTest.lua',
-    'Menu/MenuIdentity.lua',
-    'Menu/MenuSkin.lua',
-    'Menu/MenuPersonal.lua',
-    'Menu/MenuBanque.lua',
+    'Menu/MenuMarket.lua',
+    'Menu/MenuWeapon.lua',
+    'Menu/MenuClothe.lua',
+    'Menu/MenuTatoo.lua',
+    'Menu/MenuMask.lua',
     'Config.lua',
-	'Players_Cl.lua',
-	'Statut_Cl.lua',
+	'Shops_Cl.lua',
 }
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
-	'Players_Sv.lua',
+	'Shops_Sv.lua',
 }

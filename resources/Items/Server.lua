@@ -19,3 +19,13 @@ ESX.RegisterUsableItem('water', function(source)
 
 	xPlayer.showNotification(MessageDrink.."de l'eau.")
 end)
+
+ESX.RegisterUsableItem('chargeur', function(source)
+	TriggerClientEvent('UseChargeur', source)
+end)
+
+RegisterServerEvent('RemoveChargeur')
+AddEventHandler('RemoveChargeur', function()
+	local xPlayer = ESX.GetPlayerFromId(source)
+	xPlayer.removeInventoryItem('chargeur', 1)
+end)

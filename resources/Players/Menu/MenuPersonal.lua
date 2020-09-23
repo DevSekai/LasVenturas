@@ -32,6 +32,10 @@ RMenu.Add('Personnal', 'Divers', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Pr
 RMenu:Get('Personnal', 'Divers'):SetSubtitle("~y~Divers")
 RMenu:Get('Personnal', 'Divers'):DisplayGlare(false);
 
+RMenu.Add('Personnal', 'Clothe', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'Clothe'):SetSubtitle("~y~Vêtements")
+RMenu:Get('Personnal', 'Clothe'):DisplayGlare(false);
+
 Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
@@ -46,7 +50,8 @@ Citizen.CreateThread(function ()
 			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Wallet')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Divers')) or
-			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId())
+			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId()) or
+			RageUI.Visible(RMenu:Get('Personnal', 'Clothe'))
 		then
 			OpenPersonalMenu()
 		end 
@@ -102,16 +107,14 @@ function OpenPersonalMenu()
 				end)
 			end,
         },RMenu:Get('Personnal', 'Wallet'))
-        --Exemple ApplySkin --
-        --[[RageUI.Item.Button("Update Skin", "", {}, true, {
-        	onSelected = function()
-				ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-					Result = json.decode(Skin)
-					Result.BarbeIndex = 8
-					TriggerServerEvent('UpdatePlySkin', MdpPersonal, json.encode(Result))
+	    RageUI.Item.Button("Vêtements", "", {}, true, {
+	    	onSelected = function ()
+			    ESX.TriggerServerCallback("getAccessoire", function(Acces)
+			        Accessoires = Acces
+			        RageUI.Visible(RMenu:Get('Personnal', 'Clothe'), not RageUI.Visible(RMenu:Get('Personnal', 'Clothe')))
 			    end)
-			end,
-        })]]
+	    	end,
+	    })
 		RageUI.Item.List("Démarches", DemarcheList, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if Index == 1 then StartDemarche("move_m@confident")
@@ -210,6 +213,50 @@ function OpenPersonalMenu()
 				end,
 			})
 	    end
+    end)
+
+	RageUI.IsVisible(RMenu:Get('Personnal', 'Clothe'), function()
+	    Result = Accessoires
+       	for i = 1, #Result, 1 do
+	        RageUI.Item.List("~s~[~y~"..Result[i].Label.."~s~]", {"~y~Equiper~s~","~y~Enlever~s~","~y~Renommer~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+				onSelected = function(Index, Items)
+					Acces = json.decode(Result[i].Accessoire)
+					PlyPed = GetPlayerPed(-1)
+                    First = Acces.acces_1
+                    Second = Acces.acces_2
+                    Type = Result[i].Type
+	                Label = Result[i].Label
+	                Id = Result[i].Id
+	                Resulta = Result[i]
+	                if Index == 1 then
+	                	AccessoiresOn(Type, First, Second)
+	                elseif Index == 2 then
+	                	AccessoiresOff(Type)
+	                elseif Index == 3 then
+	                	NewLabel = KeyboardInput("Nouveau nom", 20)
+	                	if NewLabel ~= nil then
+		                	TriggerServerEvent('RenameAcc', MdpPersonal, Id, NewLabel)
+	                        RageUI.GoBack()
+		                else
+		                	ESX.ShowNotification("Usage invalide.")
+		                end
+		            elseif Index == 4 then
+		            	local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
+                        local closestPed = GetPlayerPed(closestPlayer)
+
+                        if closestPlayer ~= -1 and closestDistance < 3.0 then
+                            TriggerServerEvent('GiveAcc', MdpPersonal, GetPlayerServerId(closestPlayer), Id)
+	                        RageUI.GoBack()
+                        else
+                            ESX.ShowNotification("Aucun joueurs aux alentours.")
+                        end
+                    else
+                        TriggerServerEvent('DelAcc', MdpPersonal, Id)
+	                    RageUI.GoBack()
+		            end
+				end,
+			})
+        end
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Weaponry'), function()

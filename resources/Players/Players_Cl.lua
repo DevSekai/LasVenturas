@@ -1,6 +1,6 @@
 ESX = nil
 InMenu, PlayerSpawn, MdpClien, HasDamaged, HasFaim, HasSoif, HudHiden = false, false, "Ntm", false, false, false, false
-PlyStatut = {}
+PlyStatut, Accessoires = {}, {}
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -8,6 +8,7 @@ Citizen.CreateThread(function ()
         Citizen.Wait(0)
     end
 end)
+
 
 AddEventHandler('playerSpawned', function()
 	while ESX == nil do
@@ -31,10 +32,30 @@ AddEventHandler('playerSpawned', function()
         	Display = true,
         	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
 			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
-            Hunger = Result.Hunger,
-            Thrist = Result.Thrist
+            Hunger = PlyStatut.Hunger,
+            Thrist = PlyStatut.Thrist
         })
         PlayerSpawn = true
+	end)
+end)
+
+AddEventHandler('onClientResourceStart', function()
+	while ESX == nil do
+		Citizen.Wait(1)
+	end
+	exports.spawnmanager:setAutoSpawn(false)
+	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
+		Result = json.decode(Statut)
+		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
+		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
+		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
+        SendNUIMessage({
+        	Display = true,
+        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
+			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
+            Hunger = PlyStatut.Hunger,
+            Thrist = PlyStatut.Thrist
+        })
 	end)
 end)
 -----------------------------------------------------------------------------
@@ -143,7 +164,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
+		Citizen.Wait(10 * 1000)
 		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 		if HudHiden then
 	        SendNUIMessage({
@@ -394,7 +415,6 @@ AddEventHandler('ApplySkin', function(Ped, Skin)
 end)
 
 function ApplySkin(Ped, Skin)
-	FreezeEntityPosition(PlayerPedId(Ped), false)
 	SetEntityVisible(PlayerPedId(Ped), true)
 	SetEntityCollision(PlayerPedId(Ped), true)
 	Result = json.decode(Skin)
@@ -419,6 +439,11 @@ function ApplySkin(Ped, Skin)
 	if Result.ArmsIndex then SetPedComponentVariation(PlayerPedId(Ped), 3, Result.ArmsIndex, 0, 2) end
 	if Result.PantalonIndex and Result.PantalonIndex2 then SetPedComponentVariation(PlayerPedId(Ped), 4, Result.PantalonIndex, Result.PantalonIndex2, 2) end
 	if Result.ChaussureIndex and Result.ChaussureIndex2 then SetPedComponentVariation(PlayerPedId(Ped), 6, Result.ChaussureIndex, Result.ChaussureIndex2, 2) end
+	ESX.TriggerServerCallback('GetPlyTatoo', function(Tatoo)
+		for _,v in pairs (Tatoo) do
+			AddPedDecorationFromHashes(GetPlayerPed(-1), v.Collection, GetHashKey(v.Tatoo))
+		end
+	end)
 end
 
 function StartDemarche(MoveSet)
@@ -427,4 +452,394 @@ function StartDemarche(MoveSet)
 		SetPedMovementClipset(GetPlayerPed(-1), MoveSet, true)
 		RemoveAnimSet(MoveSet)
 	end)
+end
+
+function AccessoiresOn(Type, Index, Index2)
+	if Type == "Masque" then
+		local dict = 'missfbi4'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'takeoff_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedComponentVariation(playerPed, 1, Index, Index2, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Lunettes" then
+		local dict = 'clothingspecs'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'try_glasses_positive_a'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 1, Index, Index2, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chapeaux" then
+		local dict = 'missheistdockssetup1hardhat@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_hat'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 0, Index, Index2, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Boucles d'oreille" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 2, Index, Index2, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Veste" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.VesteIndex = Index
+			Result.VesteIndex2 = Index2
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Pantalon" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.PantalonIndex = Index
+			Result.PantalonIndex2 = Index2
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chaussure" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.ChaussureIndex = Index
+			Result.ChaussureIndex2 = Index2
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Tshirt" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.TshirtIndex = Index
+			Result.TshirtIndex2 = Index2
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chaines" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedComponentVariation(playerPed, 7, Index, Index2, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	end
+end
+
+function AccessoiresOff(Type)
+	if Type == "Masque" then
+		local dict = 'missfbi4'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'takeoff_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedComponentVariation(playerPed, 1, 0, 0, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Lunettes" then
+		local dict = 'clothingspecs'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'try_glasses_positive_a'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 1, 0, 0, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chapeaux" then
+		local dict = 'missheistdockssetup1hardhat@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_hat'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 0, 0, 0, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Boucles d'oreille" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedPropIndex(playerPed, 2, 0, 0, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Veste" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.VesteIndex = 0
+			Result.VesteIndex2 = 0
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Pantalon" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.PantalonIndex = 0
+			Result.PantalonIndex2 = 0
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chaussure" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.ChaussureIndex = 0
+			Result.ChaussureIndex2 = 0
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Tshirt" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+			Result = json.decode(Skin)
+			Result.TshirtIndex = 0
+			Result.TshirtIndex2 = 0
+			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
+		end)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	elseif Type == "Chaines" then
+		local dict = 'mp_masks@standard_car@rps@'
+		local myPed = PlayerPedId()
+		RequestAnimDict(dict)
+
+		while not HasAnimDictLoaded(dict) do
+			Citizen.Wait(0)
+		end
+
+		local animation = ''
+		local flags = 0 -- only play the animation on the upper body
+		animation = 'put_on_mask'
+		TaskPlayAnim(myPed, dict, animation, 8.0, -8.0, -1, 50, 0, false, false, false)
+		Citizen.Wait(1000)
+		SetEntityCollision(GetPlayerPed(-1), true, true)
+		playerPed = GetPlayerPed(-1)
+		SetPedComponentVariation(playerPed, 7, 0, 0, 2)
+		Citizen.Wait(200)
+		ClearPedTasks(playerPed)
+	end
 end
