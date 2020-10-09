@@ -67,6 +67,22 @@ ESX.RegisterServerCallback('GetPlyStatut', function(source, cb)
 	end)
 end)
 
+ESX.RegisterServerCallback('GetPlyGroup', function(source, cb)
+	local identifier
+	local playerId = source
+	for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+		if string.match(v, 'license:') then
+			identifier = string.sub(v, 9)
+			break
+		end
+	end
+	MySQL.Async.fetchScalar('SELECT `group` FROM `users` WHERE identifier = @identifier', {
+		['@identifier'] = identifier
+	}, function(result)
+		cb(result)
+	end)
+end)
+
 ESX.RegisterServerCallback('getUserBanque', function(source, cb)
 	local identifier
 	local playerId = source

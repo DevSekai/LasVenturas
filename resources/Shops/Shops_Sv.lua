@@ -162,7 +162,29 @@ AddEventHandler('BuyWeapon', function(Mdp, WeaponName, WeaponLabel, WeaponPrice)
 	    local playerId = source
 	    local PlyName = GetPlayerName(playerId)
 	    local PlyIp = GetPlayerEndpoint(playerId)
-	    TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Weapons.\nTrigger : giveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+	    TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Weapons.\nTrigger : BuyWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+	    DropPlayer(playerId, "Utilisation d'un executor.")
+	end
+end)
+
+RegisterServerEvent('BuyBarber')
+AddEventHandler('BuyBarber', function(Mdp, Price)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerMoney = xPlayer.getMoney()
+	if Mdp == "Ntm" then
+	    if playerMoney >= Price then
+	        xPlayer.removeMoney(Price)
+
+	        xPlayer.showNotification("Vous avez payer le barbier ~g~"..Price..' $')
+	        TriggerClientEvent('BuyBarber', source)
+	    else
+	        xPlayer.showNotification("Vous n'avez pas assez d'argent")
+	    end
+	else
+	    local playerId = source
+	    local PlyName = GetPlayerName(playerId)
+	    local PlyIp = GetPlayerEndpoint(playerId)
+	    TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Weapons.\nTrigger : BuyBarber.\nDescription : Le joueur a voulu déclancher le trigger.")
 	    DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -187,4 +209,41 @@ AddEventHandler('BuyItem', function(Mdp, ItemName, ItemCount, ItemLabel, ItemPri
         TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : BuyItem.\nDescription : Le joueur a voulu déclancher le trigger.")
         DropPlayer(playerId, "Utilisation d'un executor.")
     end
+end)
+
+RegisterNetEvent('BuyCar')
+AddEventHandler('BuyCar', function(Mdp, VehiclePlate, VehicleLabel, VehicleHash, VehiclePrice)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayerPed = GetPlayerPed(source)
+    local xPlayerMoney = xPlayer.getMoney()
+    if Mdp == "Ntm" then
+        if xPlayerMoney >= VehiclePrice then
+            xPlayer.removeAccountMoney('money', VehiclePrice)
+            xPlayer.showNotification("Vous avez acheté un véhicule.\nNom :"..VehicleLabel..".\nPlaque : "..VehiclePlate..".\nPrix : ~g~"..VehiclePrice.." $")
+		    MySQL.Async.execute('INSERT INTO users_vehicles (Identifier, Label, Hash, Plate) VALUES(@Identifier, @Label, @Hash, @Plate)',
+		    {          
+		        ['@Identifier'] = xPlayer.identifier,
+		        ['@Label'] = VehicleLabel,
+		        ['@Hash'] = VehicleHash,
+		        ['@Plate'] = VehiclePlate
+		    })
+		    TriggerClientEvent('BuyCar', source, xPlayerPed, VehiclePlate, VehicleHash)
+        else
+            xPlayer.showNotification("Vous n'avez pas assez d'argent.")
+        end
+    else
+        local playerId = source
+        local PlyName = GetPlayerName(playerId)
+        local PlyIp = GetPlayerEndpoint(playerId)
+        TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : BuyVehicle.\nDescription : Le joueur a voulu déclancher le trigger.")
+        DropPlayer(playerId, "Utilisation d'un executor.")
+    end
+end)
+
+ESX.RegisterServerCallback('isPlateTaken', function(source, cb, Plate)
+	MySQL.Async.fetchAll('SELECT 1 FROM users_vehicles WHERE Plate = @Plate', {
+		['@Plate'] = Plate
+	}, function(result)
+		cb(result[1] ~= nil)
+	end)
 end)

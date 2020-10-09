@@ -21,6 +21,8 @@ client_scripts {
 }
 
 client_scripts {
+    'Menu/MenuBarber.lua',
+    'Menu/MenuCar.lua',
     'Menu/MenuMarket.lua',
     'Menu/MenuWeapon.lua',
     'Menu/MenuClothe.lua',

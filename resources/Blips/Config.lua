@@ -156,4 +156,30 @@ Config.Blip = {
         {x = -1820.523, y = 792.518,   z = 137.118},
         {x = 1698.388,  y = 4924.404,  z = 41.063},
 	},
+
+	Car = {
+		Sprite = 225, Display = 4, Scale = 0.6, Color = 0, ShortRange = true, Label = "Concessionaire auto",
+		{x = -33.7, y = -1102.0, z = 25.4},
+	},
+
+	Bike = {
+		Sprite = 226, Display = 4, Scale = 0.6, Color = 0, ShortRange = true, Label = "Concessionaire moto",
+		{x = -30.781, y = -1106.915, z = 25.422},
+	},
+
+	Barber = {
+        Sprite = 71, Display = 4, Scale = 0.6, Color = 47, ShortRange = true, Label = "Salon De coiffure",
+        {x = 133.9, y = -1709.2, z = 29.29},
+        {x = -814.3, y = -183.8, z = 36.6},
+        {x = -1282.6, y = -1116.8, z = 6.0},
+        {x = 1931.5, y = 3729.7, z = 31.8},
+        {x = 1212.8, y = -472.9, z = 65.2},
+        {x = -32.9, y = -152.3, z = 56.1},
+        {x = -278.1, y = 6228.5, z = 30.7}
+    },
+
+	Casino = {
+		Sprite = 439, Display = 4, Scale = 0.8, Color = 0, ShortRange = true, Label = "Diamond's Casino",
+		{x = 918.458, y = 51.691, z = 80.898},
+	},
 }

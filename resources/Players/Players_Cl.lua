@@ -1,14 +1,19 @@
 ESX = nil
 InMenu, PlayerSpawn, MdpClien, HasDamaged, HasFaim, HasSoif, HudHiden = false, false, "Ntm", false, false, false, false
 PlyStatut, Accessoires = {}, {}
+IsDead = false
+
 
 Citizen.CreateThread(function ()
     while ESX == nil do
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
+        Citizen.Wait(10)
     end
+    while ESX.GetPlayerData().job == nil do
+        Citizen.Wait(10)
+    end
+    ESX.PlayerData = ESX.GetPlayerData()
 end)
-
 
 AddEventHandler('playerSpawned', function()
 	while ESX == nil do
@@ -26,8 +31,11 @@ AddEventHandler('playerSpawned', function()
 	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
 		Result = json.decode(Statut)
 		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
-		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
-		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
+		if Statut then
+			PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
+		else
+			PlyStatut = {Hunger = 100, Thrist = 100}
+		end
         SendNUIMessage({
         	Display = true,
         	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
@@ -36,26 +44,6 @@ AddEventHandler('playerSpawned', function()
             Thrist = PlyStatut.Thrist
         })
         PlayerSpawn = true
-	end)
-end)
-
-AddEventHandler('onClientResourceStart', function()
-	while ESX == nil do
-		Citizen.Wait(1)
-	end
-	exports.spawnmanager:setAutoSpawn(false)
-	ESX.TriggerServerCallback('GetPlyStatut', function(Statut)
-		Result = json.decode(Statut)
-		Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
-		PlyStatut = {Hunger = Result.Hunger, Thrist = Result.Thrist}
-		TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
-        SendNUIMessage({
-        	Display = true,
-        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
-			DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
-            Hunger = PlyStatut.Hunger,
-            Thrist = PlyStatut.Thrist
-        })
 	end)
 end)
 -----------------------------------------------------------------------------
@@ -162,6 +150,12 @@ AddEventHandler('AddThrist', function(Ammount)
 	end
 end)
 
+RegisterNetEvent('RevivePlayer')
+AddEventHandler('RevivePlayer', function()
+	HasDamaged, HasSoif, HasFaim = false, false, false
+	RevivePly()
+end)
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10 * 1000)
@@ -187,18 +181,23 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(2 * 60 * 1000)
-		if PlyStatut.Hunger >= 0 and PlyStatut.Thrist >= 0 then
-			NewHunger = PlyStatut.Hunger - 1
-			NewThrist = PlyStatut.Thrist - 2
+	while not HasDamaged do
+		Citizen.Wait(1000)
+		if PlyStatut.Hunger >= 1 and PlyStatut.Thrist >= 2 then
+			if IsPedRunning(PlayerPedId()) then
+				NewHunger = PlyStatut.Hunger - 2
+				NewThrist = PlyStatut.Thrist - 4
+			else
+				NewHunger = PlyStatut.Hunger - 1
+				NewThrist = PlyStatut.Thrist - 2
+			end
 			Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
 			PlyStatut = {Hunger = NewHunger, Thrist = NewThrist}
-			if PlyStatut.Hunger <= 0 or PlyStatut.Thrist <= 0 then
+			if PlyStatut.Hunger <= NewHunger or PlyStatut.Thrist <= NewThrist then
 				if PlyStatut.Hunger <= 0 then HasFaim = true end
 				if PlyStatut.Thrist <= 0 then HasSoif = true end
-				if PlyStatut.Hunger <= 30 then ESX.ShowNotification("Vous avez faim.") end
-				if PlyStatut.Thrist <= 30 then ESX.ShowNotification("Vous avez soif.") end
+				if PlyStatut.Hunger <= 50 then ESX.ShowNotification("Vous avez faim.") end
+				if PlyStatut.Thrist <= 50 then ESX.ShowNotification("Vous avez soif.") end
 				TriggerServerEvent('SendStatut', MdpClien, PlyStatut.Hunger, PlyStatut.Thrist)
 				if HudHiden then
 			        SendNUIMessage({
@@ -243,7 +242,14 @@ Citizen.CreateThread(function()
 end)
 
 function RevivePly()
+	HasDamaged = false
+	PlyCoords = GetEntityCoords(PlayerPedId())
+	PlyHead = GetEntityHeading(PlayerPedId())
 	SetEntityHealth(PlayerPedId(), 200)
+	SetEntityCoordsNoOffset(PlayerPedId(), PlyCoords, false, false, false, true)
+	NetworkResurrectLocalPlayer(PlyCoords, PlyHead, true, false)
+	SetPlayerInvincible(PlayerPedId(), false)
+	ClearPedBloodDamage(PlayerPedId())
 	NewHunger = 100
 	NewThrist = 100
 	Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()

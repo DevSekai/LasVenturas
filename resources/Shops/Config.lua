@@ -23,8 +23,76 @@ Config.Price = {
 	--Clothe--
 	Tenue = 100,
 	Clothe = 25,
+	--Barber--
+	Barber = 50,
 	--Weapon--
 	Chargeur = 150,
+}
+
+Config.Barber = {
+    {x = 133.912, y = -1709.202, z = 29.291,
+    PedX = 141.48, PedY = -1705.59, PedZ = 29.29, PedHeading = 123.37,
+    PedInX = 137.15, PedInY = -1710.50, PedInZ = 29.3, PedInHeading = 205.75,
+    AnimX = 137.72, AnimY = -1710.64, AnimZ = 28.60, AnimHeading = 237.22,
+ 	InX = 137.12, InY = -1709.45, InZ = 29.3, InHeading = 205.75},
+    {x = -814.3, y = -183.8, z = 36.6},
+    {x = -1282.6, y = -1116.8, z = 6.0},
+    {x = 1931.5, y = 3729.7, z = 31.8},
+    {x = 1212.8, y = -472.9, z = 65.2},
+    {x = -32.9, y = -152.3, z = 56.1},
+    {x = -278.1, y = 6228.5, z = 30.7},
+}
+
+Config.Car = {
+	InCar = vector3(-47.5, -1097.2, 25.4), InCarHeading = -20.0,
+	OutCar = vector3(-28.6, -1085.6, 25.5), OutCarHeading = 330.0,
+	Pos = {
+		{x = -33.7, y = -1102.0, z = 25.4},
+	},
+	Categorie = {
+		Sportive = {
+			Label = "Sportive",
+			Vehicle = {
+				{Name = "Blista", Value = "blista", Price = 1500},
+				{Name = "Brioso", Value = "brioso", Price = 1500},
+				{Name = "Dilettante", Value = "dilettante", Price = 1500},
+			},
+		},
+		Compacts = {
+			Label = "Compacts",
+			Vehicle = {
+				{Name = "Blista", Value = "blista", Price = 1500},
+				{Name = "Brioso", Value = "brioso", Price = 1500},
+				{Name = "Dilettante", Value = "dilettante", Price = 1500},
+			},
+		},
+	},
+}
+
+Config.Bike = {
+	InCar = vector3(-39.919, -1099.990, 25.422), InCarHeading = 249.806,
+	OutCar = vector3(-39.919, -1099.990, 25.422), OutCarHeading = 249.806,
+	Pos = {
+		{x = -30.781, y = -1106.915, z = 25.422},
+	},
+	Categorie = {
+		Sportive = {
+			Label = "Sportive",
+			Vehicle = {
+				{Name = "Blista", Value = "blista", Price = 1500},
+				{Name = "Brioso", Value = "brioso", Price = 1500},
+				{Name = "Dilettante", Value = "dilettante", Price = 1500},
+			},
+		},
+		Compacts = {
+			Label = "Compacts",
+			Vehicle = {
+				{Name = "Blista", Value = "blista", Price = 1500},
+				{Name = "Brioso", Value = "brioso", Price = 1500},
+				{Name = "Dilettante", Value = "dilettante", Price = 1500},
+			},
+		},
+	},
 }
 
 Config.Market = {
@@ -49,6 +117,7 @@ Config.Market = {
     {x = -1820.523, y = 792.518,   z = 137.118},
     {x = 1698.388,  y = 4924.404,  z = 41.063},
 }
+
 Config.Market.Items = {
 	{Label = "Pain", Value = "bread", Price = 15, MaxNbr = 5},
 	{Label = "Eau", Value = "water", Price = 15, MaxNbr = 5},

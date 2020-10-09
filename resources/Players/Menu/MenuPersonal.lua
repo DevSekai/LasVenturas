@@ -1,7 +1,7 @@
 PlyGroup = ""
 PlyWeight = ""
 MdpPersonal = "Ntm"
-invItems, invWeapon, invMoney, invSale, invBank = {}, {}, {}, {}, {}
+invItems, invWeapon, invMoney, invSale, invBank, invJeton = {}, {}, {}, {}, {}, {}
 DemarcheList = {"~y~Classique~s~","~y~Arrogante~s~","~y~Blesse~s~","~y~Business~s~","~y~Casual~s~","~y~Choc~s~","~y~Determine~s~","~y~Depressif~s~","~y~Depressif F~s~","~y~Fatigue~s~","~y~Fier~s~","~y~Hobo~s~","~y~Hipster~s~","~y~Intimide~s~","~y~Impertinent~s~","~y~Mangeuse d'homme~s~","~y~Malheureux~s~","~y~Muscle~s~","~y~Petite course~s~","~y~Pressee~s~","~y~Sombre~s~","~y~Trop mange~s~"}
 GpsList = {"~y~Supprimer le trajet~s~","~y~Agence d'interim~s~","~y~Auto école~s~","~y~Benny's~s~","~y~Hôpitale's~s~","~y~Parking central~s~","~y~Poste de police~s~"}
 VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
@@ -92,6 +92,7 @@ function OpenPersonalMenu()
 				invMoney = {}
 				invSale = {}
 				invBank = {}
+				invJeton = {}
 			    ESX.TriggerServerCallback('getPlayerInventory', function(money)
 					for i=1, #money.accounts, 1 do
 						if money.accounts[i].name == 'money' and money.accounts[i].money > 0 then
@@ -102,6 +103,9 @@ function OpenPersonalMenu()
 						end
 						if money.accounts[i].name == 'bank' and money.accounts[i].money > 0 then
 							table.insert(invBank, {label = "Compte bancaire", value = 'bank', itemType = 'item_account', amount = money.accounts[i].money})
+						end
+						if money.accounts[i].name == 'jeton' and money.accounts[i].money > 0 then
+							table.insert(invJeton, {label = "Diamond's Casino", value = 'jeton', itemType = 'item_account', amount = money.accounts[i].money})
 						end
 					end
 				end)
@@ -165,7 +169,7 @@ function OpenPersonalMenu()
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
 	    RageUI.Item.Separator("[~y~"..PlyWeight.."~s~ Kg / ~y~24~s~ Kg]")
 	    for _,v in pairs (invItems) do
-			RageUI.Item.List("~w~[~y~"..v.label.."~w~] x"..v.count, {"~y~Utiliser~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("~s~[~y~"..v.label.."~s~] x"..v.count, {"~y~Utiliser~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					itemName = v.value
 					if Index == 1 then
@@ -261,7 +265,7 @@ function OpenPersonalMenu()
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Weaponry'), function()
 	    for _,v in pairs (invWeapon) do
-			RageUI.Item.List("~w~[~y~"..v.label.."~w~] x"..v.amount, {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("~s~[~y~"..v.label.."~s~] x"..v.amount, {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					if Index == 1 then
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -286,7 +290,34 @@ function OpenPersonalMenu()
 		    RageUI.Item.Separator("[~y~"..v.label.."~s~] : "..v.amount.." $")
 		end
 	    for _,v in pairs (invMoney) do
-			RageUI.Item.List("	~w~[~y~"..v.label.."~w~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("	~s~[~y~"..v.label.."~s~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+				onSelected = function(Index, Items)
+					local Amount = KeyboardInput("Quantité", 20)
+					if tonumber(Amount) ~= nil then
+						if tonumber(Amount) <= v.amount then
+							if Index == 1 then
+								local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
+								if closestDistance ~= -1 and closestDistance <= 3 then
+									TriggerServerEvent('GiveMoney', GetPlayerServerId(closestDistance), MdpPersonal, v.value, tonumber(Amount))
+									RageUI.GoBack()
+								else
+									ESX.ShowNotification('Il n\'y a personne aux alentours.')
+								end
+							else
+								TriggerServerEvent('RemoveMoney', MdpPersonal, v.value, tonumber(Amount))
+								RageUI.GoBack()
+							end
+						else
+							ESX.ShowNotification("Quantité invalide.")
+						end
+					else
+						ESX.ShowNotification("Mauvaise utilisation.")
+					end
+				end,
+			})
+	    end
+	    for _,v in pairs (invJeton) do
+			RageUI.Item.List("	~s~[~y~"..v.label.."~s~] : "..v.amount.." jetons", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					local Amount = KeyboardInput("Quantité", 20)
 					if tonumber(Amount) ~= nil then
@@ -313,7 +344,7 @@ function OpenPersonalMenu()
 			})
 	    end
 	    for _,v in pairs (invSale) do
-			RageUI.Item.List("	~w~[~y~"..v.label.."~w~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("	~s~[~y~"..v.label.."~s~] : "..v.amount.." $", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					local Amount = KeyboardInput("Quantité", 20)
 					if tonumber(Amount) ~= nil then
@@ -350,20 +381,20 @@ function OpenPersonalMenu()
 			ActualSpeed = math.floor(GetEntitySpeed(plyInVeh)* 3.6 + 0.5)
 			EngineState = GetIsVehicleEngineRunning(plyInVeh)
 			if EngineState then
-				Engine = "[~g~Allumer~w~]"
+				Engine = "[~g~Allumer~s~]"
 			else
-				Engine = "[~r~Eteind~w~]"
+				Engine = "[~r~Eteind~s~]"
 			end
 			if not Limitateur then
-				LimitateurState = ActualSpeed.." Km/H [~r~Désactiver~w~]"
+				LimitateurState = ActualSpeed.." Km/H [~r~Désactiver~s~]"
 			else
-				LimitateurState = ActualSpeed.." Km/H [~g~Activer~w~]"
+				LimitateurState = ActualSpeed.." Km/H [~g~Activer~s~]"
 			end
 		end
 	    if CarModel then RageUI.Item.Separator("[~y~Modèle~s~] : "..CarModel) end
 	    if CarHealth then RageUI.Item.Separator("[~y~Etat du véhicule~s~] : "..CarHealth.."%") end
 	    if CarPlate then RageUI.Item.Separator("[~y~Plaque d'immatriculation~s~] : "..CarPlate) end
-		RageUI.Item.Checkbox("~w~	[~y~Limiteur de vitesse~w~] : "..LimitateurState, "", Limitateur, {}, {
+		RageUI.Item.Checkbox("~s~	[~y~Limiteur de vitesse~s~] : "..LimitateurState, "", Limitateur, {}, {
 			onSelected = function(Index)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					Limitateur = not Limitateur
@@ -378,7 +409,7 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-		RageUI.Item.Checkbox("~w~	[~y~Etat moteur~w~] : "..Engine, "", EngineState, {}, {
+		RageUI.Item.Checkbox("~s~	[~y~Etat moteur~s~] : "..Engine, "", EngineState, {}, {
 			onSelected = function(Index)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -392,7 +423,7 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-		RageUI.Item.List("	~w~[~y~Ouvrir une porte~w~]", VhcDoors, 1, nil, {}, true, {
+		RageUI.Item.List("	~s~[~y~Ouvrir une porte~s~]", VhcDoors, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -413,7 +444,7 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-		RageUI.Item.List("	~w~[~y~Fermer une porte~w~]", VhcDoors, 1, nil, {}, true, {
+		RageUI.Item.List("	~s~[~y~Fermer une porte~s~]", VhcDoors, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -434,7 +465,7 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-		RageUI.Item.List("	~w~[~y~Ouvrir une fenêtre~w~]", VhcWindows, 1, nil, {}, true, {
+		RageUI.Item.List("	~s~[~y~Ouvrir une fenêtre~s~]", VhcWindows, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -448,7 +479,7 @@ function OpenPersonalMenu()
 				end
 			end,
 		})
-		RageUI.Item.List("	~w~[~y~Fermer une fenêtre~w~]", VhcWindows, 1, nil, {}, true, {
+		RageUI.Item.List("	~s~[~y~Fermer une fenêtre~s~]", VhcWindows, 1, nil, {}, true, {
 			onSelected = function(Index, Items)
 				if IsPedSittingInAnyVehicle(PlayerPedId()) then
 					plyVeh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -468,7 +499,7 @@ function OpenPersonalMenu()
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
-		RageUI.Item.Checkbox("[~y~Afficher/Cacher HUD]", "", false, {}, {
+		RageUI.Item.Checkbox("[~y~Afficher/Cacher HUD~s~]", "", false, {}, {
 			onSelected = function(Index)
 				if not Display then
 					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
@@ -497,7 +528,7 @@ function OpenPersonalMenu()
 			    end
 			end,
 		})
-		RageUI.Item.Checkbox("[~y~Afficher/Cacher blips]", "", true, {}, {
+		RageUI.Item.Checkbox("[~y~Afficher/Cacher blips~s~]", "", true, {}, {
 			onSelected = function(Index)
 				if not Blip then
 			    	TriggerEvent('DeleteAllBlip')
@@ -506,6 +537,11 @@ function OpenPersonalMenu()
 					TriggerEvent('ShowAllBlip')
 			        Blip = false
 			    end
+			end,
+		})
+		RageUI.Item.List("[~y~Cacher blips~s~]", Config.BlipsList, 1, nil, {}, true, {
+			onSelected = function(Index, Items)
+			    TriggerEvent('DeleteBlip', Items.Value)
 			end,
 		})
     end)
