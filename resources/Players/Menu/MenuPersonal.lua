@@ -220,14 +220,14 @@ function OpenPersonalMenu()
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Clothe'), function()
-	    Result = Accessoires
+		Result = Accessoires
        	for i = 1, #Result, 1 do
 	        RageUI.Item.List("~s~[~y~"..Result[i].Label.."~s~]", {"~y~Equiper~s~","~y~Enlever~s~","~y~Renommer~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
-					Acces = json.decode(Result[i].Accessoire)
+					Acces = json.decode(Result[i].Stuff)
 					PlyPed = GetPlayerPed(-1)
-                    First = Acces.acces_1
-                    Second = Acces.acces_2
+                    First = Acces.Index
+                    Second = Acces.Color
                     Type = Result[i].Type
 	                Label = Result[i].Label
 	                Id = Result[i].Id
@@ -537,11 +537,6 @@ function OpenPersonalMenu()
 					TriggerEvent('ShowAllBlip')
 			        Blip = false
 			    end
-			end,
-		})
-		RageUI.Item.List("[~y~Cacher blips~s~]", Config.BlipsList, 1, nil, {}, true, {
-			onSelected = function(Index, Items)
-			    TriggerEvent('DeleteBlip', Items.Value)
 			end,
 		})
     end)

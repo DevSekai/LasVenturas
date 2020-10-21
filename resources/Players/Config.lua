@@ -86,16 +86,3 @@ Config.Bank = {
 	    {x = 5.134, y = -919.949, z = 29.557}
 	}
 }
-
-Config.BlipsList = {
-	{Name = "~y~Banque~s~", Value = "Bank"},
-	{Name = "~y~Salon de tatouage~s~", Value = "Tatoo"},
-	{Name = "~y~Magasins de vêtements~s~", Value = "Clothe"},
-	{Name = "~y~Stand de masque~s~", Value = "Mask"},
-	{Name = "~y~Armurerie~s~", Value = "Weapon"},
-	{Name = "~y~Supèrette~s~", Value = "Market"},
-	{Name = "~y~Concessionaire auto~s~", Value = "Car"},
-	{Name = "~y~Concessionaire moto~s~", Value = "Bike"},
-	{Name = "~y~Salon de coiffure~s~", Value = "Barber"},
-	{Name = "~y~Casino~s~", Value = "Casino"},
-}

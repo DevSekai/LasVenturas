@@ -1,4 +1,5 @@
 ESX = nil
+VehicleAlreadySpawn = false
 VehicleHash = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
@@ -7,9 +8,14 @@ RegisterServerEvent('CheckVehicleSpawn')
 AddEventHandler('CheckVehicleSpawn', function()
 	local playerId = source
 	if VehicleHash ~= nil then
-		TriggerClientEvent('SpawnCar', playerId, VehicleHash)
+		if not VehicleAlreadySpawn then
+			TriggerClientEvent('SpawnCar', playerId, VehicleHash)
+		end
 	else
-		TriggerClientEvent('SpawnRandomCar', playerId)
+		if not VehicleAlreadySpawn then
+			TriggerClientEvent('SpawnRandomCar', playerId)
+			VehicleAlreadySpawn = true
+		end
 	end
 end)
 

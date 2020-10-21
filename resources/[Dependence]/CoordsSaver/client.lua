@@ -11,7 +11,7 @@ RegisterCommand('table', function(source, args, rawCommand)
 	local coords = GetEntityCoords(PlayerPedId())
 	local heading = GetEntityHeading(PlayerPedId())
 	SendNUIMessage({
-		coords = "{x = "..coords.x..", y = "..coords.y..", z = "..coords.z.."},"
+		coords = "{x = "..coords.x..", y = "..coords.y..", z = "..coords.z..", h = "..heading.."},"
 	})
 end)
 
@@ -35,4 +35,11 @@ RegisterCommand('tpc', function(source, args, rawCommand)
 	if coords[3] ~= nil then z = coords[3] end
 
 	SetEntityCoords(GetPlayerPed(-1), x,y,z, false)
+end)
+
+RegisterCommand('heading', function(source, args, rawCommand)
+	local heading = GetEntityHeading(PlayerPedId())
+	SendNUIMessage({
+		coords = heading
+	})
 end)
