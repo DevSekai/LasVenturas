@@ -265,7 +265,7 @@ function OpenPersonalMenu()
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Weaponry'), function()
 	    for _,v in pairs (invWeapon) do
-			RageUI.Item.List("~s~[~y~"..v.label.."~s~] x"..v.amount, {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+			RageUI.Item.List("~s~[~y~"..v.label.."~s~]", {"~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					if Index == 1 then
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
