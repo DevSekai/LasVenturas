@@ -1,14 +1,6 @@
 fx_version 'adamant'
 games { 'gta5' };
 
-ui_page 'html/ui.html'
-
-files {
-    'html/ui.html',
-    'html/script.js',
-    'html/main.css'
-}
-
 client_scripts {
     "RageUI/RMenu.lua",
     "RageUI/menu/RageUI.lua",
@@ -36,7 +28,6 @@ client_scripts {
     'Menu/MenuBanque.lua',
     'Config.lua',
 	'Players_Cl.lua',
-	'Statut_Cl.lua',
 }
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
