@@ -1,9 +1,10 @@
 RegisterNetEvent('BuyItems')
-AddEventHandler('BuyItems', function(Mdp, ItemType, Items)
+AddEventHandler('BuyItems', function(ItemType, Items)
     local xPlayer = ESX.GetPlayerFromId(source)
     local xPlayerMoney = xPlayer.getMoney()
     local Result = json.decode(Items)
-    if Mdp == Shops.Mdp then
+    local TokenGen = json.decode(Result.Token)
+    if TokenGen.Key == Token then
         if ItemType == "Standar" then
             local Amount = tonumber(Result.Count) * tonumber(Result.Price)
             if xPlayerMoney >= Amount then
@@ -26,17 +27,18 @@ AddEventHandler('BuyItems', function(Mdp, ItemType, Items)
         local playerId = source
         local PlyName = GetPlayerName(playerId)
         local PlyIp = GetPlayerEndpoint(playerId)
-        Logs(LogsRed, "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyItems.\nDescription : Le joueur a voulu déclancher le trigger.")
+        Logs(LogsRed, "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyItems.\nDescription : Le joueur a voulu déclancher le trigger.\nObjets : "..Result.Name..".")
         DropPlayer(playerId, "Utilisation d'un executor.")
     end
 end)
 
 RegisterServerEvent("BuyStuff")
-AddEventHandler("BuyStuff", function(Mdp, Stuff)
+AddEventHandler("BuyStuff", function(Stuff)
     local xPlayer = ESX.GetPlayerFromId(source)
     local xPlayerMoney = xPlayer.getMoney()
     local Result = json.decode(Stuff)
-	if Mdp == Shops.Mdp then
+    local TokenGen = json.decode(Result.Token)
+    if TokenGen.Key == Token then
         if xPlayerMoney >= Result.Price then
 			xPlayer.removeAccountMoney("money", Result.Price)
             xPlayer.showNotification("Vous avez payer votre "..Result.Name.." ~g~"..Result.Price.."$")
@@ -57,17 +59,18 @@ AddEventHandler("BuyStuff", function(Mdp, Stuff)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyStuff.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyStuff.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Name..".")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
 
 RegisterServerEvent("CheckMoney")
-AddEventHandler("CheckMoney", function(Mdp, Check)
+AddEventHandler("CheckMoney", function(Check)
     local xPlayer = ESX.GetPlayerFromId(source)
     local xPlayerMoney = xPlayer.getMoney()
     local Result = json.decode(Check)
-	if Mdp == Shops.Mdp then
+    local TokenGen = json.decode(Result.Token)
+    if TokenGen.Key == Token then
         if xPlayerMoney >= Result.Price then
             if Result.Type == "Barber" then
                 xPlayer.removeAccountMoney("money", Result.Price)
@@ -89,7 +92,7 @@ AddEventHandler("CheckMoney", function(Mdp, Check)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : CheckMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : CheckMoney.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)

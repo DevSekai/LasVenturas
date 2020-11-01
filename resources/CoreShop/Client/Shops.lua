@@ -68,7 +68,7 @@ AddEventHandler("LeaveShop", function(Type)
 			Result.CheuveuxIndex = Shops.Barber.Index
 			Result.BarbeIndex = Shops.Barber.Index2
 			Result.CouleurIndex = Shops.Barber.Color
-			TriggerServerEvent('CreateSkin', Shops.MdpUniversel, json.encode(Result))
+			TriggerServerEvent('CreateSkin', "Ntm", json.encode(Result))
 		end)
 		SetEntityCoords(PlayerPedId(), Shops.Barber.Out.X, Shops.Barber.Out.Y, Shops.Barber.Out.Z - 0.98)
 		SetEntityHeading(PlayerPedId(), Shops.Barber.Out.H)
@@ -102,6 +102,7 @@ end
 function CreateShop()
 	for _,v in ipairs(Shops.Coords) do
 		if v.Type == "Ltd" then
+			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Ltd.BlipSprite)
 			SetBlipDisplay(Blips, 4)
 			SetBlipScale  (Blips, Shops.Ltd.BlipScale)
@@ -117,8 +118,7 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Ltd.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
-		end
-		if v.Type == "Weapon" then
+		elseif v.Type == "Weapon" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Weapon.BlipSprite)
 			SetBlipDisplay(Blips, 4)
@@ -135,8 +135,7 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Weapon.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
-		end
-		if v.Type == "Clothe" then
+		elseif v.Type == "Clothe" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Clothe.BlipSprite)
 			SetBlipDisplay(Blips, 4)
@@ -153,8 +152,7 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Clothe.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
-		end
-		if v.Type == "Tatoo" then
+		elseif v.Type == "Tatoo" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Tatoo.BlipSprite)
 			SetBlipDisplay(Blips, 4)
@@ -171,8 +169,7 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Tatoo.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
-		end
-		if v.Type == "Barber" then
+		elseif v.Type == "Barber" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Barber.BlipSprite)
 			SetBlipDisplay(Blips, 4)
@@ -189,8 +186,7 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Barber.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
-		end
-		if v.Type == "Mask" then
+		elseif v.Type == "Mask" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Mask.BlipSprite)
 			SetBlipDisplay(Blips, 4)

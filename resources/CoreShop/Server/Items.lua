@@ -37,3 +37,29 @@ ESX.RegisterUsableItem('coca', function(source)
 
 	xPlayer.showNotification(Shops.MessageDrink.."un coca.")
 end)
+
+ESX.RegisterUsableItem('chargeur', function(source)
+	TriggerClientEvent('UseChargeur', source)
+end)
+
+RegisterServerEvent('RemoveChargeur')
+AddEventHandler('RemoveChargeur', function()
+	local xPlayer = ESX.GetPlayerFromId(source)
+	xPlayer.removeInventoryItem('chargeur', 1)
+end)
+
+ESX.RegisterUsableItem('silencieux', function(source)
+    TriggerClientEvent('UseSilencieux', source)
+end)
+
+ESX.RegisterUsableItem('GPB', function(source)
+   TriggerClientEvent('UseGPB', source)
+end)
+
+ESX.RegisterUsableItem('serflex', function(source)
+	TriggerClientEvent('UseSerflex', source)
+end)
+
+ESX.RegisterUsableItem('corde', function(source)
+	TriggerClientEvent('UseCorde', source)
+end)

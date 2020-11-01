@@ -1,4 +1,5 @@
 ESX = nil
+TokenGen = {}
 InMenu = false
 FinalPrice = 0
 Timing = 2000
@@ -7,7 +8,13 @@ Citizen.CreateThread(function ()
     while ESX == nil do
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
         Citizen.Wait(0)
-    end
+	end
+	TriggerServerEvent("GetToken")
+end)
+
+RegisterNetEvent("SendToken")
+AddEventHandler("SendToken", function(Token)
+	TokenGen.Key = Token
 end)
 
 Citizen.CreateThread(function ()
