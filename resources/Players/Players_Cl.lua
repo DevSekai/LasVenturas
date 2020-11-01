@@ -30,6 +30,7 @@ AddEventHandler('playerSpawned', function()
 			SetEntityVisible(PlayerPedId(), false)
 		end
 	end)
+	Citizen.Wait(1000)
 	ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
 		Result = json.decode(PlyWeapons)
 		for k,v in pairs (Result) do
