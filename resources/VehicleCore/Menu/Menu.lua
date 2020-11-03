@@ -1,32 +1,32 @@
-RMenu.Add('Super', 'Principal', RageUI.CreateMenu("", "Luxury Autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Super', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Super', 'Principal'):DisplayGlare(false);
 RMenu:Get('Super', 'Principal').Closable = false;
 
-RMenu.Add('Sportive', 'Principal', RageUI.CreateMenu("", "Premium autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Sportive', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Sportive', 'Principal'):DisplayGlare(false);
 RMenu:Get('Sportive', 'Principal').Closable = false;
 
-RMenu.Add('Muscle', 'Principal', RageUI.CreateMenu("", "Los santos autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Muscle', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Muscle', 'Principal'):DisplayGlare(false);
 RMenu:Get('Muscle', 'Principal').Closable = false;
 
-RMenu.Add('OffRoad', 'Principal', RageUI.CreateMenu("", "Sandy shore autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('OffRoad', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('OffRoad', 'Principal'):DisplayGlare(false);
 RMenu:Get('OffRoad', 'Principal').Closable = false;
 
-RMenu.Add('Suv', 'Principal', RageUI.CreateMenu("", "Suv autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Suv', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Suv', 'Principal'):DisplayGlare(false);
 RMenu:Get('Suv', 'Principal').Closable = false;
 
-RMenu.Add('Compact', 'Principal', RageUI.CreateMenu("", "Compact autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Compact', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Compact', 'Principal'):DisplayGlare(false);
 RMenu:Get('Compact', 'Principal').Closable = false;
 
-RMenu.Add('Moto', 'Principal', RageUI.CreateMenu("", "Moto autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Moto', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Moto', 'Principal'):DisplayGlare(false);
 RMenu:Get('Moto', 'Principal').Closable = false;
 
-RMenu.Add('Velo', 'Principal', RageUI.CreateMenu("", "Velo autoshop", nil, nil, "ShopDict", "VhcBanner"), true)
+RMenu.Add('Velo', 'Principal', RageUI.CreateMenu("", Shops.MenuDesc, nil, nil, "ShopDict", "VhcBanner"), true)
 RMenu:Get('Velo', 'Principal'):DisplayGlare(false);
 RMenu:Get('Velo', 'Principal').Closable = false;
 

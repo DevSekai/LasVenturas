@@ -3,6 +3,7 @@ Shops = {
 	ShopsOut = {},
 	BuyOut = {},
 	LastVhc = {},
+	MenuDesc = "Véhicules disponible",
 	Cars = {
 		SuperMax = 4,
 		ClassiqueMax = 4,
