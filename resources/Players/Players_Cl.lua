@@ -21,6 +21,7 @@ AddEventHandler('playerSpawned', function()
 	while ESX == nil do
 		Citizen.Wait(1)
 	end
+	Citizen.Wait(1000)
 	exports.spawnmanager:setAutoSpawn(false)
 	ESX.TriggerServerCallback('CheckFirstSpawn', function(NotFirstSpawn)
 		if NotFirstSpawn then
