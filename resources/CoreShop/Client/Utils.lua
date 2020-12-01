@@ -9,11 +9,11 @@ Citizen.CreateThread(function ()
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
         Citizen.Wait(0)
 	end
-	TriggerServerEvent("GetToken")
+	TriggerServerEvent("GetShopToken")
 end)
 
-RegisterNetEvent("SendToken")
-AddEventHandler("SendToken", function(Token)
+RegisterNetEvent("SendShopToken")
+AddEventHandler("SendShopToken", function(Token)
 	TokenGen.Key = Token
 end)
 

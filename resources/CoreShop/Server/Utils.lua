@@ -12,9 +12,9 @@ Citizen.CreateThread(function ()
 	end
 end)
 
-RegisterServerEvent("GetToken")
-AddEventHandler("GetToken", function()
-	TriggerClientEvent("SendToken", source, Token)
+RegisterServerEvent("GetShopToken")
+AddEventHandler("GetShopToken", function()
+	TriggerClientEvent("SendShopToken", source, Token)
 end)
 
 function GenerateToken(Length)

@@ -4,7 +4,7 @@ end)
 
 function EnterShop(Shops)
 	local Result = json.decode(Shops)
-	if Result.Type == "Mask" then
+	if Result.Type == "Masque" then
 		SetEntityCoords(PlayerPedId(), Shops.Mask.PlyCam)
 		SetEntityHeading(PlayerPedId(), Shops.Mask.PlyCamH)
 		FreezeEntityPosition(PlayerPedId(), true)
@@ -72,6 +72,13 @@ AddEventHandler("LeaveShop", function(Type)
 		end)
 		SetEntityCoords(PlayerPedId(), Shops.Barber.Out.X, Shops.Barber.Out.Y, Shops.Barber.Out.Z - 0.98)
 		SetEntityHeading(PlayerPedId(), Shops.Barber.Out.H)
+		FreezeEntityPosition(PlayerPedId(), false)
+		RageUI.CloseAll()
+		Citizen.Wait(750)
+		Timing = 2000
+		DoScreenFadeIn(1500)
+		Citizen.Wait(Timing)
+		InMenu = false
 	elseif Type == "Tatoo" then
 		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
 			TriggerEvent('ApplySkin', GetPlayerPed(-1), Skin)
@@ -83,14 +90,9 @@ AddEventHandler("LeaveShop", function(Type)
 		end)
 		SetEntityCoords(PlayerPedId(), Shops.Tatoo.Out.X, Shops.Tatoo.Out.Y, Shops.Tatoo.Out.Z - 0.98)
 		SetEntityHeading(PlayerPedId(), Shops.Tatoo.Out.H)
+	else
+		RageUI.GoBack()
 	end
-	FreezeEntityPosition(PlayerPedId(), false)
-	RageUI.CloseAll()
-	Citizen.Wait(750)
-	Timing = 2000
-	DoScreenFadeIn(1500)
-	Citizen.Wait(Timing)
-	InMenu = false
 end)
 
 function DeleteCams()

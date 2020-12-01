@@ -1,24 +1,24 @@
-RMenu.Add('Ltd', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "ShopDict", "LtdBanner"), true)
+RMenu.Add('Ltd', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Ltd', 'Principal'):DisplayGlare(false);
 RMenu:Get('Ltd', 'Principal').Closable = false;
 
-RMenu.Add('Weapon', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "ShopDict", "AmmuBanner"), true)
+RMenu.Add('Weapon', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Weapon', 'Principal'):DisplayGlare(false);
 RMenu:Get('Weapon', 'Principal').Closable = false;
 
-RMenu.Add('Mask', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "ShopDict", "MaskBanner"), true)
+RMenu.Add('Mask', 'Principal', RageUI.CreateMenu("", "Article disponible", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Mask', 'Principal'):DisplayGlare(false);
 RMenu:Get('Mask', 'Principal').Closable = false;
 
-RMenu.Add('Barber', 'Principal', RageUI.CreateMenu("", "Coupe possible", nil, nil, "ShopDict", "HairBanner"), true)
+RMenu.Add('Barber', 'Principal', RageUI.CreateMenu("", "Coupe possible", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Barber', 'Principal'):DisplayGlare(false);
 RMenu:Get('Barber', 'Principal').Closable = false;
 
-RMenu.Add('Tatoo', 'Principal', RageUI.CreateMenu("", "Tatouage disponible", nil, nil, "ShopDict", "TatooBanner"), true)
+RMenu.Add('Tatoo', 'Principal', RageUI.CreateMenu("", "Tatouage disponible", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Tatoo', 'Principal'):DisplayGlare(false);
 RMenu:Get('Tatoo', 'Principal').Closable = false;
 
-RMenu.Add('Clothe', 'Principal', RageUI.CreateMenu("", "Magasin de vêtements", nil, nil, "ShopDict", "ClotheBanner"), true)
+RMenu.Add('Clothe', 'Principal', RageUI.CreateMenu("", "Magasin de vêtements", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Clothe', 'Principal'):DisplayGlare(false);
 RMenu:Get('Clothe', 'Principal').Closable = false;
 
@@ -387,7 +387,7 @@ function ShowMenu(Type)
 			RageUI.Item.List("Chapeaux", ChapeauxFound, Shops.Clothe.ChapeauxIndex, nil, {}, true, {
 				onListChange = function(Index, Items)
 					Shops.Clothe.ChapeauxIndex = Index
-					SetPedComponentVariation(PlayerPedId(), 0, Shops.Clothe.ChapeauxIndex, Shops.Clothe.ChapeauxIndex2, 2)
+					SetPedPropIndex(PlayerPedId(), 0, Shops.Clothe.ChapeauxIndex, Shops.Clothe.ChapeauxIndex2, 2)
 				end,
 			})
 			ChapeauxColorFound = {}
@@ -397,7 +397,7 @@ function ShowMenu(Type)
 			RageUI.Item.List("Couleur du chapeau", ChapeauxColorFound, Shops.Clothe.ChapeauxIndex2, nil, {}, true, {
 				onListChange = function(Index, Items)
 					Shops.Clothe.ChapeauxIndex2 = Index
-					SetPedComponentVariation(PlayerPedId(), 0, Shops.Clothe.ChapeauxIndex, Shops.Clothe.ChapeauxIndex2, 2)
+					SetPedPropIndex(PlayerPedId(), 0, Shops.Clothe.ChapeauxIndex, Shops.Clothe.ChapeauxIndex2, 2)
 				end,
 			})
             RageUI.Item.Button("Acheter", "", {}, true, {

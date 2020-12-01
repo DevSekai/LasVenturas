@@ -3,7 +3,7 @@ SexeChoose = {"Homme", "Femme"}
 SexeIndex = 1
 MdpIdentity = "Ntm"
 
-RMenu.Add('CrationPerso', 'Identity', RageUI.CreateMenu("", "", 600, nil, "root_cause", "banner"), true)
+RMenu.Add('CrationPerso', 'Identity', RageUI.CreateMenu("", "", 600, nil, "root_cause", "Banner"), true)
 RMenu:Get('CrationPerso', 'Identity'):SetSubtitle("~y~Création de l'identité")
 RMenu:Get('CrationPerso', 'Identity'):SetSizeWidth(200)
 RMenu:Get('CrationPerso', 'Identity'):DisplayInstructionalButton(false)

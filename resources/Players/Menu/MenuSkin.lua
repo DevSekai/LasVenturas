@@ -3,7 +3,7 @@ DadNumber = {"Benjamin", "Daniel", "Joshua", "Noah", "Andrew", "Juan", "Alex", "
 MotherNumber = {"Adelyn", "Emily", "Abigail", "Beverly", "Kristen", "Hailey", "June", "Daisy", "Elizabeth", "Addison", "Ava", "Cameron", "Samantha", "Madison", "Amber", "Heather", "Hillary", "Courtney", "Ashley", "Alyssa", "Mia", "Brittany"}
 MdpSkin = "Ntm"
 
-RMenu.Add('CrationPerso', 'Skin', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
+RMenu.Add('CrationPerso', 'Skin', RageUI.CreateMenu("", "", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('CrationPerso', 'Skin'):SetSubtitle("~y~Création de l'apparence")
 RMenu:Get('CrationPerso', 'Skin'):DisplayInstructionalButton(false)
 RMenu:Get('CrationPerso', 'Skin'):DisplayGlare(false);

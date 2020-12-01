@@ -1,4 +1,6 @@
-WebHook = "https://discordapp.com/api/webhooks/755900623832219758/oVtoKWcu6h4uuDaZRUeAWLE2VpNM6vzSbiOPwZwxkb2N-8UczVQmsBNcouFHwKoHOGnh"
+WebHookLoggin = "https://discord.com/api/webhooks/777603414971908096/YF9_MagYYgBNokEMzmLiDn8x4YiqEVjixK3AvtX84uQoPWsXjV60LbJYPnLSa6WRRrC7"
+WebHookBans = "https://discord.com/api/webhooks/777603279571648522/QhUm-F5VQDYwAgYMS9myHh3OjPvBW1i732-5d9Q_a6u6QWTqf8PGGhUVYU_ALTQjfIXV"
+WebHookWarms = "https://discord.com/api/webhooks/777602838062301234/cmNFRKriW6in559HxttiBV_HecYLOL8s7YCi4uo_OZBIOgI27VPgWd5AkQaBTbrfbEVS"
 Name = "Logs Venturas"
 Logo = "https://media.discordapp.net/attachments/743953072266412056/744662695541735504/CoreoLogo.png"
 LogsBlue = 3447003
@@ -34,7 +36,61 @@ function Logs(Color, Title, Description)
 	            },
 	        }
 	    }
-	PerformHttpRequest(WebHook, function(err, text, headers) end, 'POST', json.encode({username = Name, embeds = Content}), { ['Content-Type'] = 'application/json' })
+	PerformHttpRequest(WebHookLoggin, function(err, text, headers) end, 'POST', json.encode({username = Name, embeds = Content}), { ['Content-Type'] = 'application/json' })
+end
+
+RegisterNetEvent('LogsBans')
+AddEventHandler('LogsBans', function(Color, Title, Description)
+	if Color == "Red" then
+		LogsColor = 15158332
+	elseif Color == "Blue" then
+		LogsColor = 3447003
+	else
+		LogsColor = 3066993
+	end
+	LogsBans(LogsColor, Title, Description)
+end)
+
+function LogsBans(Color, Title, Description)
+	local Content = {
+	        {
+	            ["color"] = Color,
+	            ["title"] = Title,
+	            ["description"] = Description,
+		        ["footer"] = {
+	                ["text"] = Name,
+	                ["icon_url"] = Logo,
+	            },
+	        }
+	    }
+	PerformHttpRequest(WebHookBans, function(err, text, headers) end, 'POST', json.encode({username = Name, embeds = Content}), { ['Content-Type'] = 'application/json' })
+end
+
+RegisterNetEvent('LogsWarms')
+AddEventHandler('LogsWarms', function(Color, Title, Description)
+	if Color == "Red" then
+		LogsColor = 15158332
+	elseif Color == "Blue" then
+		LogsColor = 3447003
+	else
+		LogsColor = 3066993
+	end
+	LogsWarms(LogsColor, Title, Description)
+end)
+
+function LogsWarms(Color, Title, Description)
+	local Content = {
+	        {
+	            ["color"] = Color,
+	            ["title"] = Title,
+	            ["description"] = Description,
+		        ["footer"] = {
+	                ["text"] = Name,
+	                ["icon_url"] = Logo,
+	            },
+	        }
+	    }
+	PerformHttpRequest(WebHookWarms, function(err, text, headers) end, 'POST', json.encode({username = Name, embeds = Content}), { ['Content-Type'] = 'application/json' })
 end
 
 AddEventHandler('playerDropped', function()

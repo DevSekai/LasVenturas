@@ -185,14 +185,20 @@ AddEventHandler('UseSerflex', function()
             SetCurrentPedWeapon(PlayerPedId(closestPlayer), GetHashKey('WEAPON_UNARMED'), true)
             SetPedCanPlayGestureAnims(PlayerPedId(closestPlayer), false)
             FreezeEntityPosition(PlayerPedId(closestPlayer), true)
-            DisplayRadar(false)
+			DisplayRadar(false)
+			wasDragged = true
+            AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 4103, 11816, 0.48, 0.00, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
         else
             ClearPedSecondaryTask(PlayerPedId(closestPlayer))
             SetEnableHandcuffs(PlayerPedId(closestPlayer), false)
             DisablePlayerFiring(PlayerPedId(closestPlayer), false)
             SetPedCanPlayGestureAnims(PlayerPedId(closestPlayer), true)
             FreezeEntityPosition(PlayerPedId(closestPlayer), false)
-            DisplayRadar(true)
+			DisplayRadar(true)
+            if not IsPedInParachuteFreeFall(PlayerPedId()) and wasDragged then
+                wasDragged = false
+                DetachEntity(PlayerPedId(), true, false)    
+            end
         end
     else
         ESX.ShowNotification("Il n'y a personne aux alentours.")
@@ -218,20 +224,5 @@ AddEventHandler('UseCorde', function()
         end
     else
         ESX.ShowNotification("Il n'y a personne aux alentours.")
-    end
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        if isHandcuffed2 and drag then
-            wasDragged = true
-            AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 4103, 11816, 0.48, 0.00, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
-        else
-            if not IsPedInParachuteFreeFall(PlayerPedId()) and wasDragged then
-                wasDragged = false
-                DetachEntity(PlayerPedId(), true, false)    
-            end
-        end
     end
 end)

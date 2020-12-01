@@ -3,8 +3,10 @@ games { 'gta5' };
 
 client_scripts {
     -- Config --
-        'Shops.lua',
+        'Position.lua',
+        'Storage.lua',
         'VehicleList.lua',
+        'Hud.lua',
     -- Client --
         'Client/*.lua',
     -- RageUI --
@@ -31,7 +33,6 @@ server_scripts {
     -- MySql --
         '@mysql-async/lib/MySQL.lua',
     -- Config --
-        'Shops.lua',
         'VehicleList.lua',
     -- Server --
         'Server/*.lua',

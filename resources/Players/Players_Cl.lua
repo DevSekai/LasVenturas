@@ -1,7 +1,6 @@
 ESX = nil
 InMenu, PlayerSpawn, MdpClien, HasDamaged, HasFaim, HasSoif, HudHiden = false, false, "Ntm", false, false, false, false
 Accessoires = {}
-IsDead = false
 
 
 Citizen.CreateThread(function ()
@@ -14,13 +13,11 @@ Citizen.CreateThread(function ()
 			Citizen.Wait(10)
 		end
     end
-    ESX.PlayerData = ESX.GetPlayerData()
+	ESX.PlayerData = ESX.GetPlayerData()
+	InitPlayers()
 end)
 
-AddEventHandler('playerSpawned', function()
-	while ESX == nil do
-		Citizen.Wait(1)
-	end
+function InitPlayers()
 	Citizen.Wait(1000)
 	exports.spawnmanager:setAutoSpawn(false)
 	ESX.TriggerServerCallback('CheckFirstSpawn', function(NotFirstSpawn)
@@ -39,18 +36,26 @@ AddEventHandler('playerSpawned', function()
 			GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
 		end
 	end)
-end)
+end
 -----------------------------------------------------------------------------
 ----------------Utils-------------------------------------
 function SpawnPlayer()
+	Citizen.Wait(1000)
 	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
 		Result = json.decode(Coords)
 		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
 		SetEntityHeading(PlayerPedId(), Result.heading)
 	end)
+	Citizen.Wait(1000)
 	ESX.TriggerServerCallback('GetPlySkin', function(Skin)
 		ApplySkin(GetPlayerPed(-1), Skin)
     end)
+	Citizen.Wait(1000)
+	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
+		Result = json.decode(Coords)
+		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
+		SetEntityHeading(PlayerPedId(), Result.heading)
+	end)
 end
 
 function CreatePlayer()
@@ -200,6 +205,7 @@ function ApplySkin(Ped, Skin)
 			AddPedDecorationFromHashes(GetPlayerPed(-1), v.Collection, GetHashKey(v.Tatoo))
 		end
 	end)
+	ESX.ShowNotification("Personnage chargé avec succés")
 end
 
 function StartDemarche(MoveSet)
@@ -268,7 +274,7 @@ function AccessoiresOn(Type, Index, Index2)
 		SetPedPropIndex(playerPed, 0, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Boucles d'oreille" then
+	elseif Type == "Boucles" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -287,7 +293,7 @@ function AccessoiresOn(Type, Index, Index2)
 		SetPedPropIndex(playerPed, 2, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Veste" then
+	elseif Type == "Vestes" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -303,15 +309,10 @@ function AccessoiresOn(Type, Index, Index2)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.VesteIndex = Index
-			Result.VesteIndex2 = Index2
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 11, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Pantalon" then
+	elseif Type == "Pantalons" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -327,15 +328,10 @@ function AccessoiresOn(Type, Index, Index2)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.PantalonIndex = Index
-			Result.PantalonIndex2 = Index2
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 4, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Chaussure" then
+	elseif Type == "Chaussures" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -351,12 +347,7 @@ function AccessoiresOn(Type, Index, Index2)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.ChaussureIndex = Index
-			Result.ChaussureIndex2 = Index2
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 6, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
 	elseif Type == "Tshirt" then
@@ -375,12 +366,7 @@ function AccessoiresOn(Type, Index, Index2)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.TshirtIndex = Index
-			Result.TshirtIndex2 = Index2
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 8, Index, Index2, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
 	elseif Type == "Chaines" then
@@ -463,7 +449,7 @@ function AccessoiresOff(Type)
 		SetPedPropIndex(playerPed, 0, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Boucles d'oreille" then
+	elseif Type == "Boucles" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -482,7 +468,7 @@ function AccessoiresOff(Type)
 		SetPedPropIndex(playerPed, 2, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Veste" then
+	elseif Type == "Vestes" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -498,15 +484,10 @@ function AccessoiresOff(Type)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.VesteIndex = 0
-			Result.VesteIndex2 = 0
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 11, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Pantalon" then
+	elseif Type == "Pantalons" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -522,15 +503,10 @@ function AccessoiresOff(Type)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.PantalonIndex = 0
-			Result.PantalonIndex2 = 0
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 4, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
-	elseif Type == "Chaussure" then
+	elseif Type == "Chaussures" then
 		local dict = 'mp_masks@standard_car@rps@'
 		local myPed = PlayerPedId()
 		RequestAnimDict(dict)
@@ -546,12 +522,7 @@ function AccessoiresOff(Type)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.ChaussureIndex = 0
-			Result.ChaussureIndex2 = 0
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 6, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
 	elseif Type == "Tshirt" then
@@ -570,12 +541,7 @@ function AccessoiresOff(Type)
 		Citizen.Wait(1000)
 		SetEntityCollision(GetPlayerPed(-1), true, true)
 		playerPed = GetPlayerPed(-1)
-		ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-			Result = json.decode(Skin)
-			Result.TshirtIndex = 0
-			Result.TshirtIndex2 = 0
-			TriggerEvent('ApplySkin', GetPlayerPed(-1), json.encode(Result))
-		end)
+		SetPedComponentVariation(myPed, 8, 0, 0, 2)
 		Citizen.Wait(200)
 		ClearPedTasks(playerPed)
 	elseif Type == "Chaines" then

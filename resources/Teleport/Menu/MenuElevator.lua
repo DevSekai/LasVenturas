@@ -1,4 +1,4 @@
-RMenu.Add('Batiments', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
+RMenu.Add('Batiments', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Batiments', 'Principal'):DisplayGlare(false);
 RMenu:Get('Batiments', 'Principal').Closable = false;
 

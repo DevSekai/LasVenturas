@@ -8,7 +8,7 @@ VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s
 VhcWindows = {"~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
 Display, Blip = false, false
 
-RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "banner"), true)
+RMenu.Add('Personnal', 'Principal', RageUI.CreateMenu("", "", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Personnal', 'Principal'):SetSubtitle("~y~Menu personnel")
 RMenu:Get('Personnal', 'Principal'):DisplayGlare(false);
 
