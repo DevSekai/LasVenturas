@@ -716,18 +716,20 @@ function ShowMenu(Type)
 
 		RageUI.IsVisible(RMenu:Get('Mask', 'Principal'), function()
 			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Mask.Price.." $")
-			Index = {}
+			MaskFound = {}
 			for i = 0 , GetNumberOfPedDrawableVariations(PlayerPedId(), 1) - 1, 1 do
-				Index[i] = i
+				MaskFound[i] = i
 			end
-			RageUI.Item.List("Masque", Index, Shops.Mask.Index, nil, {}, true, {
-				onListChange = function(Index, Items)
-					Shops.Mask.Index = Index
-					ESX.ShowNotification(Shops.Mask.Color)
-					Shops.Mask.Color = 0
-					SetPedComponentVariation(PlayerPedId(), 1, Shops.Mask.Index, Shops.Mask.Color, 2)
-				end,
-			})
+			for _,v in pairs (MaskFound) do
+				RageUI.Item.List("Masque", Index, Shops.Mask.Index, nil, {}, true, {
+					onListChange = function(Index, Items)
+						Shops.Mask.Index = Index
+						ESX.ShowNotification(Shops.Mask.Color)
+						Shops.Mask.Color = 0
+						SetPedComponentVariation(PlayerPedId(), 1, Shops.Mask.Index, Shops.Mask.Color, 2)
+					end,
+				})
+			end
 			Color = {}
 			for i = 0 , GetNumberOfPedTextureVariations(PlayerPedId(), 1, Shops.Mask.Index) - 1, 1 do
 				Color[i] = i

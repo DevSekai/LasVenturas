@@ -100,12 +100,12 @@ AddEventHandler('esx_society:withdrawMoney', function(society, amount)
 end)
 
 RegisterServerEvent('esx_society:depositMoney')
-AddEventHandler('esx_society:depositMoney', function(society, amount)
+AddEventHandler('esx_society:depositMoney', function(societyname, amount)
 
   local xPlayer = ESX.GetPlayerFromId(source)
-  local society = GetSociety(society)
+  local society = GetSociety(societyname)
 
-  if amount > 0 and xPlayer.get('money') >= amount then
+  if amount > 0 and xPlayer.getMoney() >= amount then
 
     TriggerEvent('esx_addonaccount:getSharedAccount', society.account, function(account)
       xPlayer.removeMoney(amount)

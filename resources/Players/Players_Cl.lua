@@ -6,20 +6,21 @@ Accessoires = {}
 Citizen.CreateThread(function ()
     while ESX == nil do
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(10)
+        Citizen.Wait(1)
     end
 	if ESX then
 		while ESX.GetPlayerData().job == nil do
-			Citizen.Wait(10)
+			Citizen.Wait(1)
 		end
     end
 	ESX.PlayerData = ESX.GetPlayerData()
+	Citizen.Wait(1000)
+	exports.spawnmanager:setAutoSpawn(false)
 	InitPlayers()
 end)
 
 function InitPlayers()
 	Citizen.Wait(1000)
-	exports.spawnmanager:setAutoSpawn(false)
 	ESX.TriggerServerCallback('CheckFirstSpawn', function(NotFirstSpawn)
 		if NotFirstSpawn then
 			SpawnPlayer()
@@ -28,33 +29,27 @@ function InitPlayers()
 			SetEntityVisible(PlayerPedId(), false)
 		end
 	end)
-	Citizen.Wait(1000)
+end
+-----------------------------------------------------------------------------
+----------------Utils-------------------------------------
+function SpawnPlayer()
+	Citizen.Wait(1500)
+	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
+		Result = json.decode(Coords)
+		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
+		SetEntityHeading(PlayerPedId(), Result.heading)
+	end)
+	Citizen.Wait(1500)
+	ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+		ApplySkin(GetPlayerPed(-1), Skin)
+	end)
+	Citizen.Wait(1500)
 	ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
 		Result = json.decode(PlyWeapons)
 		for k,v in pairs (Result) do
 			WeaponHash = GetHashKey(k)
 			GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
 		end
-	end)
-end
------------------------------------------------------------------------------
-----------------Utils-------------------------------------
-function SpawnPlayer()
-	Citizen.Wait(1000)
-	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
-		Result = json.decode(Coords)
-		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
-		SetEntityHeading(PlayerPedId(), Result.heading)
-	end)
-	Citizen.Wait(1000)
-	ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-		ApplySkin(GetPlayerPed(-1), Skin)
-    end)
-	Citizen.Wait(1000)
-	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
-		Result = json.decode(Coords)
-		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
-		SetEntityHeading(PlayerPedId(), Result.heading)
 	end)
 end
 
@@ -181,13 +176,15 @@ function ApplySkin(Ped, Skin)
 	Result = json.decode(Skin)
 	GoodPed = GetEntityModel(PlayerId(Ped))
 
-	if GoodPed ~= Result.PedIndex then
-		RequestModel(Result.PedIndex)
-		while not HasModelLoaded(Result.PedIndex) do
+	if Result.PedIndex then
+		if GoodPed ~= Result.PedIndex then
 			RequestModel(Result.PedIndex)
-			Citizen.Wait(0)
-		end 
-		SetPlayerModel(PlayerId(Ped), Result.PedIndex) 
+			while not HasModelLoaded(Result.PedIndex) do
+				RequestModel(Result.PedIndex)
+				Citizen.Wait(0)
+			end
+			SetPlayerModel(PlayerId(Ped), Result.PedIndex) 
+		end
 	end
 	if Result.DadIndex and Result.MotherIndex then SetPedHeadBlendData(PlayerPedId(Ped), Result.DadIndex, Result.MotherIndex, nil, Result.DadIndex, Result.MotherIndex, nil, 0.5, 0.5, nil, true) end
 	if Result.CheuveuxIndex then SetPedComponentVariation(PlayerPedId(Ped), 2, Result.CheuveuxIndex, 1, 2) end

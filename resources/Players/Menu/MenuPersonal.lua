@@ -61,7 +61,6 @@ end)
 function OpenPersonalMenu()
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Principal'), function()
 		RageUI.Item.Separator("[~y~Votre ID~s~] : "..GetPlayerServerId(PlayerId()))
-		RageUI.Item.Separator("[~y~Joueurs connecté~s~] : "..NetworkIsPlayerActive().." / 128")
         RageUI.Item.Button("Inventaire", "", {}, true, {
         	onSelected = function()
 				invItems = {}
