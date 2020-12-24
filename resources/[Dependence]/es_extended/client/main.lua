@@ -58,6 +58,17 @@ AddEventHandler('esx:playerLoaded', function(playerData)
 			job_label = playerData.job.label,
 			grade_label = playerData.job.grade_label
 		})
+
+		local jobTpl2 = '<div>{{job_label2}} - {{grade_label2}}</div>'
+
+		if playerData.job2.grade_label == '' or playerData.job2.grade_label == playerData.job2.label then
+			jobTpl2 = '<div>{{job_label2}}</div>'
+		end
+
+		ESX.UI.HUD.RegisterElement('job', #playerData.accounts, 0, jobTpl2, {
+			job_label2 = playerData.job2.label,
+			grade_label2 = playerData.job2.grade_label
+		})
 	end
 
 	ESX.Game.Teleport(PlayerPedId(), {
@@ -181,6 +192,11 @@ AddEventHandler('esx:setJob', function(job)
 	ESX.PlayerData.job = job
 end)
 
+RegisterNetEvent('esx:setJob2')
+AddEventHandler('esx:setJob2', function(job)
+	ESX.PlayerData.job2 = job
+end)
+
 RegisterNetEvent('esx:addWeapon')
 AddEventHandler('esx:addWeapon', function(weaponName, ammo)
 	local playerPed = PlayerPedId()
@@ -250,6 +266,16 @@ AddEventHandler('esx:setJob', function(job)
 		ESX.UI.HUD.UpdateElement('job', {
 			job_label = job.label,
 			grade_label = job.grade_label
+		})
+	end
+end)
+
+RegisterNetEvent('esx:setJob2')
+AddEventHandler('esx:setJob2', function(job)
+	if Config.EnableHud then
+		ESX.UI.HUD.UpdateElement('job2', {
+			job_label2 = job2.label,
+			grade_label2 = job2.grade_label
 		})
 	end
 end)

@@ -8,6 +8,7 @@ ESX.CancelledTimeouts = {}
 ESX.Pickups = {}
 ESX.PickupId = 0
 ESX.Jobs = {}
+ESX.Jobs2 = {}
 ESX.RegisteredCommands = {}
 
 AddEventHandler('esx:getSharedObject', function(cb)
@@ -48,6 +49,30 @@ MySQL.ready(function()
 			for k2,v2 in pairs(ESX.Jobs) do
 				if ESX.Table.SizeOf(v2.grades) == 0 then
 					ESX.Jobs[v2.name] = nil
+					print(('[es_extended] [^3WARNING^7] Ignoring job "%s" due to no job grades found'):format(v2.name))
+				end
+			end
+		end)
+	end)
+
+	MySQL.Async.fetchAll('SELECT * FROM jobs2', {}, function(jobs2)
+		for k,v in ipairs(jobs2) do
+			ESX.Jobs2[v.name] = v
+			ESX.Jobs2[v.name].grades = {}
+		end
+
+		MySQL.Async.fetchAll('SELECT * FROM job2_grades', {}, function(jobGrades2)
+			for k,v in ipairs(jobGrades2) do
+				if ESX.Jobs2[v.job2_name] then
+					ESX.Jobs2[v.job2_name].grades[tostring(v.grade)] = v
+				else
+					print(('[es_extended] [^3WARNING^7] Ignoring job grades for "%s" due to missing job'):format(v.job2_name))
+				end
+			end
+
+			for k2,v2 in pairs(ESX.Jobs2) do
+				if ESX.Table.SizeOf(v2.grades) == 0 then
+					ESX.Jobs2[v2.name] = nil
 					print(('[es_extended] [^3WARNING^7] Ignoring job "%s" due to no job grades found'):format(v2.name))
 				end
 			end

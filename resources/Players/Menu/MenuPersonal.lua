@@ -80,6 +80,7 @@ function OpenPersonalMenu()
 				invWeapon = {}
 			    ESX.TriggerServerCallback('getPlayerInventory', function(loadout)
 					for i=1, #loadout.weapons, 1 do
+						ESX.ShowNotification(json.encode(loadout.weapons))
 					    local weapon = loadout.weapons[i]
 						table.insert(invWeapon, {label = ESX.GetWeaponLabel(weapon.name), value = weapon.name, itemType = 'item_weapon', amount = weapon.ammo})
 					end
@@ -284,7 +285,10 @@ function OpenPersonalMenu()
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Wallet'), function()
-	    RageUI.Item.Separator("[~y~Métier~s~] : "..ESX.PlayerData.job.label.." [~y~Grade~s~] : "..ESX.PlayerData.job.grade_label)
+		RageUI.Item.Separator("[~y~Métier~s~] : "..ESX.PlayerData.job.label.." [~y~Grade~s~] : "..ESX.PlayerData.job.grade_label)
+		if ESX.PlayerData.job2.name ~= "unemployed2" then
+			RageUI.Item.Separator("[~y~Métier~s~] : "..ESX.PlayerData.job2.label.." [~y~Grade~s~] : "..ESX.PlayerData.job2.grade_label)
+		end
 	    for _,v in pairs (invBank) do
 		    RageUI.Item.Separator("[~y~"..v.label.."~s~] : "..v.amount.." $")
 		end

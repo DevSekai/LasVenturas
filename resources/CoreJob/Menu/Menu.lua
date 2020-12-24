@@ -18,12 +18,10 @@ RMenu.Add('Job', 'Chest', RageUI.CreateMenu("", "Coffre", nil, nil, "root_cause"
 RMenu:Get('Job', 'Chest'):DisplayGlare(false);
 RMenu:Get('Job', 'Chest').Closable = false;
 
-RMenu.Add('Job', 'Chest_Item_Ply', RageUI.CreateSubMenu(RMenu:Get('Job', 'Chest'), "", ""))
-RMenu:Get('Job', 'Chest_Item_Ply'):SetSubtitle("Inventaire")
+RMenu.Add('Job', 'Chest_Item_Ply', RageUI.CreateSubMenu(RMenu:Get('Job', 'Chest'), "", "Inventaire"))
 RMenu:Get('Job', 'Chest_Item_Ply'):DisplayGlare(false);
 
-RMenu.Add('Job', 'Chest_Item_Sct', RageUI.CreateSubMenu(RMenu:Get('Job', 'Chest'), "", ""))
-RMenu:Get('Job', 'Chest_Item_Sct'):SetSubtitle("Coffre")
+RMenu.Add('Job', 'Chest_Item_Sct', RageUI.CreateSubMenu(RMenu:Get('Job', 'Chest'), "", "Coffre"))
 RMenu:Get('Job', 'Chest_Item_Sct'):DisplayGlare(false);
 
 RMenu.Add('Job', 'Shop', RageUI.CreateMenu("", "Fournisseur", nil, nil, "root_cause", "Banner"), true)
@@ -37,6 +35,41 @@ RMenu:Get('Job', 'Garage').Closable = false;
 RMenu.Add('Job', 'Cloackroom', RageUI.CreateMenu("", "Vestiaire", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('Job', 'Cloackroom'):DisplayGlare(false);
 RMenu:Get('Job', 'Cloackroom').Closable = false;
+
+RMenu.Add('Job', 'Stand', RageUI.CreateMenu("", "Stand", nil, nil, "root_cause", "Banner"), true)
+RMenu:Get('Job', 'Stand'):DisplayGlare(false);
+RMenu:Get('Job', 'Stand').Closable = false;
+
+RMenu.Add('Job', 'Stand_Custom', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand'), "", "Estéthique"))
+RMenu:Get('Job', 'Stand_Custom'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Stand_Color', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Custom'), "", "Estéthique"))
+RMenu:Get('Job', 'Stand_Color'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Stand_Wheels', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Custom'), "", "Roues"))
+RMenu:Get('Job', 'Stand_Wheels'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Wheels_Color', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Wheels'), "", "Roues"))
+RMenu:Get('Job', 'Wheels_Color'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Wheels_Found', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Wheels'), "", "Articles disponnible"))
+RMenu:Get('Job', 'Wheels_Found'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Primary_Color', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Color'), "", "Couleur principale"))
+RMenu:Get('Job', 'Primary_Color'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Secondary_Color', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Color'), "", "Couleur secondaire"))
+RMenu:Get('Job', 'Secondary_Color'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Pearless_Color', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand_Color'), "", "Nacrage"))
+RMenu:Get('Job', 'Pearless_Color'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Stand_Perfs', RageUI.CreateSubMenu(RMenu:Get('Job', 'Stand'), "", "Performance"))
+RMenu:Get('Job', 'Stand_Perfs'):DisplayGlare(false);
+
+RMenu.Add('Job', 'Crafting', RageUI.CreateMenu("", "Plan de travail", nil, nil, "root_cause", "Banner"), true)
+RMenu:Get('Job', 'Crafting'):DisplayGlare(false);
+RMenu:Get('Job', 'Crafting').Closable = false;
 
 function ShowMenu(Type)
 		if Type == "Interim" then
@@ -79,6 +112,26 @@ function ShowMenu(Type)
 				else
 					ESX.ShowNotification("Ce véhicule ne peut pas rentrer dans le garage.")
 				end
+			else
+				ESX.ShowNotification("Vous devez être en service.")
+			end
+		elseif Type == "Stand" then
+			CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
+			if CrtVhc then
+				Job.Stand.FinalPrice = 0
+				SetVehicleModKit(CrtVhc, 0)	
+				RageUI.Visible(RMenu:Get('Job', Type), not RageUI.Visible(RMenu:Get('Job', Type)))
+				FreezeEntityPosition(CrtVhc, true)
+				SetVehicleEngineOn(CrtVhc, false, true, true)
+				InMenu = true
+				Job.Stand.LastProps = ESX.Game.GetVehicleProperties(CrtVhc)
+			else
+			end
+		elseif Type == "Crafting" then
+			if Job.Wl.DuttyState then
+				RageUI.Visible(RMenu:Get('Job', Type), not RageUI.Visible(RMenu:Get('Job', Type)))
+				FreezeEntityPosition(PlayerPedId(), true)
+				InMenu = true
 			else
 				ESX.ShowNotification("Vous devez être en service.")
 			end
@@ -288,12 +341,20 @@ function ShowMenu(Type)
 			if Job.Wl[PlayerData.job.name].Items then
 				for _,v in pairs (Job.Wl[PlayerData.job.name].Items) do
 					RageUI.Item.Button(v.Label, "", {RightLabel = "~g~"..v.Price.." $~s~"}, true, {
-						onSelected = function()
-							Input = KeyboardInput("Quantité à acheter ("..v.Limite.." maximum)", "", 20)
-							if tonumber(Input) ~= nil then
-								TriggerServerEvent("Job:BuyItems", v, tonumber(Input))
+						onSelected = function(Index, Items)
+							if v.Type == "Items" then
+								Input = KeyboardInput("Quantité à acheter ("..v.Limite.." maximum)", "", 20)
+								if tonumber(Input) ~= nil then
+									TriggerServerEvent("Job:BuyItems", v, tonumber(Input))
+								else
+									ESX.ShowNotification("Utilisation invalide.")
+								end
 							else
-								ESX.ShowNotification("Utilisation invalide.")
+								if not HasPedGotWeapon(PlayerPedId(), GetHashKey("weapon_"..v.Value), false) then
+									TriggerServerEvent("Job:BuyItems", v, tonumber(Input))
+								else
+									ESX.ShowNotification("Vous avez déja cette arme sur vous.")
+								end
 							end
 						end,
 					})
@@ -349,5 +410,75 @@ function ShowMenu(Type)
 			})
 		end)
 
+		RageUI.IsVisible(RMenu:Get('Job', 'Stand'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.Btn()
+			RageUI.Item.Button("Retour", "", {}, true, {
+				onSelected = function()
+					if not Job.Stand.Buyed then
+						ESX.Game.SetVehicleProperties(CrtVhc, Job.Stand.LastProps)
+						LeaveStand(CrtVhc)
+					else
+						Plate = GetVehicleNumberPlateText(CrtVhc)
+						ESX.TriggerServerCallback('BuyMods', function(Result)
+							if Result then
+								CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
+								LeaveStand(CrtVhc)
+							end
+						end, Job.Stand.FinalPrice, Plate)
+					end
+				end,
+			})
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Stand_Perfs'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.PerfsBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Stand_Custom'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.CustomBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Stand_Color'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.ColorBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Primary_Color'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.PrimaryBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Secondary_Color'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.SecondaryBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Pearless_Color'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.PearlessBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Wheels_Color'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.WheelColorBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Stand_Wheels'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.WheelsBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Wheels_Found'), function()
+			RageUI.Item.Separator("[Prix total] : ~g~"..Job.Stand.FinalPrice.." $~s~")
+			Job.Stand.WheelsTypeBtn()
+		end)
+
+		RageUI.IsVisible(RMenu:Get('Job', 'Crafting'), function()
+			Job.Crafting.Btn()
+		end)
+		
 	end
 end

@@ -179,8 +179,8 @@ AddEventHandler("OutVehicle", function(Vehicles)
 				['@Id']   = Result.Id
 			}, function(Ensured)
 				if Ensured then
-					TriggerClientEvent('OutEnsuredVehicle', playerId)
 					xPlayer.showNotification("Vous avez sortie un véhicule assurer, il est donc équiper d'un traceur GPS.")
+					TriggerClientEvent('OutEnsuredVehicle', playerId)
 				else
 					xPlayer.showNotification("Vous avez sortie un véhicule qui n'est pas assurer, il n'est donc pas équiper d'un traceur GPS.")
 				end

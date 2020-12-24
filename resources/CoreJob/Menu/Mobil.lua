@@ -2,73 +2,22 @@
 RMenu.Add("Job", "Mobil", RageUI.CreateMenu("", "Intéraction", nil, nil, "root_cause", "Banner"), true)
 RMenu.Add("Job", "Mobil_Society", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Gestion de l'entreprise"))
 RMenu.Add("Job", "Mobil_Report", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Dossiers"))
-
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-    PlayerData.job = job
-end)
+RMenu.Add("Job", "Mobil_TrgInv", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Inventaire de la personne"))
+RMenu.Add("Job", "Mobil_TrgIdt", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité de la personne"))
+RMenu.Add("Job", "Mobil_CarOwner", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité du propriétaire"))
 
 Citizen.CreateThread(function ()
     while true do
         Citizen.Wait(0)
 
         if IsControlJustReleased(1, 167) then
-            if PlayerData.job.name ~= "unemployed" and PlayerData.job.name ~= "unemployed2" then
+            if PlayerData.job.name ~= "unemployed" then
                 RageUI.Visible(RMenu:Get("Job", "Mobil"), not RageUI.Visible(RMenu:Get("Job", "Mobil")))
             end
         end
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil"), function()
-            if PlayerData.job.grade_name == "boss" then
-                RageUI.Item.Button("Actions entreprise", nil, {}, true, {
-                    onSelected = function(Index, Items)
-                        ESX.TriggerServerCallback('esx_society:getSocietyMoney', function(Money)
-                            Job.Wl.Society_Money = Money
-                        end, PlayerData.job.name)
-                    end,
-                },RMenu:Get("Job", "Mobil_Society"))
-            end
-            RageUI.Item.Checkbox("Prise/Fin de service", "", Job.Wl.DuttyState, {}, {
-                onSelected = function(Index, Items)
-                    Job.Wl.DuttyState = not Job.Wl.DuttyState
-                    TriggerServerEvent("OnDutty", Job.Wl.DuttyState)
-                end,
-            })
-            if Job.Wl.DuttyState then
-                RageUI.Item.Button("Facturation", "", {}, true, {
-                    onSelected = function(Index, Items)
-                        local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
-                        if closestPlayer == -1 or closestDistance > 1.5 then
-                            ESX.ShowNotification("Personne aux alentours")
-                        else
-                            Input = KeyboardInput("Montant de la facture", "", 20)
-                            if tonumber(Input) ~= nil then
-                                TriggerServerEvent('esx_billing:sendBill', GetPlayerServerId(closestPlayer), 'society_'..PlayerData.job.name, 'Facture', tonumber(Input))
-                            else
-                                ESX.ShowNotification("Utilisation invalide.")
-                            end
-                        end
-                    end,
-                })
-                for _,v in pairs (Job.Wl[PlayerData.job.name].Btn) do
-                    if v.Type == "Button" then
-                        RageUI.Item.Button(v.Label, nil, {}, true, {
-                            onSelected = function(Index, Items)
-                                v.Function()
-                            end,
-                        })
-                    elseif v.Type == "List" then
-                        RageUI.Item.List(v.Label, v.Table, v.Index, nil, {}, true, {
-                            onSelected = function(Index, Items)
-                                v.Index = Index
-                                v.Function(Items.Value)
-                            end,
-                        })
-                    else
-                        RageUI.Item.Separator(v.Label)
-                    end
-                end
-            end
+            Job.Wl.JobBtn()
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_Society"), function()
@@ -119,6 +68,47 @@ Citizen.CreateThread(function ()
             for _,v in pairs (Job.Wl.PlyReport) do
                 RageUI.Item.Button(v.Date, v.Report, {}, true, {
                 })
+            end
+        end)
+
+        RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgInv"), function()
+            RageUI.Item.Separator("↓↓       ~g~Cash~s~       ↓↓")
+            for _,v in pairs (Job.Wl.Trg.Account) do
+                RageUI.Item.Button("~g~"..v.label.." $", "", {}, true, {
+                })
+            end
+            RageUI.Item.Separator("↓↓       ~y~Objets~s~       ↓↓")
+            for _,v in pairs (Job.Wl.Trg.Inventory) do
+                RageUI.Item.Button(""..v.label.." "..v.amount, "", {}, true, {
+                })
+            end
+            RageUI.Item.Separator("↓↓       ~o~Armes~s~       ↓↓")
+            for _,v in pairs (Job.Wl.Trg.Loadout) do
+                RageUI.Item.Button(""..v.label.." "..v.amount, "", {}, true, {
+                })
+            end
+        end)
+
+        RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgIdt"), function()
+            RageUI.Item.Separator("↓↓       ~y~Identité~s~       ↓↓")
+            RageUI.Item.Separator("[Nom] : "..Job.Wl.TrgIdentity.LastName)
+            RageUI.Item.Separator("[Prénom] : "..Job.Wl.TrgIdentity.FirstName)
+            RageUI.Item.Separator("↓↓       ~y~Informations~s~       ↓↓")
+            RageUI.Item.Separator("[Age] : "..Job.Wl.TrgIdentity.Birthday)
+            RageUI.Item.Separator("[Métier] : "..Job.Wl.TrgIdentity.Job)
+        end)
+
+        RageUI.IsVisible(RMenu:Get("Job", "Mobil_CarOwner"), function()
+            RageUI.Item.Separator("↓↓       ~y~Identité~s~       ↓↓")
+            RageUI.Item.Separator("[Nom] : "..Job.Wl.CarOwner.LastName)
+            RageUI.Item.Separator("[Prénom] : "..Job.Wl.CarOwner.FirstName)
+            RageUI.Item.Separator("↓↓       ~y~Informations~s~       ↓↓")
+            RageUI.Item.Separator("[Age] : "..Job.Wl.CarOwner.Plate)
+            if Job.Wl.CarOwner.Ensured then
+                RageUI.Item.Separator("[Assurer]")
+            end
+            if Job.Wl.CarOwner.Search then
+                RageUI.Item.Separator("[Rechercher]")
             end
         end)
     end

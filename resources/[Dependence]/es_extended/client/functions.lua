@@ -407,7 +407,7 @@ ESX.Game.SpawnLocalVehicle = function(modelName, coords, heading, cb)
 		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, false, false)
 		local timeout = 0
 
-		SetEntityAsMissionEntity(vehicle, true, true)
+		SetEntityAsMissionEntity(vehicle, true, false)
 		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		SetVehicleNeedsToBeHotwired(vehicle, false)
 		SetVehRadioStation(vehicle, 'OFF')

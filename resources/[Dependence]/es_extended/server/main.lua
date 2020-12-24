@@ -81,16 +81,18 @@ function loadESXPlayer(identifier, playerId)
 		accounts = {},
 		inventory = {},
 		job = {},
+		job2 = {},
 		loadout = {},
 		playerName = GetPlayerName(playerId),
 		weight = 0
 	}
 
 	table.insert(tasks, function(cb)
-		MySQL.Async.fetchAll('SELECT accounts, job, job_grade, `group`, loadout, position, inventory FROM users WHERE identifier = @identifier', {
+		MySQL.Async.fetchAll('SELECT `accounts`, job, job_grade, job2, job2_grade, `group`, loadout, position, inventory FROM users WHERE identifier = @identifier', {
 			['@identifier'] = identifier
 		}, function(result)
 			local job, grade, jobObject, gradeObject = result[1].job, tostring(result[1].job_grade)
+			local job2, grade2, jobObject2, gradeObject2 = result[1].job2, tostring(result[1].job2_grade)
 			local foundAccounts, foundItems = {}, {}
 
 			-- Accounts
@@ -133,6 +135,29 @@ function loadESXPlayer(identifier, playerId)
 
 			if gradeObject.skin_male then userData.job.skin_male = json.decode(gradeObject.skin_male) end
 			if gradeObject.skin_female then userData.job.skin_female = json.decode(gradeObject.skin_female) end
+
+			if ESX.DoesJob2Exist(job2, grade2) then
+				jobObject2, gradeObject2 = ESX.Jobs2[job2], ESX.Jobs2[job2].grades[grade2]
+			else
+				print(('[es_extended] [^3WARNING^7] Ignoring invalid job for %s [job: %s, grade: %s]'):format(identifier, job2, grade2))
+				job2, grade2 = 'unemployed2', '0'
+				jobObject2, gradeObject2 = ESX.Jobs2[job2], ESX.Jobs2[job2].grades[grade2]
+			end
+
+			userData.job2.id = jobObject2.id
+			userData.job2.name = jobObject2.name
+			userData.job2.label = jobObject2.label
+
+			userData.job2.grade = tonumber(grade2)
+			userData.job2.grade_name = gradeObject2.name
+			userData.job2.grade_label = gradeObject2.label
+			userData.job2.grade_salary = gradeObject2.salary
+
+			userData.job.skin_male = {}
+			userData.job.skin_female = {}
+
+			if gradeObject2.skin_male then userData.job2.skin_male = json.decode(gradeObject2.skin_male) end
+			if gradeObject2.skin_female then userData.job2.skin_female = json.decode(gradeObject2.skin_female) end
 
 			-- Inventory
 			if result[1].inventory and result[1].inventory ~= '' then
@@ -210,7 +235,7 @@ function loadESXPlayer(identifier, playerId)
 	end)
 
 	Async.parallel(tasks, function(results)
-		local xPlayer = CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job, userData.loadout, userData.playerName, userData.coords)
+		local xPlayer = CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job, userData.job2, userData.loadout, userData.playerName, userData.coords)
 		ESX.Players[playerId] = xPlayer
 		TriggerEvent('esx:playerLoaded', playerId, xPlayer)
 
@@ -220,6 +245,7 @@ function loadESXPlayer(identifier, playerId)
 			identifier = xPlayer.getIdentifier(),
 			inventory = xPlayer.getInventory(),
 			job = xPlayer.getJob(),
+			job2 = xPlayer.getJob2(),
 			loadout = xPlayer.getLoadout(),
 			maxWeight = xPlayer.getMaxWeight(),
 			money = xPlayer.getMoney()
@@ -467,6 +493,7 @@ ESX.RegisterServerCallback('esx:getPlayerData', function(source, cb)
 		accounts     = xPlayer.getAccounts(),
 		inventory    = xPlayer.getInventory(),
 		job          = xPlayer.getJob(),
+		job2          = xPlayer.getJob2(),
 		loadout      = xPlayer.getLoadout(),
 		money        = xPlayer.getMoney()
 	})
@@ -480,6 +507,7 @@ ESX.RegisterServerCallback('esx:getOtherPlayerData', function(source, cb, target
 		accounts     = xPlayer.getAccounts(),
 		inventory    = xPlayer.getInventory(),
 		job          = xPlayer.getJob(),
+		job2          = xPlayer.getJob2(),
 		loadout      = xPlayer.getLoadout(),
 		money        = xPlayer.getMoney()
 	})

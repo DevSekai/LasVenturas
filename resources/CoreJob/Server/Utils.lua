@@ -11,12 +11,26 @@ local InJob = {
 	Fisherman = false,
 	Farmer = false,
 }
+local Handcuffed = {}
 Token = nil
 ESX = nil
+InService = {
+	["ambulance"] = {},
+	["police"] = {},
+	["mecano"] = {},
+	["weazel"] = {},
+	["unicorn"] = {},
+	["tequilala"] = {},
+	["gouv"] = {},
+	["dog"] = {},
+}
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-TriggerEvent('esx_society:registerSociety', 'ambulance', 'EMS', 'society_ambulance', 'society_ambulance', 'society_ambulance', {type = 'public'})
-TriggerEvent('esx_society:registerSociety', 'police', 'LSPD', 'society_police', 'society_police', 'society_police', {type = 'public'})
+Citizen.CreateThread( function()
+	for _,v in pairs (Job.Wl.JobList) do
+		TriggerEvent('esx_society:registerSociety', v.JobName, v.JobLabel, "society_"..v.JobName, "society_"..v.JobName, "society_"..v.JobName, {type = 'public'})
+	end
+end)
 
 for i = 48,  57 do table.insert(Char, string.char(i)) end
 for i = 65,  90 do table.insert(Char, string.char(i)) end
@@ -238,12 +252,13 @@ RegisterServerEvent('Job:BuyItems')
 AddEventHandler('Job:BuyItems', function(item, count)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerMoney = xPlayer.getMoney()
-	local ItemQuantity = xPlayer.getInventoryItem(item.Value).count
 	if item.Type == "Items" then
+		local ItemQuantity = xPlayer.getInventoryItem(item.Value).count
 		local Price2 = item.Price * count
-		if Price2 >= playerMoney then
+		if Price2 <= playerMoney then
 			if ItemQuantity <= item.Limite - 1 then
 				xPlayer.addInventoryItem(item.Value, count)
+                xPlayer.removeAccountMoney("money", Price2)
 				TriggerClientEvent('esx:showNotification', source, 'Vous avez acheter : ~o~x'..count..' ' .. item.Label.."~s~.")
 			else
 				TriggerClientEvent('esx:showNotification', source, 'Vous ~r~n\'avez pas assez de place dans votre inventaire~s~ pour porter plus de ~p~' .. item.Label)
@@ -253,9 +268,10 @@ AddEventHandler('Job:BuyItems', function(item, count)
 		end
 	else
 		local Price2 = item.Price
-		if Price2 >= playerMoney then
-			xPlayer.addWeapon(item.Value, 250)
-			TriggerClientEvent('esx:showNotification', source, 'Vous avez acheter : '..ESX.GetWeaponLabel(item.Value)..' ~p~')
+		if Price2 <= playerMoney then
+			xPlayer.addWeapon("weapon_"..item.Value, 250)
+			xPlayer.removeAccountMoney("money", Price2)
+			TriggerClientEvent('esx:showNotification', source, 'Vous avez acheter : '..ESX.GetWeaponLabel("weapon_"..item.Value)..' ~p~')
 		else
 			TriggerClientEvent('esx:showNotification', source, 'Vous ~r~n\'avez pas assez d\'argent.')
 		end
@@ -316,7 +332,6 @@ ESX.RegisterServerCallback('GetJobReport', function(source, cb, Trg)
 	end
 end)
 
-
 RegisterServerEvent('NewJobReport')
 AddEventHandler('NewJobReport', function(Trg, Date, Report)
 	local xPlayer = ESX.GetPlayerFromId(source)
@@ -329,5 +344,292 @@ AddEventHandler('NewJobReport', function(Trg, Date, Report)
 		}, function()
 			xPlayer.showNotification("Vous avez écrit dans le dossier de : ~o~"..xTarget.name.."~s~.")
 		end)
+	end
+end)
+
+ESX.RegisterServerCallback('getOtherPlayerData', function(source, cb, Trg)
+	local xPlayer = ESX.GetPlayerFromId(Trg)
+	local data = {
+		name       = GetPlayerName(Trg),
+		job        = xPlayer.job,
+		inventory  = xPlayer.inventory,
+		accounts   = xPlayer.accounts,
+		weapons    = xPlayer.loadout
+	}
+	cb(data)
+end)
+
+RegisterServerEvent('Handcuffed')
+AddEventHandler('Handcuffed', function(Trg)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Trg)
+	local xPlayerCoords = GetEntityCoords(GetPlayerPed(source))
+	local xTargetCoords = GetEntityCoords(GetPlayerPed(Trg))
+	local xCoordsX = xPlayerCoords.x - xTargetCoords.x
+	local xCoordsY = xPlayerCoords.y - xTargetCoords.y
+	if (xCoordsX - xCoordsY) < 1.5 then
+		if xPlayer.job.name == "police" or xPlayer.job2.name ~= "unemployed2" then
+			TriggerClientEvent('Handcuffed', Trg)
+		end
+	end
+end)
+
+RegisterServerEvent('InCarOut')
+AddEventHandler('InCarOut', function(Trg)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(Trg)
+	local xPlayerCoords = GetEntityCoords(GetPlayerPed(source))
+	local xTargetCoords = GetEntityCoords(GetPlayerPed(Trg))
+	local xCoordsX = xPlayerCoords.x - xTargetCoords.x
+	local xCoordsY = xPlayerCoords.y - xTargetCoords.y
+	if (xCoordsX - xCoordsY) < 1.5 then
+		if xPlayer.job.name == "police" or xPlayer.job.name == "ambulance" or xPlayer.job2.name ~= "unemployed2" then
+			TriggerClientEvent('InCarOut', Trg)
+		end
+	end
+end)
+
+ESX.RegisterServerCallback('getOtherPlayerData', function(source, cb, Trg)
+	local xPlayer = ESX.GetPlayerFromId(Trg)
+	local data = {
+		name       = GetPlayerName(Trg),
+		job        = xPlayer.job,
+		inventory  = xPlayer.inventory,
+		accounts   = xPlayer.accounts,
+		weapons    = xPlayer.loadout
+	}
+	cb(data)
+end)
+
+ESX.RegisterServerCallback('getIdentity', function(source, cb, Trg)
+	local xTarget = ESX.GetPlayerFromId(Trg)
+	MySQL.Async.fetchAll('SELECT Sexe, FirstName, LastName, Birthday FROM users WHERE Identifier = @Identifier',  {
+		['@Identifier'] = xTarget.identifier
+	}, function(Result)
+		for _,v in pairs (Result) do
+			Data = {
+				Sexe = v.Sexe,
+				FirstName = v.FirstName,
+				LastName = v.LastName,
+				Birthday = v.Birthday,
+				Job = xTarget.job.label
+			}
+		end
+		cb(Data)
+	end)
+end)
+
+ESX.RegisterServerCallback('getCarOwner', function(source, cb, Plate)
+	Identifier = nil
+	Ensure = nil
+	MySQL.Async.fetchAll('SELECT Identifier, Ensure FROM users_vehicles WHERE Plate = @Plate', {
+		['@Plate'] = Plate
+	}, function(Result)
+		if Result then
+			for _,v in pairs (Result) do
+				Identifier = v.Identifier
+				Ensure = v.Ensure
+			end
+			MySQL.Async.fetchAll('SELECT FirstName, LastName FROM users WHERE Identifier = @Identifier',  {
+				['@Identifier'] = Identifier
+			}, function(Result2)
+				if Result2 then
+					for _,v in pairs (Result2) do
+						Data = {
+							FirstName = v.FirstName,
+							LastName = v.LastName,
+							Plate = Plate,
+							Ensured = Ensure,
+						}
+					end
+					cb(Data)
+				end
+			end)
+		else
+			cb(Result)
+		end
+	end)
+end)
+
+RegisterServerEvent('JobRenfort')
+AddEventHandler('JobRenfort', function(Coords, Level)
+	local _source = source
+	local _raison = raison
+	local xPlayer = ESX.GetPlayerFromId(_source)
+	local xPlayers = ESX.GetPlayers()
+
+	for i = 1, #xPlayers, 1 do
+		local thePlayer = ESX.GetPlayerFromId(xPlayers[i])
+		if thePlayer.job.name == 'police' then
+			TriggerClientEvent('JobRenfort', xPlayers[i], Coords, Level)
+		end
+	end
+end)
+
+RegisterServerEvent('RefreshPrice')
+AddEventHandler('RefreshPrice', function(Price)
+    local xPlayer = ESX.GetPlayerFromId(source)
+	TriggerClientEvent('RefreshPrice', source, Price)
+end)
+
+ESX.RegisterServerCallback('BuyMods', function(source, cb, Price, Plate, Props)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local playerMoney = xPlayer.getMoney()
+	if playerMoney >= Price then
+		MySQL.Async.fetchScalar('SELECT Identifier FROM users_vehicles WHERE Plate = @Plate', {
+			['@Plate'] = Plate
+		}, function(Result)
+			if Result then
+				MySQL.Async.execute(
+					'UPDATE users_vehicles SET Props = @Props WHERE Plate=@Plate',
+				{
+					['@Plate'] = Plate,
+					['@Props'] = Props
+				})
+			end
+			xPlayer.removeMoney(Price)
+			cb(true)
+		end)
+	else
+		TriggerClientEvent('esx:showNotification', source, 'Vous n\'avais pas assez d\'argent.')
+		cb(false)
+	end
+end)
+
+RegisterServerEvent('Job:Annonce')
+AddEventHandler('Job:Annonce', function(Desc)
+	local xPlayer = ESX.GetPlayerFromId(source)
+
+	if xPlayer.job.name == "weazel" then
+		TriggerClientEvent("Weazel:Annonce", -1, Desc)
+	elseif xPlayer.job.name == "gouv" then
+		TriggerClientEvent("Gouv:Annonce", -1, Desc)
+	end
+end)
+
+RegisterServerEvent('OnDutty')
+AddEventHandler('OnDutty', function(State)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xPlayers = ESX.GetPlayers()
+
+	for i = 1, #xPlayers, 1 do
+		local thePlayer = ESX.GetPlayerFromId(xPlayers[i])
+		if thePlayer.job.name == xPlayer.job.name then
+			if State then
+				if json.encode(InService[xPlayer.job.name]) == "[]" then
+					TriggerClientEvent('esx:showNotification', -1, "Un d'employé : ~o~"..xPlayer.job.label.."~s~ vien de prendre son service")
+					TriggerClientEvent("Dutty:DeleteShop", -1, xPlayer.job.name)
+				end
+				table.insert(InService[xPlayer.job.name], {Player = source})
+			else
+				for _,v in pairs(InService[xPlayer.job.name]) do
+					if v.Player == source then
+						table.remove(InService[xPlayer.job.name], _)
+					end
+				end
+				if json.encode(InService[xPlayer.job.name]) == "[]" then
+					TriggerClientEvent('esx:showNotification', -1, "Il n'y a plus d'employé : ~o~"..xPlayer.job.label.."~s~ en service")
+					TriggerClientEvent("Dutty:CreateShop", -1, xPlayer.job.name)
+				end
+			end
+			TriggerClientEvent("OnDutty", i, source, State)
+		end
+	end
+end)
+
+RegisterServerEvent('Dutty:GetState')
+AddEventHandler('Dutty:GetState', function(JobName)
+	if json.encode(InService[JobName]) == "[]" then
+		TriggerClientEvent("Dutty:CreateShop", source, JobName)
+	end
+end)
+
+RegisterServerEvent('Job:Craft')
+AddEventHandler('Job:Craft', function(Items)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if xPlayer.job.name == "dog" then
+		if Items.Value == "frite" then
+			local ItemQuantity = xPlayer.getInventoryItem("patate").count
+			if ItemQuantity >= 1 then
+				TriggerClientEvent("Job:Craft", source, Items)
+				Citizen.Wait(Items.Time)
+				xPlayer.removeInventoryItem("patate", 1)
+				xPlayer.addInventoryItem(Items.Value, 1)
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de pommes de terre.")
+			end
+		elseif Items.Value == "hotdog" then
+			local ItemQuantity = xPlayer.getInventoryItem("saucisse").count
+			if ItemQuantity >= 1 then
+				local ItemQuantity2 = xPlayer.getInventoryItem("hotdogbread").count
+				if ItemQuantity2 >= 1 then
+					TriggerClientEvent("Job:Craft", source, Items)
+					Citizen.Wait(Items.Time)
+					xPlayer.removeInventoryItem("saucisse", 1)
+					xPlayer.removeInventoryItem("hotdogbread", 1)
+					xPlayer.addInventoryItem(Items.Value, 1)
+				else
+					xPlayer.showNotification("Vous n'avez pas assez de pain à hot-dog.")
+				end
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de saucisse.")
+			end
+		else
+			TriggerClientEvent("Job:Craft", source, Items)
+			Citizen.Wait(Items.Time)
+			xPlayer.addInventoryItem(Items.Value, 1)
+		end
+	elseif xPlayer.job.name == "tequilala" then
+		if Items.Value == "jeargerbomb" then
+			local ItemQuantity = xPlayer.getInventoryItem("redbull").count
+			if ItemQuantity >= 1 then
+				TriggerClientEvent("Job:Craft", source, Items)
+				Citizen.Wait(Items.Time)
+				xPlayer.removeInventoryItem("redbull", 1)
+				xPlayer.addInventoryItem(Items.Value, 1)
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de redbull.")
+			end
+		elseif Items.Value == "gintonic" then
+			local ItemQuantity = xPlayer.getInventoryItem("tonic").count
+			if ItemQuantity >= 1 then
+				TriggerClientEvent("Job:Craft", source, Items)
+				Citizen.Wait(Items.Time)
+				xPlayer.removeInventoryItem("tonic", 1)
+				xPlayer.addInventoryItem(Items.Value, 1)
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de tonic.")
+			end
+		else
+			TriggerClientEvent("Job:Craft", source, Items)
+			Citizen.Wait(Items.Time)
+			xPlayer.addInventoryItem(Items.Value, 1)
+		end
+	elseif xPlayer.job.name == "unicorn" then
+		if Items.Value == "kirr" then
+			local ItemQuantity = xPlayer.getInventoryItem("liqueur").count
+			if ItemQuantity >= 1 then
+				TriggerClientEvent("Job:Craft", source, Items)
+				Citizen.Wait(Items.Time)
+				xPlayer.removeInventoryItem("liqueur", 1)
+				xPlayer.addInventoryItem(Items.Value, 1)
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de liqueur.")
+			end
+		elseif Items.Value == "sexonthebeatch" then
+			local ItemQuantity = xPlayer.getInventoryItem("sirop").count
+			if ItemQuantity >= 1 then
+				TriggerClientEvent("Job:Craft", source, Items)
+				Citizen.Wait(Items.Time)
+				xPlayer.removeInventoryItem("sirop", 1)
+				xPlayer.addInventoryItem(Items.Value, 1)
+			else
+				xPlayer.showNotification("Vous n'avez pas assez de sirop.")
+			end
+		else
+			TriggerClientEvent("Job:Craft", source, Items)
+			Citizen.Wait(Items.Time)
+			xPlayer.addInventoryItem(Items.Value, 1)
+		end
 	end
 end)
