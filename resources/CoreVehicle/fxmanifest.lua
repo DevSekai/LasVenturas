@@ -34,6 +34,7 @@ server_scripts {
         '@mysql-async/lib/MySQL.lua',
     -- Config --
         'VehicleList.lua',
+        'Storage.lua',
     -- Server --
         'Server/*.lua',
 }

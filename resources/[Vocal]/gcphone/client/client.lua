@@ -1409,7 +1409,7 @@ end)
 ----------------------------------
 
 AddEventHandler('onClientResourceStart', function(res)
-
+  Citizen.Wait(3500)
   DoScreenFadeIn(300)
 
   if res == "gcphone" then

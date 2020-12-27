@@ -1,5 +1,6 @@
 ESX = nil
 TokenGen = {}
+InZone = {}
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -23,6 +24,7 @@ Citizen.CreateThread(function ()
 					local distanceShops = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, true)
 					if distanceShops < Position.MarkerDist then
 						Position.Timing = 0
+						InZone[v.Name] = true
 						DrawMarker(Position.MarkerType, v.x, v.y, v.z + 0.98, 0, 0, 0, 0, 0, 0, Position.MarkerScale, Position.MarkerScale, Position.MarkerScale, Position.MarkerR, Position.MarkerG, Position.MarkerB, Position.MarkerA, false, true, 2, true, nil, false)
 						if distanceShops < Position.PedDist then
 							ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder au véhicules disponible.')
@@ -32,10 +34,11 @@ Citizen.CreateThread(function ()
 								Storage.BuyOut = {x = v.box, y = v.boy, z = v.boz, h = v.boh}
 								ShowMenu(v.Menu)
 							end
-						else
-							if not Storage.InMenu then
-								Position.Timing = 2000
-							end
+						end
+					else
+						if InZone[v.Name] then
+							Position.Timing = 2000
+							InZone[v.Name] = false
 						end
 					end
 				elseif v.Class == "Storage" then
@@ -46,6 +49,7 @@ Citizen.CreateThread(function ()
 					end
 					if distanceStorage < Position.MarkerDist2 then
 						Position.Timing = 0
+						InZone[v.Name] = true
 						if not IsPedSittingInAnyVehicle(PlayerPedId()) then
 							DrawMarker(Position.MarkerType, v.x, v.y, v.z + 0.98, 0, 0, 0, 0, 0, 0, Position.MarkerScale, Position.MarkerScale, Position.MarkerScale, Position.MarkerR, Position.MarkerG, Position.MarkerB, Position.MarkerA, false, true, 2, true, nil, false)
 						else
@@ -71,16 +75,22 @@ Citizen.CreateThread(function ()
 									TriggerServerEvent('InVehicle', json.encode(Choose))
 								end
 							end
-						else
-							if not Storage.InMenu then
-								Position.Timing = 2000
-							end
+						end
+					else
+						if InZone[v.Name] then
+							Position.Timing = 2000
+							InZone[v.Name] = false
 						end
 					end
 				end
 			end
 		end
 	end
+end)
+
+RegisterNetEvent("Trunk:RefreshTrunk")
+AddEventHandler("Trunk:RefreshTrunk", function(CWeight)
+	Storage.CrtWeight = CWeight
 end)
 
 function SpawnCar(VhcName)

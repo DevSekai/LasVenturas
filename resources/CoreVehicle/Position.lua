@@ -2,7 +2,7 @@ Position = {
     Timing = 2000,
     MarkerDist = 8,
     PedDist = 2,
-    MarkerDist2 = 8,
+    MarkerDist2 = 16,
     PedDist2 = 5,
     MarkerType = 29,
     MarkerScale = 0.3,
@@ -83,11 +83,11 @@ Position = {
 
         --**Storage**--
           --Garage--
-        {x = 276.86968994141, y = -345.24490356445, z = 44.920116424561, h = 249.63375854492, Menu = "Garage", Type = "Garage", Class = "Storage",
+        {x = 276.86968994141, y = -345.24490356445, z = 44.920116424561, h = 249.63375854492, Menu = "Garage", Type = "Garage", Class = "Storage", Name = "Central",
         cx = 293.64175415039, cy = -329.21472167969, cz = 44.919895172119, ch = 153.54002380371,
         box = 287.34008789063, boy = -344.39926147461, boz = 44.919891357422, boh = 159.17381286621},
           --Fourriere--
-        {x = 409.68246459961, y = -1623.4520263672, z = 29.291929244995, h = 228.84313964844, Menu = "Fourriere", Type = "Fourriere", Class = "Storage",
+        {x = 409.68246459961, y = -1623.4520263672, z = 29.291929244995, h = 228.84313964844, Menu = "Fourriere", Type = "Fourriere", Class = "Storage", Name = "Tieks",
         box = 399.68841552734, boy = -1635.6711425781, boz = 28.730180740356, boh = 231.19705200195},
     },
 }

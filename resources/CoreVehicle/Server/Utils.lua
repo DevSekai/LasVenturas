@@ -15,6 +15,8 @@ local VehicleChoose = {
     Compacts = {}, 
 	Moto = {},
 }
+Trunk = {}
+CrtWeight = {}
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
@@ -303,4 +305,209 @@ AddEventHandler("RentCar", function(Vehicles)
 		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : RentCar.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
+end)
+
+Trunk = {
+	MaxWeight = {
+		[0] = 150000, --Compact
+		[1] = 150000, --Sedan
+		[2] = 150000, --SUV
+		[3] = 150000, --Coupes
+		[4] = 150000, --Muscle
+		[5] = 150000, --Sports Classics
+		[6] = 150000, --Sports
+		[7] = 150000, --Super
+		[8] = 150000, --Motorcycles
+		[9] = 150000, --Off-road
+		[10] = 150000, --Industrial
+		[11] = 150000, --Utility
+		[12] = 150000, --Vans
+		[13] = 150000, --Cycles
+		[14] = 150000, --Boats
+		[15] = 150000, --Helicopters
+		[16] = 150000, --Planes
+		[17] = 150000, --Service
+		[18] = 150000, --Emergency
+		[19] = 150000, --Military
+		[20] = 150000, --Commercial
+		[21] = 150000, --Trains
+	},
+	Weight = {
+		["phone"] = 1000,
+		["silencieux"] = 1000,
+		["serflex"] = 1000,
+		["saucisse"] = 1000,
+		["sandiwch"] = 1000,
+		["headbag"] = 1000,
+		["policeradio"] = 1000,
+		["patate"] = 1000,
+		["hotdogbread"] = 1000,
+		["bread"] = 1000,
+		["hotdog"] = 1000,
+		["bulletproof"] = 1000,
+		["frite"] = 1000,
+		["water"] = 1000,
+		["medikit"] = 1000,
+		["corde"] = 1000,
+		["coca"] = 1000,
+		["sim"] = 1000,
+		["bandage"] = 1000,
+	},
+},
+
+ESX.RegisterServerCallback('Trunk:IsOpen', function(source, cb, Plate)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if not Trunk[Plate] then
+		cb(false)
+		Trunk[Plate] = true
+	else
+		cb(true)
+	end
+end)
+
+ESX.RegisterServerCallback('Trunk:GetPlyInv', function(source, cb)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local items   = xPlayer.inventory
+    local weapons = xPlayer.loadout
+    local accounts = xPlayer.accounts
+
+	cb({
+	   	items = items,
+	   	weapons = weapons,
+	  	accounts = accounts
+	})
+end)
+
+ESX.RegisterServerCallback('Trunk:GetVhcInv', function(source, cb, Plate)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if CrtWeight[Plate] == nil then
+		CrtWeight[Plate] = 0
+	end
+    MySQL.Async.fetchAll('SELECT * FROM trunk_inventory WHERE Plate = @Plate', {
+		['@Plate'] = Plate
+	}, function(Result)
+		if json.encode(Result) ~= "[]" then
+			for _,v in pairs (Result) do
+				FinalWeight = Trunk.Weight[v.ItemName] * v.ItemCount
+				if CrtWeight[Plate] ~= FinalWeight then
+					TriggerClientEvent("Trunk:RefreshTrunk", xPlayer.source, FinalWeight)
+					CrtWeight[Plate] = FinalWeight
+				end
+			end
+			cb(Result)
+		else
+			cb(false)
+		end
+	end)
+end)
+
+RegisterServerEvent('Trunk:Leave')
+AddEventHandler('Trunk:Leave', function(Plate)
+	Trunk[Plate] = false
+end)
+
+RegisterServerEvent('Trunk:Deposite')
+AddEventHandler('Trunk:Deposite', function(Table)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if CrtWeight[Table.Plate] == nil then
+		CrtWeight[Table.Plate] = 0
+	end
+	MySQL.Async.fetchScalar('SELECT Plate FROM trunk_inventory WHERE Plate = @Plate', {
+		['@Plate'] = Table.Plate
+	}, function(Exist)
+		if Exist then
+			MySQL.Async.fetchAll('SELECT * FROM trunk_inventory WHERE Plate = @Plate', {
+				['@Plate'] = Table.Plate
+			}, function(Result)
+				if json.encode(Result) ~= "[]" then
+					for _,v in pairs (Result) do
+						if v.ItemName == Table.ItemName then
+							CrtCount = v.ItemCount + Table.ItemCount
+							CrtId = v.Id
+							HasItem = true
+						end
+					end
+					if (CrtWeight[Table.Plate] + (Trunk.Weight[Table.ItemName] * Table.ItemCount)) <= Trunk.MaxWeight[Table.VhcClass] then
+						CWeight = (Trunk.Weight[Table.ItemName] * Table.ItemCount)
+						if CrtWeight[Table.Plate] ~= CWeight then
+							TriggerClientEvent("Trunk:RefreshTrunk", xPlayer.source, CWeight)
+							CrtWeight[Table.Plate] = CWeight
+						end
+						Citizen.Wait(10)
+						if HasItem then
+							MySQL.Async.execute('UPDATE trunk_inventory SET ItemCount = @ItemCount WHERE Id=@Id',{
+								['@Id'] = CrtId,
+								['@ItemCount'] = CrtCount
+							})
+							TriggerClientEvent('esx:showAdvancedNotification', xPlayer.source, "Dymia V", "~y~Véhicule", "Vous avez déposer ~o~"..Table.ItemCount.." "..Table.ItemLabel.."~s~ dans le coffre du véhicule.", "CHAR_STRETCH", 1)
+							xPlayer.removeInventoryItem(Table.ItemName, Table.ItemCount)
+							HasItem = false
+						else
+							MySQL.Async.execute('INSERT INTO trunk_inventory (Plate, ItemName, ItemCount, ItemLabel) VALUES (@Plate, @ItemName, @ItemCount, @ItemLabel)', {
+								['@Plate']   = Table.Plate,
+								['@ItemName']   = Table.ItemName,
+								['@ItemCount'] = Table.ItemCount,
+								['@ItemLabel']   = Table.ItemLabel
+							}, function()
+								TriggerClientEvent('esx:showAdvancedNotification', xPlayer.source, "Dymia V", "~y~Véhicule", "Vous avez déposer ~o~"..Table.ItemCount.." "..Table.ItemLabel.."~s~ dans le coffre du véhicule.", "CHAR_STRETCH", 1)
+								xPlayer.removeInventoryItem(Table.ItemName, Table.ItemCount)
+							end)
+						end
+					end
+				end
+			end)
+		else
+			MySQL.Async.execute('INSERT INTO trunk_inventory (Plate, ItemName, ItemCount, ItemLabel) VALUES (@Plate, @ItemName, @ItemCount, @ItemLabel)', {
+				['@Plate']   = Table.Plate,
+				['@ItemName']   = Table.ItemName,
+				['@ItemCount'] = Table.ItemCount,
+				['@ItemLabel']   = Table.ItemLabel
+			}, function()
+				TriggerClientEvent('esx:showAdvancedNotification', xPlayer.source, "Dymia V", "~y~Véhicule", "Vous avez déposer ~o~"..Table.ItemCount.." "..Table.ItemLabel.."~s~ dans le coffre du véhicule.", "CHAR_STRETCH", 1)
+				xPlayer.removeInventoryItem(Table.ItemName, Table.ItemCount)
+			end)
+		end
+	end)
+end)
+
+RegisterServerEvent('Trunk:Withdraw')
+AddEventHandler('Trunk:Withdraw', function(Table)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if CrtWeight[Table.Plate] == nil then
+		CrtWeight[Table.Plate] = 0
+	end
+	MySQL.Async.fetchScalar('SELECT Plate FROM trunk_inventory WHERE Plate = @Plate', {
+		['@Plate'] = Table.Plate
+	}, function(Exist)
+		if Exist then
+			MySQL.Async.fetchAll('SELECT * FROM trunk_inventory WHERE Plate = @Plate', {
+				['@Plate'] = Table.Plate
+			}, function(Result)
+				if json.encode(Result) ~= "[]" then
+					for _,v in pairs (Result) do
+						if v.ItemName == Table.ItemName then
+							CrtCount = v.ItemCount - Table.ItemCount
+							CrtId = v.Id
+							HasItem = true
+						end
+					end
+					FinalWeight = CrtWeight[Table.Plate] - (Trunk.Weight[Table.ItemName] * Table.ItemCount)
+					if CrtWeight[Table.Plate] ~= FinalWeight then
+						TriggerClientEvent("Trunk:RefreshTrunk", xPlayer.source, FinalWeight)
+						CrtWeight[Table.Plate] = CWeight
+					end
+					Citizen.Wait(10)
+					if HasItem then
+						MySQL.Async.execute('UPDATE trunk_inventory SET ItemCount = @ItemCount WHERE Id=@Id',{
+							['@Id'] = CrtId,
+							['@ItemCount'] = CrtCount
+						})
+						TriggerClientEvent('esx:showAdvancedNotification', xPlayer.source, "Dymia V", "~y~Véhicule", "Vous avez retirer ~o~"..Table.ItemCount.." "..Table.ItemLabel.."~s~ dans le coffre du véhicule.", "CHAR_STRETCH", 1)
+						xPlayer.addInventoryItem(Table.ItemName, Table.ItemCount)
+						HasItem = false
+					end
+				end
+			end)
+		end
+	end)
 end)
