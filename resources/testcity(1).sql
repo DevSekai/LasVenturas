@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 25 déc. 2020 à 16:43
+-- Généré le : Dim 27 déc. 2020 à 23:30
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.2.30
 
@@ -72,10 +72,10 @@ INSERT INTO `addon_account_data` (`id`, `account_name`, `money`, `owner`) VALUES
 (12, 'society_dog', 0, NULL),
 (13, 'society_gouv', 0, NULL),
 (14, 'society_mecano', 0, NULL),
-(15, 'society_police', 0, NULL),
+(15, 'society_police', 844, NULL),
 (16, 'society_tequilala', 0, NULL),
 (17, 'society_unicorn', 0, NULL),
-(18, 'society_weazel', 0, NULL),
+(18, 'society_weazel', 841, NULL),
 (19, 'society_ballas', 0, NULL),
 (20, 'society_vagos', 0, NULL),
 (21, 'society_ammu', 0, NULL);
@@ -180,23 +180,24 @@ CREATE TABLE `items` (
 
 INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 ('bandage', 'Bandage', 1, 0, 1),
+('bread', 'Pain', 1, 0, 1),
 ('bulletproof', 'Gilet par balles', 1, 0, 1),
-('Carte sim', 'sim', 1, 0, 1),
-('Coca', 'coca', 1, 0, 1),
+('coca', 'Coca', 1, 0, 1),
 ('corde', 'Corde', 1, 0, 1),
 ('frite', 'Frites', 1, 0, 1),
 ('headbag', 'Sac', 1, 0, 1),
 ('hotdog', 'Hot-Dog', 1, 0, 1),
 ('hotdogbread', 'Pain à hot-dog', 1, 0, 1),
 ('medikit', 'Défibrillateur', 1, 0, 1),
-('Pain', 'bread', 1, 0, 1),
 ('patate', 'Pomme de terre', 1, 0, 1),
+('phone', 'Téléphone', 1, 0, 1),
 ('pistol', 'pistolet', 1, 0, 1),
-('Sandwich', 'sandwich', 1, 0, 1),
+('policeradio', 'Radio pirate : LSPD', 1, 0, 1),
+('sandiwch', 'Sandwich', 1, 0, 1),
 ('saucisse', 'Saucisse', 1, 0, 1),
 ('serfelx', 'Serflex', 1, 0, 1),
 ('silencieux', 'Silencieux', 1, 0, 1),
-('Téléphone', 'phone', 1, 0, 1),
+('sim', 'Carte SIM', 1, 0, 1),
 ('water', 'Eau', 1, 0, 1);
 
 -- --------------------------------------------------------
@@ -336,6 +337,63 @@ INSERT INTO `job_grades` (`id`, `job_name`, `grade`, `name`, `label`, `salary`) 
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `phone_app_chat`
+--
+
+CREATE TABLE `phone_app_chat` (
+  `id` int(11) NOT NULL,
+  `channel` varchar(20) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `phone_calls`
+--
+
+CREATE TABLE `phone_calls` (
+  `id` int(11) NOT NULL,
+  `owner` varchar(10) NOT NULL COMMENT 'Num tel proprio',
+  `num` varchar(10) NOT NULL COMMENT 'Num reférence du contact',
+  `incoming` int(11) NOT NULL COMMENT 'Défini si on est à l''origine de l''appels',
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `accepts` int(11) NOT NULL COMMENT 'Appels accepter ou pas'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `phone_messages`
+--
+
+CREATE TABLE `phone_messages` (
+  `id` int(11) NOT NULL,
+  `transmitter` varchar(10) NOT NULL,
+  `receiver` varchar(10) NOT NULL,
+  `message` varchar(255) NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `isRead` int(11) NOT NULL DEFAULT 0,
+  `owner` int(11) NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `phone_users_contacts`
+--
+
+CREATE TABLE `phone_users_contacts` (
+  `id` int(11) NOT NULL,
+  `identifier` varchar(60) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `number` varchar(10) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `display` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '-1'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `police_report`
 --
 
@@ -345,6 +403,26 @@ CREATE TABLE `police_report` (
   `Date` varchar(255) NOT NULL,
   `Report` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `sim_card`
+--
+
+CREATE TABLE `sim_card` (
+  `owner` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `phone_number` varchar(10) CHARACTER SET utf8 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `sim_card`
+--
+
+INSERT INTO `sim_card` (`owner`, `phone_number`) VALUES
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '451-8533'),
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '761-0971'),
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '897-0062');
 
 -- --------------------------------------------------------
 
@@ -374,6 +452,46 @@ INSERT INTO `trunk_inventory` (`Id`, `Plate`, `ItemName`, `ItemCount`, `ItemLabe
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `twitter_accounts`
+--
+
+CREATE TABLE `twitter_accounts` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `password` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '0',
+  `avatar_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `twitter_likes`
+--
+
+CREATE TABLE `twitter_likes` (
+  `id` int(11) NOT NULL,
+  `authorId` int(11) DEFAULT NULL,
+  `tweetId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `twitter_tweets`
+--
+
+CREATE TABLE `twitter_tweets` (
+  `id` int(11) NOT NULL,
+  `authorId` int(11) NOT NULL,
+  `realUser` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `likes` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `users`
 --
 
@@ -394,15 +512,16 @@ CREATE TABLE `users` (
   `job2` varchar(20) NOT NULL DEFAULT 'unemployed2',
   `job2_grade` int(11) NOT NULL DEFAULT 0,
   `loadout` longtext DEFAULT NULL,
-  `position` varchar(255) DEFAULT '{"x":-1042.571,"y":-2746.193,"z":21.359,"heading":327.772}'
+  `position` varchar(255) DEFAULT '{"x":-1042.571,"y":-2746.193,"z":21.359,"heading":327.772}',
+  `phone_number` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`identifier`, `accounts`, `group`, `Statut`, `Sexe`, `Skin`, `FirstName`, `LastName`, `Birthday`, `Taille`, `inventory`, `job`, `job_grade`, `job2`, `job2_grade`, `loadout`, `position`) VALUES
-('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"black_money\":0,\"money\":2252,\"bank\":4000}', 'admin', '{\"Hunger\":100,\"Thrist\":100}', 'Homme', '{\"ArmsIndex\":2,\"ChaussureIndex2\":4,\"DadIndex\":2,\"ChaussureIndex\":7,\"TshirtIndex2\":7,\"PantalonIndex2\":9,\"PantalonIndex\":9,\"VesteIndex2\":3,\"VesteIndex\":6,\"TshirtIndex\":6,\"BarbeIndex\":3,\"PedIndex\":\"mp_m_freemode_01\",\"OeilIndex\":3,\"MotherIndex\":2,\"CouleurIndex\":2,\"CheuveuxIndex\":4}', 'Yan', 'Labray', '15/03/1996', 186, '{\"water\":897,\"pistol\":448}', 'ambulance', 3, 'ballas', 0, '{\"WEAPON_PISTOL\":{\"ammo\":178},\"weapon_nightstick\":{\"ammo\":250},\"weapon_flashlight\":{\"ammo\":250},\"WEAPON_RPG\":{\"ammo\":0}}', '{\"x\":965.3,\"y\":142.1,\"z\":81.0,\"heading\":149.0}');
+INSERT INTO `users` (`identifier`, `accounts`, `group`, `Statut`, `Sexe`, `Skin`, `FirstName`, `LastName`, `Birthday`, `Taille`, `inventory`, `job`, `job_grade`, `job2`, `job2_grade`, `loadout`, `position`, `phone_number`) VALUES
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"bank\":4000,\"money\":4115,\"black_money\":0}', 'admin', '{\"Hunger\":100,\"Thrist\":100}', 'Homme', '{\"ArmsIndex\":2,\"ChaussureIndex2\":4,\"DadIndex\":2,\"ChaussureIndex\":7,\"TshirtIndex2\":7,\"PantalonIndex2\":9,\"PantalonIndex\":9,\"VesteIndex2\":3,\"VesteIndex\":6,\"TshirtIndex\":6,\"BarbeIndex\":3,\"PedIndex\":\"mp_m_freemode_01\",\"OeilIndex\":3,\"MotherIndex\":2,\"CouleurIndex\":2,\"CheuveuxIndex\":4}', 'Yan', 'Labray', '15/03/1996', 186, '{\"policeradio\":1,\"phone\":1,\"water\":897,\"pistol\":448}', 'police', 4, 'ballas', 0, '{\"weapon_nightstick\":{\"ammo\":250},\"WEAPON_PISTOL\":{\"ammo\":122},\"weapon_flashlight\":{\"ammo\":250},\"WEAPON_RPG\":{\"ammo\":0}}', '{\"x\":375.1,\"heading\":152.1,\"z\":103.4,\"y\":319.2}', '451-8533');
 
 -- --------------------------------------------------------
 
@@ -567,16 +686,68 @@ ALTER TABLE `job_grades`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `phone_app_chat`
+--
+ALTER TABLE `phone_app_chat`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `phone_calls`
+--
+ALTER TABLE `phone_calls`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `phone_messages`
+--
+ALTER TABLE `phone_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `phone_users_contacts`
+--
+ALTER TABLE `phone_users_contacts`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `police_report`
 --
 ALTER TABLE `police_report`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Index pour la table `sim_card`
+--
+ALTER TABLE `sim_card`
+  ADD PRIMARY KEY (`phone_number`);
+
+--
 -- Index pour la table `trunk_inventory`
 --
 ALTER TABLE `trunk_inventory`
   ADD PRIMARY KEY (`Id`);
+
+--
+-- Index pour la table `twitter_accounts`
+--
+ALTER TABLE `twitter_accounts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Index pour la table `twitter_likes`
+--
+ALTER TABLE `twitter_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_twitter_likes_twitter_accounts` (`authorId`),
+  ADD KEY `FK_twitter_likes_twitter_tweets` (`tweetId`);
+
+--
+-- Index pour la table `twitter_tweets`
+--
+ALTER TABLE `twitter_tweets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_twitter_tweets_twitter_accounts` (`authorId`);
 
 --
 -- Index pour la table `users`
@@ -661,6 +832,30 @@ ALTER TABLE `job_grades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
+-- AUTO_INCREMENT pour la table `phone_app_chat`
+--
+ALTER TABLE `phone_app_chat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT pour la table `phone_calls`
+--
+ALTER TABLE `phone_calls`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+
+--
+-- AUTO_INCREMENT pour la table `phone_messages`
+--
+ALTER TABLE `phone_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+
+--
+-- AUTO_INCREMENT pour la table `phone_users_contacts`
+--
+ALTER TABLE `phone_users_contacts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT pour la table `police_report`
 --
 ALTER TABLE `police_report`
@@ -671,6 +866,24 @@ ALTER TABLE `police_report`
 --
 ALTER TABLE `trunk_inventory`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT pour la table `twitter_accounts`
+--
+ALTER TABLE `twitter_accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT pour la table `twitter_likes`
+--
+ALTER TABLE `twitter_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+
+--
+-- AUTO_INCREMENT pour la table `twitter_tweets`
+--
+ALTER TABLE `twitter_tweets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
 
 --
 -- AUTO_INCREMENT pour la table `users_accessories`
@@ -707,6 +920,23 @@ ALTER TABLE `users_vehicles`
 --
 ALTER TABLE `users_warns`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `twitter_likes`
+--
+ALTER TABLE `twitter_likes`
+  ADD CONSTRAINT `FK_twitter_likes_twitter_accounts` FOREIGN KEY (`authorId`) REFERENCES `twitter_accounts` (`id`),
+  ADD CONSTRAINT `FK_twitter_likes_twitter_tweets` FOREIGN KEY (`tweetId`) REFERENCES `twitter_tweets` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `twitter_tweets`
+--
+ALTER TABLE `twitter_tweets`
+  ADD CONSTRAINT `FK_twitter_tweets_twitter_accounts` FOREIGN KEY (`authorId`) REFERENCES `twitter_accounts` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
