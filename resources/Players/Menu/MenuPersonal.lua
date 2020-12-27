@@ -1,7 +1,7 @@
 PlyGroup = ""
 PlyWeight = ""
 MdpPersonal = "Ntm"
-invItems, invWeapon, invMoney, invSale, invBank, invJeton = {}, {}, {}, {}, {}, {}
+invItems, invWeapon, invMoney, invSale, invBank, invJeton, PlySim = {}, {}, {}, {}, {}, {}, {}
 DemarcheList = {"~y~Classique~s~","~y~Arrogante~s~","~y~Blesse~s~","~y~Business~s~","~y~Casual~s~","~y~Choc~s~","~y~Determine~s~","~y~Depressif~s~","~y~Depressif F~s~","~y~Fatigue~s~","~y~Fier~s~","~y~Hobo~s~","~y~Hipster~s~","~y~Intimide~s~","~y~Impertinent~s~","~y~Mangeuse d'homme~s~","~y~Malheureux~s~","~y~Muscle~s~","~y~Petite course~s~","~y~Pressee~s~","~y~Sombre~s~","~y~Trop mange~s~"}
 GpsList = {"~y~Supprimer le trajet~s~","~y~Agence d'interim~s~","~y~Auto école~s~","~y~Benny's~s~","~y~Hôpitale's~s~","~y~Parking central~s~","~y~Poste de police~s~"}
 VhcDoors = {"~y~Capot~s~","~y~Coffre~s~","~y~Avant gauche~s~","~y~Avant droite~s~","~y~Arrière gauche~s~","~y~Arrière droite~s~","~y~Toutes~s~"}
@@ -23,6 +23,10 @@ RMenu:Get('Personnal', 'Weaponry'):DisplayGlare(false);
 RMenu.Add('Personnal', 'Wallet', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
 RMenu:Get('Personnal', 'Wallet'):SetSubtitle("~y~Porte-feuille")
 RMenu:Get('Personnal', 'Wallet'):DisplayGlare(false);
+
+RMenu.Add('Personnal', 'SimCard', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
+RMenu:Get('Personnal', 'SimCard'):SetSubtitle("~y~Cartes sims")
+RMenu:Get('Personnal', 'SimCard'):DisplayGlare(false);
 
 RMenu.Add('Personnal', 'Vehicle', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
 RMenu:Get('Personnal', 'Vehicle'):SetSubtitle("~y~Gestion du véhicule")
@@ -50,6 +54,7 @@ Citizen.CreateThread(function ()
 			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Wallet')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Divers')) or
+			RageUI.Visible(RMenu:Get('Personnal', 'SimCard')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId()) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Clothe'))
 		then
@@ -116,6 +121,16 @@ function OpenPersonalMenu()
 			    ESX.TriggerServerCallback("getAccessoire", function(Acces)
 			        Accessoires = Acces
 			        RageUI.Visible(RMenu:Get('Personnal', 'Clothe'), not RageUI.Visible(RMenu:Get('Personnal', 'Clothe')))
+			    end)
+	    	end,
+	    })
+	    RageUI.Item.Button("Mes cartes sim", "", {}, true, {
+	    	onSelected = function ()
+			    ESX.TriggerServerCallback("esx_cartesim:GetList", function(Data)
+			        for _,v in pairs(Data) do
+						table.insert(PlySim, {label = tostring(v.number), value = v})
+					end
+			        RageUI.Visible(RMenu:Get('Personnal', 'SimCard'), not RageUI.Visible(RMenu:Get('Personnal', 'SimCard')))
 			    end)
 	    	end,
 	    })
@@ -213,6 +228,41 @@ function OpenPersonalMenu()
 						else
 							ESX.ShowNotification("Vous ne pouvez pas effectuez cette action")
 						end
+					end
+				end,
+			})
+	    end
+	end)
+	
+	RageUI.IsVisible(RMenu:Get('Personnal', 'SimCard'), function()
+		RageUI.Item.Button("Actualiser le téléphone", "", {}, true, {
+			onSelected = function(Index, Items)
+				TriggerServerEvent('gcPhone:allUpdate')
+			end,
+	    })
+	    for _,v in pairs (PlySim) do
+			RageUI.Item.List("~s~[~y~"..v.label.."~s~]", {"~y~Utiliser~s~","~g~Donner~s~","~r~Jeter~s~"}, 1, nil, {}, true, {
+				onSelected = function(Index, Items)
+					itemName = v.value
+					if Index == 1 then
+						TriggerServerEvent('esx_cartesim:sim_use', v.value.number)
+						ESX.ShowNotification("Vous avez ~g~activé~s~ la carte SIM avec le numéro : ~p~" .. v.value.number)
+						Citizen.Wait(1000)
+						TriggerServerEvent('gcPhone:allUpdate')
+					elseif Index == 2 then
+						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
+						if closestPlayer == -1 or closestDistance > 3.0 then
+							ESX.ShowNotification('~r~Aucun joueur à proximité !')
+						else
+							TriggerServerEvent('esx_cartesim:sim_give', v.value.number, GetPlayerServerId(closestPlayer))
+						end
+						Citizen.Wait(1000)
+						TriggerServerEvent('gcPhone:allUpdate')
+					else
+						TriggerServerEvent('esx_cartesim:sim_delete', v.value.number)
+						ESX.ShowNotification("Vous avez ~r~jeté~s~ la carte SIM avec le numéro : ~p~" .. v.value.number)
+						Citizen.Wait(1000)
+						TriggerServerEvent('gcPhone:allUpdate')
 					end
 				end,
 			})

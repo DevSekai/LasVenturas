@@ -6,8 +6,7 @@ RegisterCommand("getcoords", function(source, args, rawCommand)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local PlyPed = GetPlayerPed(source)
 	local PlyCoords = GetEntityCoords(PlyPed)
-	local PlyHeading = GetEntityHeading(PlyPed)
     if xPlayer.group ~= "users" then
-        print("{x = "..PlyCoords.x..", y = "..PlyCoords.y..", z = "..PlyCoords.z..", h = "..PlyHeading.."},")
+        print(PlyCoords)
     end
 end, false)

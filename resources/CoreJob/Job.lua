@@ -316,26 +316,22 @@ Job = {
 				Spawn = {x = 316.8923034668, y = -548.32086181641, z = 28.0498046875, h = 269.29135131836},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Ambulance", Value = "ambulance"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Ambulance", Value = "ambulance"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Ambulance", Value = "ambulance"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Ambulance", Value = "ambulance"},
 					},
 				},
 			},
@@ -546,26 +542,22 @@ Job = {
 				Spawn = {x = -183.01977539063, y = -1316.7427978516, z = 30.644653320313, h = 357.16534423828},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "SlamVan", Value = "slamvan"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "SlamVan", Value = "slamvan"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "SlamVan", Value = "slamvan"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "SlamVan", Value = "slamvan"},
 					},
 				},
 			},
@@ -872,32 +864,41 @@ Job = {
 				Spawn = {x = 458.0439453125, y = -981.11206054688, z = 25.320190429688, h = 119.0551071167},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Police", Value = "police"},
+						{Label = "Police2", Value = "police2"},
+						{Label = "Police3", Value = "police3"},
+						{Label = "Police4", Value = "police4"},
+						{Label = "Fbi", Value = "fbi"},
+						{Label = "Fbi2", Value = "fbi2"},
 					},
 				},
 				["expert2"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Police", Value = "police"},
+						{Label = "Police2", Value = "police2"},
+						{Label = "Police3", Value = "police3"},
+						{Label = "Fbi", Value = "fbi"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Police", Value = "police"},
+						{Label = "Police2", Value = "police2"},
+						{Label = "Police3", Value = "police3"},
+						{Label = "Fbi", Value = "fbi"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Police", Value = "police"},
+						{Label = "Police2", Value = "police2"},
+						{Label = "Police3", Value = "police3"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Police", Value = "police"},
+						{Label = "Police2", Value = "police2"},
 					},
 				},
 			},
@@ -1163,26 +1164,22 @@ Job = {
 				Spawn = {x = -556.48352050781, y = -929.03735351563, z = 23.2138671875, h = 269.29135131836},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Rumpo", Value = "rumpo"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Rumpo", Value = "rumpo"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Rumpo", Value = "rumpo"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Rumpo", Value = "rumpo"},
 					},
 				},
 			},
@@ -1348,26 +1345,22 @@ Job = {
 				Spawn = {x = 164.42637634277, y = -1284.2769775391, z = 28.605834960938, h = 90.708656311035},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 			},
@@ -1533,26 +1526,22 @@ Job = {
 				Spawn = {x = -563.27471923828, y = 303.13845825195, z = 82.542114257813, h = 266.45669555664},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Patriot2", Value = "patriot2"},
 					},
 				},
 			},
@@ -1681,26 +1670,22 @@ Job = {
 				Spawn = {x = -579.45495605469, y = -170.3208770752, z = 37.182373046875, h = 294.80316162109},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Washington", Value = "washington"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Washington", Value = "washington"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Washington", Value = "washington"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Washington", Value = "washington"},
 					},
 				},
 			},
@@ -1834,26 +1819,22 @@ Job = {
 				Spawn = {x = 40.430770874023, y = -1014.4088134766, z = 29.21240234375, h = 73.700782775879},
 				["boss"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Faggio", Value = "faggio"},
 					},
 				},
 				["expert"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Faggio", Value = "faggio"},
 					},
 				},
 				["medium"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Faggio", Value = "faggio"},
 					},
 				},
 				["recrue"] = {
 					Value = {
-						{Label = "Adder", Value = "adder"},
-						{Label = "Blista", Value = "blista"},
+						{Label = "Faggio", Value = "faggio"},
 					},
 				},
 			},

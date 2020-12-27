@@ -66,12 +66,12 @@ Citizen.CreateThread(function ()
                                 RageUI.Visible(RMenu:Get("Admin", "PlyWarns"), true)
                             end, GetPlayerServerId(v))
                         elseif Items.Value == "Setjob" or Items.Value == "Setorg" or Items.Value == "Goto" or Items.Value == "Bring" then
+                            if Items.Value == "Goto" then
+                                Coords = GetEntityCoords(PlayerPedId(v))
+                                Table = {Token = json.encode(TokenGen), Target = GetPlayerServerId(PlayerId()), Type = Items.Value, Coords = Coords}
+                                TriggerServerEvent(Items.Trigger, json.encode(Table))
                             if Items.Value == "Bring" then
                                 Coords = GetEntityCoords(PlayerPedId())
-                            elseif Items.Value == "Goto" then
-                                Coords = GetEntityCoords(PlayerPedId(v))
-                            end
-                            if Items.Value == "Goto" or Items.Value == "Bring" then
                                 Table = {Token = json.encode(TokenGen), Target = GetPlayerServerId(v), Type = Items.Value, Coords = Coords}
                                 TriggerServerEvent(Items.Trigger, json.encode(Table))
                             else

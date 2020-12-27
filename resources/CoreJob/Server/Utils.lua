@@ -29,6 +29,7 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 Citizen.CreateThread( function()
 	for _,v in pairs (Job.Wl.JobList) do
 		TriggerEvent('esx_society:registerSociety', v.JobName, v.JobLabel, "society_"..v.JobName, "society_"..v.JobName, "society_"..v.JobName, {type = 'public'})
+		TriggerEvent('esx_phone:registerNumber', v.JobName, v.JobName, true, true)
 	end
 end)
 
@@ -300,16 +301,20 @@ end)
 
 RegisterServerEvent('RevivePly')
 AddEventHandler('RevivePly', function(Trg, Admin)
-	local xPlayer = ESX.GetPlayerFromId(source)
+	_source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)	
+	local xTrgPed = GetPlayerPed(Trg)
+
 	if not Admin then
-		local ItemQuantity = xPlayer.getInventoryItem("bandage").count
+		local ItemQuantity = xPlayer.getInventoryItem("medikit").count
 		if ItemQuantity >= 1 then
-			xPlayer.removeInventoryItem("bandage", 1)
-			TriggerClientEvent("RevivePly", Trg)
-			TriggerClientEvent('esx:showNotification', Trg, "Vous avez était : ~o~Réanimer~s~.")
-			TriggerClientEvent('esx:showNotification', source, "Vous avez : ~o~Réanimer~s~ la personne.")
+			xPlayer.removeInventoryItem("medikit", 1)
+			TriggerClientEvent("Ply:RevivePly", _source, GetPlayerPed(Trg))
+			Citizen.Wait(13500)	
+			TriggerClientEvent("Trg:RevivePly", Trg, GetPlayerPed(Trg))
+			TriggerClientEvent('esx:showNotification', _source, "Vous avez : ~o~RÃ©animer~s~ la personne.")
 		else
-			TriggerClientEvent('esx:showNotification', source, "Vous ~r~n'avez pas~s~ de ~o~Défibrillateur~s~ sur vous.")
+			TriggerClientEvent('esx:showNotification', _source, "Vous ~r~n'avez pas~s~ de ~o~DÃ©fibrillateur~s~ sur vous.")
 		end
 	else
 		if PlayerData.group ~= "users" then
@@ -509,6 +514,8 @@ end)
 
 RegisterServerEvent('OnDutty')
 AddEventHandler('OnDutty', function(State)
+	Ped = GetPlayerPed(source)
+	Name = GetPlayerName(source)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xPlayers = ESX.GetPlayers()
 
@@ -517,7 +524,7 @@ AddEventHandler('OnDutty', function(State)
 		if thePlayer.job.name == xPlayer.job.name then
 			if State then
 				if json.encode(InService[xPlayer.job.name]) == "[]" then
-					TriggerClientEvent('esx:showNotification', -1, "Un d'employé : ~o~"..xPlayer.job.label.."~s~ vien de prendre son service")
+					TriggerClientEvent('esx:showNotification', -1, "Un employÃ© : ~o~"..xPlayer.job.label.."~s~ vient de prendre son service")
 					TriggerClientEvent("Dutty:DeleteShop", -1, xPlayer.job.name)
 				end
 				table.insert(InService[xPlayer.job.name], {Player = source})
@@ -528,11 +535,11 @@ AddEventHandler('OnDutty', function(State)
 					end
 				end
 				if json.encode(InService[xPlayer.job.name]) == "[]" then
-					TriggerClientEvent('esx:showNotification', -1, "Il n'y a plus d'employé : ~o~"..xPlayer.job.label.."~s~ en service")
+					TriggerClientEvent('esx:showNotification', -1, "Il n'y a plus d'employÃ© : ~o~"..xPlayer.job.label.."~s~ en service")
 					TriggerClientEvent("Dutty:CreateShop", -1, xPlayer.job.name)
 				end
 			end
-			TriggerClientEvent("OnDutty", i, source, State)
+			TriggerClientEvent("OnDutty", -1, Ped, State, xPlayer.job.label, Name)
 		end
 	end
 end)
