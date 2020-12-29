@@ -94,6 +94,23 @@ AddEventHandler('esx_addons_gcphone:startCall', function (number, message, coord
     end
 end)
 
+RegisterServerEvent('esx_addons_gcphone:startCall2')
+AddEventHandler('esx_addons_gcphone:startCall2', function (number, message)
+    local source = source
+
+    if PhoneNumbers[number] ~= nil then
+        getPhoneNumber(source, function (phone) 
+            notifyAlertSMS(number, {
+            message = message,
+            coords = coords,
+            numero = phone,
+            }, PhoneNumbers[number].sources)
+        end)
+    else
+        print('Appels sur un service non enregistre => numero : ' .. number)
+    end
+end)
+
 
 AddEventHandler('esx:playerLoaded', function(source)
 

@@ -12,6 +12,8 @@ InCarOut = false
 LimitCount = 50
 CountClr = {255, 255, 255}
 InZone = {}
+isDead = false
+CrtTimer = nil
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -23,6 +25,57 @@ Citizen.CreateThread(function ()
 	for _,v in pairs (Dutty.Shops) do
 		TriggerServerEvent("Dutty:GetState", v.Type)
 	end       
+end)
+
+RegisterCommand("die", function(source, args, rawCommand)
+	Coords = GetEntityCoords(PlayerPedId())
+	NetworkResurrectLocalPlayer(Coords.x, Coords.y, Coords.z + 0.98, 0.0, true, false)
+	SetEntityHealth(PlayerPedId(), 100.0)
+	Citizen.Wait(100)
+	SetEntityHealth(PlayerPedId(), 0.0)
+end, false)
+
+AddEventHandler('esx:onPlayerSpawn', function()
+	ESX.TriggerServerCallback('Players:getDeathStatus', function(IsDead)
+		if IsDead then
+			isDead = true
+			SetEntityHealth(PlayerPedId(), 0.0)
+		end
+	end)
+end)
+
+AddEventHandler('esx:onPlayerDeath', function()
+	TriggerServerEvent("Players:setDeathStatus", true)
+	AnimpostfxPlay('DeathFailOut', 0, true)
+	DisplayRadar(false)
+	CrtTimer = Job.DeathTimer
+	SignalSended = false
+	isDead = true
+	while isDead do
+		Citizen.Wait(1)
+		
+		if CrtTimer >= 0 then
+			CrtTimer = CrtTimer - 10
+			drawTxt(ESX.Math.Round(CrtTimer / 1000).." secondes avant réanimation", 1, {255, 255, 255, 255}, 0.6, 0.45, 0.9)
+			drawTxt("Appuyer sur ~b~G~s~ pour envoyer un signal de détresse", 1, {255, 255, 255, 255}, 0.6, 0.4, 0.95)
+			if not SignalSended then
+				if IsControlJustReleased(0, 47) then
+					Data = {
+						number = "ambulance",
+						message = "Signal de détresse reçu, dépéchez vous."
+					}
+					TriggerEvent("esx_addons_gcphone:call", Data)
+					ESX.ShowNotification("Vous avez envoyer un signal de détresse.")
+					SignalSended = true
+				end
+			end
+		else
+			AnimpostfxStop("DeathFailOut")
+			DoScreenFadeOut(2500)
+			Citizen.Wait(3000)
+			ReviveToHospital()
+		end
+	end
 end)
 
 RegisterNetEvent('esx_phone:loaded')
@@ -385,7 +438,7 @@ AddEventHandler("Ply:RevivePly", function()
 			TaskPlayAnim(playerPed, lib, anim, 8.0, -8.0, -1, 0, 0.0, false, false, false)
 		end)
 	end
-	ClearPedBloodDamage(GetPlayerPed(Ped))	
+	ClearPedBloodDamage(GetPlayerPed(Ped))
 end)
 
 RegisterNetEvent("Trg:RevivePly")
@@ -394,8 +447,27 @@ AddEventHandler("Trg:RevivePly", function(Ped)
 	NetworkResurrectLocalPlayer(Coords.x, Coords.y, Coords.z + 0.98, Heading, true, false)
 	SetPlayerInvincible(GetPlayerPed(Ped), false)		
 	ESX.ShowNotification("Vous avez était : ~o~Réanimer~s~.")
-
+	AnimpostfxStop("DeathFailOut")
 end)
+
+function ReviveToHospital()
+	Coords = Job.Respawn.Coords
+	Heading = Job.Respawn.Heading
+	isDead = false
+	NetworkResurrectLocalPlayer(Coords.x, Coords.y, Coords.z, Heading, true, false)
+	TriggerServerEvent("Players:setDeathStatus", false)
+	DoScreenFadeIn(2500)
+	ESX.ShowNotification("Vous avez été transporter a l'hôpital.")
+	DisplayRadar(true)
+	RequestAnimSet(Job.Respawn.Anim)
+	SetPedMovementClipset(PlayerPedId(), Job.Respawn.Anim, true)
+	SetEntityMaxSpeed(PlayerPedId(), 1.0)
+	Citizen.Wait(Job.Respawn.AnimDuration)
+	SetEntityMaxSpeed(PlayerPedId(), 6.0)
+	ResetPedMovementClipset(PlayerPedId())
+    ResetPedWeaponMovementClipset(PlayerPedId())
+    ResetPedStrafeClipset(PlayerPedId())
+end
 
 RegisterNetEvent("Handcuffed")
 AddEventHandler("Handcuffed", function()

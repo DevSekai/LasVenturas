@@ -1,6 +1,5 @@
 RegisterNetEvent('esx_addons_gcphone:call')
 AddEventHandler('esx_addons_gcphone:call', function(data)
-  print("Test")
   local playerPed   = GetPlayerPed(-1)
   local coords      = GetEntityCoords(playerPed)
   local message     = data.message
@@ -21,5 +20,24 @@ AddEventHandler('esx_addons_gcphone:call', function(data)
       y = coords.y,
       z = coords.z
     })
+  end
+end)
+
+RegisterNetEvent('esx_addons_gcphone:call2')
+AddEventHandler('esx_addons_gcphone:call2', function(data)
+  local message     = data.message
+  local number      = data.number
+  if message == nil then
+    DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
+    while (UpdateOnscreenKeyboard() == 0) do
+      DisableAllControlActions(0);
+      Wait(0);
+    end
+    if (GetOnscreenKeyboardResult()) then
+      message =  GetOnscreenKeyboardResult()
+    end
+  end
+  if message ~= nil and message ~= "" then
+    TriggerServerEvent('esx_addons_gcphone:startCall2', number, message)
   end
 end)

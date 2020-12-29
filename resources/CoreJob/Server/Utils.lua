@@ -26,11 +26,27 @@ InService = {
 }
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+
 Citizen.CreateThread( function()
 	for _,v in pairs (Job.Wl.JobList) do
 		TriggerEvent('esx_society:registerSociety', v.JobName, v.JobLabel, "society_"..v.JobName, "society_"..v.JobName, "society_"..v.JobName, {type = 'public'})
 		TriggerEvent('esx_phone:registerNumber', v.JobName, v.JobName, true, true)
 	end
+end)
+
+IsDead = {} -- Je créer une table vide pour contenir les mort coté server "inviolable"
+
+ESX.RegisterServerCallback('Players:getDeathStatus', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	if IsDead[xPlayer.identifier] then -- Si L'identifier est présent dans la table et qu'il est sur TRUE
+		cb(IsDead[xPlayer.identifier]) -- Return TRUE
+	end
+end)
+
+RegisterServerEvent("Players:setDeathStatus")
+AddEventHandler("Players:setDeathStatus", function(State)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	IsDead[xPlayer.identifier] = State -- J'insert l'identifier sur true dans la bdd
 end)
 
 for i = 48,  57 do table.insert(Char, string.char(i)) end

@@ -14,56 +14,42 @@ Citizen.CreateThread(function ()
 		end
     end
 	ESX.PlayerData = ESX.GetPlayerData()
-	Citizen.Wait(1000)
-	exports.spawnmanager:setAutoSpawn(false)
-	InitPlayers()
 end)
 
-function InitPlayers()
-	Citizen.Wait(1000)
+AddEventHandler('esx:onPlayerSpawn', function()
+	exports.spawnmanager:setAutoSpawn(false)
 	ESX.TriggerServerCallback('CheckFirstSpawn', function(NotFirstSpawn)
 		if NotFirstSpawn then
-			SpawnPlayer()
+			Citizen.CreateThread( function()
+				ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
+					Result = json.decode(Coords)
+					SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
+					SetEntityHeading(PlayerPedId(), Result.heading)
+				end)
+				ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
+					Result = json.decode(PlyWeapons)
+					for k,v in pairs (Result) do
+						WeaponHash = GetHashKey(k)
+						GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
+					end
+				end)
+				ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+					ApplySkin(GetPlayerPed(-1), Skin)
+				end)
+			end)
 		else
-			CreatePlayer()
-			SetEntityVisible(PlayerPedId(), false)
+			SetEntityCoordsNoOffset(PlayerPedId(), -1042.571, -2746.193, 21.359, true, true, true)
+			SetEntityHeading(PlayerPedId(), 327.772)
+			if not InMenu then
+				SetEntityVisible(PlayerPedId(), false)
+				FreezeEntityPosition(PlayerPedId(), true)
+				HighCam()
+				RageUI.Visible(RMenu:Get('CrationPerso', 'Identity'), not RageUI.Visible(RMenu:Get('CrationPerso', 'Identity')))
+				InMenu = true
+			end
 		end
 	end)
-end
------------------------------------------------------------------------------
-----------------Utils-------------------------------------
-function SpawnPlayer()
-	Citizen.Wait(1500)
-	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
-		Result = json.decode(Coords)
-		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
-		SetEntityHeading(PlayerPedId(), Result.heading)
-	end)
-	Citizen.Wait(1500)
-	ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-		ApplySkin(GetPlayerPed(-1), Skin)
-	end)
-	Citizen.Wait(1500)
-	ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
-		Result = json.decode(PlyWeapons)
-		for k,v in pairs (Result) do
-			WeaponHash = GetHashKey(k)
-			GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
-		end
-	end)
-end
-
-function CreatePlayer()
-	SetEntityCoordsNoOffset(PlayerPedId(), -1042.571, -2746.193, 21.359, true, true, true)
-	SetEntityHeading(PlayerPedId(), 327.772)
-	if not InMenu then
-		SetEntityVisible(PlayerPedId(), false)
-		FreezeEntityPosition(PlayerPedId(), true)
-		HighCam()
-		RageUI.Visible(RMenu:Get('CrationPerso', 'Identity'), not RageUI.Visible(RMenu:Get('CrationPerso', 'Identity')))
-		InMenu = true
-	end
-end
+end)
 
 function CreateSkinPed()
 	if SexeChoosen == 'Femme' then

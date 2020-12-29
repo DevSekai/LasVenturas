@@ -1,6 +1,6 @@
 {
 
-  "reseau": "NeverLand 5G",
+  "reseau": "LasVenturas 5G",
 
   "warningMessageCount": 250,
 
@@ -241,7 +241,170 @@
 
       ]
 
+    },
+
+    {
+
+      "display": "Unicorn",
+
+      "icon": "/html/static/img/icons_app/unicorn.jpg",
+
+      "subMenu": [
+
+        {
+
+          "title": "Demandez une réservation",
+
+          "eventName": "esx_addons_gcphone:call2",
+
+          "type": {
+
+          "number": "unicorn"
+
+          }
+
+        },
+
+        {
+
+          "title": "Demandez un chauffeur",
+
+          "eventName": "esx_addons_gcphone:call",
+
+          "type": {
+
+          "number": "unicorn",
+
+          "message": "Bonjour, j'aurais besoin d'un chauffeur pour me ramener chez vous merci.'."
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "display": "Weazel News",
+
+      "icon": "/html/static/img/icons_app/weazel.png",
+
+      "subMenu": [
+
+        {
+
+          "title": "Proposition d'un scoop",
+
+          "eventName": "esx_addons_gcphone:call",
+
+          "type": {
+
+          "number": "weazel"
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "display": "Tequila-La",
+
+      "icon": "/html/static/img/icons_app/tequila.jpg",
+
+      "subMenu": [
+
+        {
+
+          "title": "Demandez une reservation",
+
+          "eventName": "esx_addons_gcphone:call2",
+
+          "type": {
+
+          "number": "tequilala"
+
+          }
+
+        },
+
+        {
+
+          "title": "Demandez un chauffeur",
+
+          "eventName": "esx_addons_gcphone:call",
+
+          "type": {
+
+          "number": "tequilala",
+
+          "message": "Bonjour, j'aurais besoin d'un chauffeur pour me ramener chez vous merci.'."
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "display": "Gouvernement",
+
+      "icon": "/html/static/img/icons_app/gouv.png",
+
+      "subMenu": [
+
+        {
+
+          "title": "Demande de RDV",
+
+          "eventName": "esx_addons_gcphone:call2",
+
+          "type": {
+
+          "number": "gouv"
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "display": "Legion Dog",
+
+      "icon": "/html/static/img/icons_app/dog.png",
+
+      "subMenu": [
+
+        {
+
+          "title": "Commander à manger",
+
+          "eventName": "esx_addons_gcphone:call2",
+
+          "type": {
+
+          "number": "dog"
+
+          }
+
+        }
+
+      ]
+
     }
+
 
   ],
 

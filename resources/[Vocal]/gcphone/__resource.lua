@@ -46,6 +46,11 @@ files {
 	'html/static/img/icons_app/alcool.png',
 	'html/static/img/icons_app/boucher.png',
 	'html/static/img/icons_app/ferme.png',
+	'html/static/img/icons_app/weazel.png',
+	'html/static/img/icons_app/gouv.png',
+	'html/static/img/icons_app/dog.png',
+	'html/static/img/icons_app/unicorn.jpg',
+	'html/static/img/icons_app/tequila.jpg',
 
 
 	'html/static/img/app_bank/logo_mazebank.jpg',

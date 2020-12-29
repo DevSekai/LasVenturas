@@ -1,4 +1,11 @@
 Job = {
+	DeathTimer = 1000,
+	Respawn = {
+		Coords = vector3(365.53845214844, -569.9736328125, 28.791259765625),
+		Heading = 68.031494140625,
+		Anim = "move_m@injured",
+		AnimDuration = 30 * 1000,
+	},
 	MarkerDist = 8,
 	PedDist = 2,
 	MarkerType = 29,

@@ -15,6 +15,14 @@ Fwv = function (entity)
     return { x = math.cos(hr) * 2.0, y = math.sin(hr) * 2.0 }
 end
 
+Driftmode = false
+
+function GetPed() return GetPlayerPed(-1) end
+
+function GetCar() return GetVehiclePedIsIn(GetPlayerPed(-1),false) end
+
+SetPlayerCanDoDriveBy(GetPlayerPed(-1), true)
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(Hud.Timing)
@@ -28,6 +36,40 @@ Citizen.CreateThread(function()
 
         if IsPedInAnyVehicle(player, false) and GetIsVehicleEngineRunning(vehicle) and vehicleClass ~= 13 then
             Hud.Timing = 0
+            local model = GetEntityModel(vehicle)
+            -- If it's not a boat, plane or helicopter, and the vehilce is off the ground with ALL wheels, then block steering/leaning left/right/up/down.
+            if not IsThisModelABoat(model) and not IsThisModelAHeli(model) and not IsThisModelAPlane(model) and not VvehicleClass == 8 and IsEntityInAir(veh) then
+                DisableAllControlActions(0)
+                DisableAllControlActions(1)
+                DisableAllControlActions(2)
+            end
+            if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) and (CrtSpeed * 3.6) >= 30.0 then
+                SetPlayerCanDoDriveBy(PlayerId(), false)
+                canshoot = false
+            else
+                if not canshoot then
+                    SetPlayerCanDoDriveBy(PlayerId(), true)
+                    canshoot = true
+                end
+            end
+            if IsControlJustPressed(1, 118) then
+                Driftmode = not Driftmode
+            end
+            if Driftmode then
+                drawTxt("Drift mode : Activer", 2, {255, 255, 255, 255}, 0.4, Hud.X + 0.005, Hud.Y + 0.008)
+                if IsPedInAnyVehicle(GetPed(), false) then
+                    CarSpeed = GetEntitySpeed(GetCar()) * 3.6
+                    if GetPedInVehicleSeat(GetCar(), -1) == GetPed() then
+                        if CarSpeed <= 150.0 then  
+                            if IsControlPressed(1, 21) then
+                                SetVehicleReduceGrip(GetCar(), true)
+                            else
+                                SetVehicleReduceGrip(GetCar(), false)
+                            end
+                        end
+                    end
+                end
+            end
             local Speed = CrtSpeed*3.6
             local SpeedClr = (Speed >= Hud.SpeedLimit) and Hud.SpeedOver or Hud.SpeedUnder
             drawTxt(("%.3d"):format(math.ceil(Speed)), 2, SpeedClr, 0.8, Hud.X + 0.000, Hud.Y + 0.028)
