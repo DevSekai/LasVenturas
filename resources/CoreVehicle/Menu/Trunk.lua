@@ -3,16 +3,16 @@ RMenu:Get("Trunk", "Main").Closable = false;
 RMenu.Add("Trunk", "Vhc_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "Coffre du véhicule", "Retirer"))
 RMenu.Add("Trunk", "Ply_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "Coffre du véhicule", "Déposer"))
 
-InZone = {}
+Timing = 2000
+OnTrunk = false
 
 Citizen.CreateThread(function ()
-    Timing = 1000
     while true do
         Citizen.Wait(Timing)
         local Vehicle   = ESX.Game.GetVehicleInDirection()
         if DoesEntityExist(Vehicle) then
             Timing = 0
-            InZone[Vehicle] = true
+            OnTrunk = true
             ESX.ShowHelpNotification("Appuyer sur ~INPUT_CELLPHONE_CAMERA_FOCUS_LOCK~ pour ouvrir le coffre")
             VhcClass = GetVehicleClass(Vehicle)
             if IsControlJustReleased(1, 182) then
@@ -31,7 +31,7 @@ Citizen.CreateThread(function ()
                                     Storage.Vhc_Inv = TrunkInv
                                     RageUI.Visible(RMenu:Get("Trunk", "Main"), true)
                                 else
-                                    TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Le coffre est vide.", "CHAR_STRETCH", 1)
+                                    RageUI.Visible(RMenu:Get("Trunk", "Main"), true)
                                 end
                             end, Plate)
                         end
@@ -41,10 +41,9 @@ Citizen.CreateThread(function ()
                 end
             end
         else
-            if InZone[Vehicle] then
-                Timing = 1000
-                InZone[Vehicle] = true
-                RageUI.CloseAll()
+            if OnTrunk then
+                Timing = 2000
+                OnTrunk = false
             end
         end
 

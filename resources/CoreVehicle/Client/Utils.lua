@@ -21,18 +21,28 @@ Citizen.CreateThread(function ()
 		if not Storage.InMenu then
 			for _,v in pairs (Position.Coords) do
 				if v.Class == "Shops" then
-					local distanceShops = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, true)
+					local distanceShops = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, false)
 					if distanceShops < Position.MarkerDist then
 						Position.Timing = 0
 						InZone[v.Name] = true
 						DrawMarker(Position.MarkerType, v.x, v.y, v.z + 0.98, 0, 0, 0, 0, 0, 0, Position.MarkerScale, Position.MarkerScale, Position.MarkerScale, Position.MarkerR, Position.MarkerG, Position.MarkerB, Position.MarkerA, false, true, 2, true, nil, false)
 						if distanceShops < Position.PedDist then
-							ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder au véhicules disponible.')
+							if v.HelpNotif then
+								ESX.ShowHelpNotification(v.HelpNotif)
+							else
+								ESX.ShowHelpNotification("Appuyer sur ~INPUT_CONTEXT~ pour voir les véhicules disponnible")
+							end
 							if IsControlJustReleased(1, 51) then
-								Storage.ShopsIn = {x = v.cx, y = v.cy, z = v.cz, h = v.ch}
-								Storage.ShopsOut = {x = v.x, y = v.y, z = v.z, h = v.h}
-								Storage.BuyOut = {x = v.box, y = v.boy, z = v.boz, h = v.boh}
-								ShowMenu(v.Menu)
+								if v.cx then 
+									Storage.ShopsIn = {x = v.cx, y = v.cy, z = v.cz, h = v.ch}
+									Storage.ShopsOut = {x = v.x, y = v.y, z = v.z, h = v.h}
+									Storage.BuyOut = {x = v.box, y = v.boy, z = v.boz, h = v.boh}
+									ShowMenu(v.Menu)
+								else
+									if IsPedSittingInAnyVehicle(PlayerPedId()) then
+										v.Action()
+									end
+								end
 							end
 						end
 					else
@@ -177,7 +187,7 @@ function CreatePosition()
             FreezeEntityPosition(Peds, true)
 			SetEntityInvincible(Peds, true)
 			SetBlockingOfNonTemporaryEvents(Peds, true)
-        else
+        elseif v.Type == "Moto" then
             SetBlipSprite (Blips, Position.Bike.BlipSprite)
             SetBlipScale  (Blips, Position.Bike.BlipScale)
             SetBlipColour (Blips, Position.Bike.BlipColor)
@@ -193,7 +203,12 @@ function CreatePosition()
             FreezeEntityPosition(Peds, true)
 			SetEntityInvincible(Peds, true)
 			SetBlockingOfNonTemporaryEvents(Peds, true)
-        end
+		else
+            SetBlipSprite (Blips, Position.CarWash.BlipSprite)
+            SetBlipScale  (Blips, Position.CarWash.BlipScale)
+            AddTextComponentString(Position.CarWash.BlipLabel)
+            EndTextCommandSetBlipName(Blips)
+		end
 		FreezeEntityPosition(Peds, true)
 		SetEntityInvincible(Peds, true)
 		SetBlockingOfNonTemporaryEvents(Peds, true)

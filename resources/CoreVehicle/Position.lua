@@ -47,6 +47,11 @@ Position = {
         BlipColor = 9, 
         BlipLabel = "Fourrière",
     },
+    CarWash = {
+        BlipSprite = 100, 
+        BlipScale = 0.6, 
+        BlipLabel = "Lave-Auto",
+    },
     Coords = {
         --**Shops**--
           --Auto--
@@ -89,5 +94,36 @@ Position = {
           --Fourriere--
         {x = 409.68246459961, y = -1623.4520263672, z = 29.291929244995, h = 228.84313964844, Menu = "Fourriere", Type = "Fourriere", Class = "Storage", Name = "Tieks",
         box = 399.68841552734, boy = -1635.6711425781, boz = 28.730180740356, boh = 231.19705200195},
+
+        {x = 29.103298187256, y = -1391.89453125, z = 29.347290039063, Type = "CarWash", Class = "Shops", Name = "CarWash", HelpNotif = "Appuyer sur ~INPUT_CONTEXT~ pour nettoyer votre véhicule",
+        Action = function()
+            local vehicle = GetVehiclePedIsIn(PlayerPedId())
+            FreezeEntityPosition(vehicle, true)
+            Citizen.Wait(5000)
+            ESX.ShowNotification("Le véhicule est tout propre.")
+            SetVehicleDirtLevel(vehicle, 0.1)
+            FreezeEntityPosition(vehicle, false)
+        end,
+        },
+        {x = 174.3032989502, y = -1736.4791259766, z = 29.195556640625, Type = "CarWash", Class = "Shops", Name = "CarWash2", HelpNotif = "Appuyer sur ~INPUT_CONTEXT~ pour nettoyer votre véhicule",
+        Action = function()
+            local vehicle = GetVehiclePedIsIn(PlayerPedId())
+            FreezeEntityPosition(vehicle, true)
+            Citizen.Wait(5000)
+            ESX.ShowNotification("Le véhicule est tout propre.")
+            SetVehicleDirtLevel(vehicle, 0.1)
+            FreezeEntityPosition(vehicle, false)
+        end,
+        },
+        {x = -699.65277099609, y = -933.05932617188, z = 19.00146484375, Type = "CarWash", Class = "Shops", Name = "CarWash3", HelpNotif = "Appuyer sur ~INPUT_CONTEXT~ pour nettoyer votre véhicule",
+        Action = function()
+            local vehicle = GetVehiclePedIsIn(PlayerPedId())
+            FreezeEntityPosition(vehicle, true)
+            Citizen.Wait(5000)
+            ESX.ShowNotification("Le véhicule est tout propre.")
+            SetVehicleDirtLevel(vehicle, 0.1)
+            FreezeEntityPosition(vehicle, false)
+        end,
+        },
     },
 }

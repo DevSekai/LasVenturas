@@ -9,34 +9,18 @@ Citizen.CreateThread(function ()
         Citizen.Wait(1)
     end
 	if ESX then
+		ESX.PlayerData = ESX.GetPlayerData()
 		while ESX.GetPlayerData().job == nil do
 			Citizen.Wait(1)
 		end
     end
-	ESX.PlayerData = ESX.GetPlayerData()
 end)
 
 AddEventHandler('esx:onPlayerSpawn', function()
 	exports.spawnmanager:setAutoSpawn(false)
 	ESX.TriggerServerCallback('CheckFirstSpawn', function(NotFirstSpawn)
 		if NotFirstSpawn then
-			Citizen.CreateThread( function()
-				ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
-					Result = json.decode(Coords)
-					SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
-					SetEntityHeading(PlayerPedId(), Result.heading)
-				end)
-				ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
-					Result = json.decode(PlyWeapons)
-					for k,v in pairs (Result) do
-						WeaponHash = GetHashKey(k)
-						GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
-					end
-				end)
-				ESX.TriggerServerCallback('GetPlySkin', function(Skin)
-					ApplySkin(GetPlayerPed(-1), Skin)
-				end)
-			end)
+			InitCoords()
 		else
 			SetEntityCoordsNoOffset(PlayerPedId(), -1042.571, -2746.193, 21.359, true, true, true)
 			SetEntityHeading(PlayerPedId(), 327.772)
@@ -50,6 +34,32 @@ AddEventHandler('esx:onPlayerSpawn', function()
 		end
 	end)
 end)
+
+function InitLoadout()
+	ESX.TriggerServerCallback('getUserLoadout', function(PlyWeapons)
+		Result = json.decode(PlyWeapons)
+		for k,v in pairs (Result) do
+			WeaponHash = GetHashKey(k)
+			GiveWeaponToPed(PlayerPedId(), WeaponHash, v.ammo, false, false)
+		end
+	end)
+end
+
+function InitSkin()
+	ESX.TriggerServerCallback('GetPlySkin', function(Skin)
+		ApplySkin(GetPlayerPed(-1), Skin)
+		InitLoadout()
+	end)
+end
+
+function InitCoords()
+	ESX.TriggerServerCallback('GetPlyCoords', function(Coords)
+		Result = json.decode(Coords)
+		SetEntityCoordsNoOffset(PlayerPedId(), Result.x, Result.y, Result.z, true, true, true)
+		SetEntityHeading(PlayerPedId(), Result.heading)
+		InitSkin()
+	end)
+end
 
 function CreateSkinPed()
 	if SexeChoosen == 'Femme' then
