@@ -60,6 +60,38 @@ Citizen.CreateThread(function ()
 	end   
 end)
 
+function getPlayers()
+    local playerList = {}
+    for i = 0, 256 do
+        local player = GetPlayerFromServerId(i)
+        if NetworkIsPlayerActive(player) then
+            table.insert(playerList, player)
+        end
+    end
+    return playerList
+end
+
+function getNearPlayer()
+    local players = getPlayers()
+    local closestDistance = -1
+    local closestPlayer = -1
+    local ply = GetPlayerPed(-1)
+    local plyCoords = GetEntityCoords(ply, 0)
+    
+    for index,value in ipairs(players) do
+        local target = GetPlayerPed(value)
+        if(target ~= ply) then
+            local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
+            local distance = Vdist(targetCoords["x"], targetCoords["y"], targetCoords["z"], plyCoords["x"], plyCoords["y"], plyCoords["z"])
+            if(closestDistance == -1 or closestDistance > distance) then
+                closestPlayer = value
+                closestDistance = distance
+            end
+        end
+    end
+    return closestPlayer, closestDistance
+end
+
 function loadAnimDict(dict)
 	while ( not HasAnimDictLoaded(dict)) do
 		RequestAnimDict(dict)

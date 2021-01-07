@@ -1,6 +1,13 @@
 fx_version 'adamant'
 games { 'gta5' };
 
+ui_page('Html/index.html')
+
+files {
+    'Html/index.html',
+    'Html/Giffle.ogg',
+}
+
 client_scripts {
     -- Casino --
         'Casino.lua',

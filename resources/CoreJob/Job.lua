@@ -1,5 +1,5 @@
 Job = {
-	DeathTimer = 1000,
+	DeathTimer = 5 * 60 * 1000,
 	Respawn = {
 		Coords = vector3(365.53845214844, -569.9736328125, 28.791259765625),
 		Heading = 68.031494140625,

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Exo&display=swap');
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+.ui {
+    font-family: 'Exo', sans-serif;
+    position: absolute;
+    left: 16%;
+    bottom: 1.7%;
+    color: white;
+}
+
+.food {
+    opacity: 1;
+    width: 64px;
+    height: 64px;
+    background-image: url("food.png");
+    background-size: 85%;
+    background-position: center;
+    border: 1px solid blue;
+    background-repeat:no-repeat;
+}
+
+.water {
+    opacity: 1;
+    width: 64px;
+    height: 64px;
+    background-image: url("water.png");
+    background-size: 85%;
+    background-position: center;
+    border: 1px solid blue;
+    background-repeat:no-repeat;
+}

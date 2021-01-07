@@ -1,4 +1,6 @@
 TrunkTiming = 2000
+CivTiming = 2000
+
 
 Citizen.CreateThread(function()
     while true do
@@ -90,5 +92,46 @@ Citizen.CreateThread(function()
         else
             TrunkTiming = 2000
         end
+    end
+end)
+
+Citizen.CreateThread( function()
+    while true do
+        Citizen.Wait(CivTiming)
+
+        local CitoyenCible, distance = getNearPlayer()
+        if (distance ~= -1 and distance < 2) then
+            CivTiming = 0
+            if IsPedArmed(GetPlayerPed(-1), 7) then
+                SetCurrentPedWeapon(GetPlayerPed(-1), GetHashKey('WEAPON_UNARMED'), true)
+            end
+            if (DoesEntityExist(GetPlayerPed(-1)) and not IsEntityDead(GetPlayerPed(-1))) and IsControlPressed(1, 19) and IsControlJustPressed(1, 51) then
+                loadAnimDict("melee@unarmed@streamed_variations")
+                TaskPlayAnim(GetPlayerPed(-1), "melee@unarmed@streamed_variations", "plyr_takedown_front_slap", 8.0, 1.0, 1500, 1, 0, 0, 0, 0)
+                TriggerServerEvent("Feat:SyncAnim", GetPlayerServerId(CitoyenCible))
+            end
+        else
+            CivTiming = 2000
+        end
+    end
+end)
+
+RegisterNetEvent('Feat:SyncAnim')
+AddEventHandler('Feat:SyncAnim', function(playerNetId)
+    Wait(250)
+    TriggerServerEvent("Feat:SyncSv")
+    SetPedToRagdoll(GetPlayerPed(-1), 2000, 2000, 0, 0, 0, 0)
+end)
+
+RegisterNetEvent('Feat:SyncCl')
+AddEventHandler('Feat:SyncCl', function(playerNetId)
+    local lCoords = GetEntityCoords(GetPlayerPed(-1))
+    local eCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerNetId)))
+    local distIs  = Vdist(lCoords.x, lCoords.y, lCoords.z, eCoords.x, eCoords.y, eCoords.z)
+    if (distIs <= 2.0001) then
+        SendNUIMessage({
+            DemarrerLaMusique     = 'Sound:Slap',
+            VolumeDeLaMusique   = VolumeDeLaMusique
+        })
     end
 end)

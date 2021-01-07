@@ -312,6 +312,7 @@ AddEventHandler('esx:giveInventoryItem', function(target, type, itemName, itemCo
 
 				sourceXPlayer.showNotification(_U('gave_item', itemCount, sourceItem.label, targetXPlayer.name))
 				targetXPlayer.showNotification(_U('received_item', itemCount, sourceItem.label, sourceXPlayer.name))
+				TriggerEvent("Fd_Logs:SendLogs", "Item", Webhook.Color["Blue"], "Give item", ""..sourceXPlayer.name.." à donner "..sourceItem.label.." * "..itemCount.." à "..targetXPlayer.name..".")
 			else
 				sourceXPlayer.showNotification(_U('ex_inv_lim', targetXPlayer.name))
 			end
@@ -325,6 +326,7 @@ AddEventHandler('esx:giveInventoryItem', function(target, type, itemName, itemCo
 
 			sourceXPlayer.showNotification(_U('gave_account_money', ESX.Math.GroupDigits(itemCount), Config.Accounts[itemName], targetXPlayer.name))
 			targetXPlayer.showNotification(_U('received_account_money', ESX.Math.GroupDigits(itemCount), Config.Accounts[itemName], sourceXPlayer.name))
+			TriggerEvent("Fd_Logs:SendLogs", "Cash", Webhook.Color["Yellow"], "Give cash", ""..sourceXPlayer.name.." à donner "..itemCount.." $ à "..targetXPlayer.name..".")
 		else
 			sourceXPlayer.showNotification(_U('imp_invalid_amount'))
 		end
@@ -344,9 +346,11 @@ AddEventHandler('esx:giveInventoryItem', function(target, type, itemName, itemCo
 					local ammoLabel = weaponObject.ammo.label
 					sourceXPlayer.showNotification(_U('gave_weapon_withammo', weaponLabel, itemCount, ammoLabel, targetXPlayer.name))
 					targetXPlayer.showNotification(_U('received_weapon_withammo', weaponLabel, itemCount, ammoLabel, sourceXPlayer.name))
+					TriggerEvent("Fd_Logs:SendLogs", "Cash", Webhook.Color["Yellow"], "Give ammo", ""..sourceXPlayer.name.." à donner "..itemCount.." munitions de "..weaponLabel.." à "..targetXPlayer.name..".")
 				else
 					sourceXPlayer.showNotification(_U('gave_weapon', weaponLabel, targetXPlayer.name))
 					targetXPlayer.showNotification(_U('received_weapon', weaponLabel, sourceXPlayer.name))
+					TriggerEvent("Fd_Logs:SendLogs", "Cash", Webhook.Color["Yellow"], "Give weapon", ""..sourceXPlayer.name.." à donner "..weaponLabel.." avec "..itemCount.." munitions à "..targetXPlayer.name..".")
 				end
 			else
 				sourceXPlayer.showNotification(_U('gave_weapon_hasalready', targetXPlayer.name, weaponLabel))
@@ -369,6 +373,7 @@ AddEventHandler('esx:giveInventoryItem', function(target, type, itemName, itemCo
 
 						sourceXPlayer.showNotification(_U('gave_weapon_ammo', itemCount, ammoLabel, weapon.label, targetXPlayer.name))
 						targetXPlayer.showNotification(_U('received_weapon_ammo', itemCount, ammoLabel, weapon.label, sourceXPlayer.name))
+						TriggerEvent("Fd_Logs:SendLogs", "Cash", Webhook.Color["Yellow"], "Give ammo", ""..sourceXPlayer.name.." à donner "..itemCount.." munitions de "..weapon.label.." à "..targetXPlayer.name..".")
 					end
 				end
 			else

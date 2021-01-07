@@ -13,9 +13,10 @@ Citizen.CreateThread(function()
     end
     while true do
         Citizen.Wait(10)
+		N_0xf4f2c0d4ee209e20()
         RemoveAllPickupsOfType(0xDF711959)
         RemoveAllPickupsOfType(0xF9AFB48F)
-        RemoveAllPickupsOfType(0xA9355DCD)
+		RemoveAllPickupsOfType(0xA9355DCD)
         DisablePlayerVehicleRewards(PlayerId())
         SetPedSuffersCriticalHits(PlayerPedId(), false)
         SetVehicleModelIsSuppressed(GetHashKey("feltzer2"), true) 
