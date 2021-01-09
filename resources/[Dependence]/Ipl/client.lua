@@ -1,4 +1,43 @@
-Citizen.CreateThread(function()RequestIpl('shr_int')
+Citizen.CreateThread(function()
+	OnEnterMp() -- required to load heist ipl?
+	RequestAllIpls()
+end)
+
+Citizen.CreateThread(function()
+	for k,ipl in pairs(allIpls) do
+		loadInterior(ipl.coords, ipl.interiorsProps, ipl.interiorsPropColors)
+	end
+end)
+
+function loadInterior(coords, interiorProps, interiorsPropColors)
+	for k,coords in pairs(coords) do
+
+		local interiorID = GetInteriorAtCoords(coords[1], coords[2], coords[3])
+
+		if IsValidInterior(interiorID) then
+			PinInteriorInMemory(interiorID)
+
+			for index,propName in pairs(interiorProps) do
+				ActivateInteriorEntitySet(interiorID, propName)
+			end
+
+			if interiorsPropColors then
+				for i=1, #interiorsPropColors, 1 do
+					SetInteriorEntitySetColor(interiorID, interiorsPropColors[i][1], interiorsPropColors[i][2])
+				end
+			end
+
+			RefreshInterior(interiorID)
+		end
+	end
+end
+
+-- https://wiki.gtanet.work/index.php?title=Online_Interiors_and_locations
+-- IPL list 1.0.1290: https://pastebin.com/iNGLY32D
+-- Extra IPL info: https://pastebin.com/SE5t8CnE
+function RequestAllIpls()
+	-- Simeon: -47.162, -1115.333, 26.5
+	RequestIpl('shr_int')
 
 	-- Trevor: 1985.481, 3828.768, 32.5
 	-- Trash or Tidy. Only choose one.
@@ -422,25 +461,4 @@ Citizen.CreateThread(function()RequestIpl('shr_int')
 	RequestIpl('prologue_LODLights')
 	RequestIpl('prologue_m2_door')
 	--]]
-    RequestIpl('vw_casino_main')
-    RequestIpl('vw_casino_garage')
-    RequestIpl('vw_casino_carpark')
-    RequestIpl('vw_casino_penthouse')    
-    RequestIpl("hei_dlc_casino_aircon")
-    RequestIpl("hei_dlc_casino_aircon_lod")
-    RequestIpl("hei_dlc_casino_door")
-    RequestIpl("hei_dlc_casino_door_lod")
-    RequestIpl("hei_dlc_vw_roofdoors_locked")
-    RequestIpl("hei_dlc_windows_casino")
-    RequestIpl("hei_dlc_windows_casino_lod")
-    RequestIpl("vw_ch3_additions")
-    RequestIpl("vw_ch3_additions_long_0")
-    RequestIpl("vw_ch3_additions_strm_0")
-    RequestIpl("vw_dlc_casino_door")
-    RequestIpl("vw_dlc_casino_door_lod")
-    RequestIpl("vw_casino_billboard")
-    RequestIpl("vw_casino_billboard_lod(1)")
-    RequestIpl("vw_casino_billboard_lod")
-    RequestIpl("vw_int_placement_vw")
-    RequestIpl("vw_dlc_casino_apart")
-end)
+end

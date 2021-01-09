@@ -3,9 +3,11 @@ $(function(){
         if (event.data.pauseMenu == false) {
             $(".ui").fadeIn();
             var food = event.data.food;
-            $("#food").css("opacity", food / 100);
+            $("#FoodOp").css("opacity", food);
             var water = event.data.water;
-            $("#water").css("opacity", water / 100);
+            $("#WaterOp").css("opacity", water);
+            var drunk = event.data.drunk;
+            $("#DrunkOp").css("opacity", drunk);
         } else {
             $(".ui").fadeOut();
         }

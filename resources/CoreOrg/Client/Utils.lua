@@ -44,51 +44,52 @@ Citizen.CreateThread(function ()
 
 		if PlayerData ~= nil then
 			if not InMenu then
-				for _,v in pairs (Org.Wl[PlayerData.job2.name].Coords) do
-					local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, true)
-					if distance < Org.MarkerDist then
-						Timing = 0
-						InZone[v.Type] = true
-						DrawMarker(v.MarkerType, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, v.MarkerScale, v.MarkerScale, v.MarkerScale, v.MarkerR, v.MarkerG, v.MarkerB, v.MarkerA, false, true, 2, true, nil, false)
-						if distance < Org.PedDist then
-							if v.Type ~= "DeleteCar" then
-								ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder au menu.')
-							else
-								ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour rentrer le véhicule.')
+				if PlayerData.job2.name ~= "unemployed2" then
+					for _,v in pairs (Org.Wl[PlayerData.job2.name].Coords) do
+						local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, true)
+						if distance < Org.MarkerDist then
+							Timing = 0
+							InZone[v.Type] = true
+							DrawMarker(v.MarkerType, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, v.MarkerScale, v.MarkerScale, v.MarkerScale, v.MarkerR, v.MarkerG, v.MarkerB, v.MarkerA, false, true, 2, true, nil, false)
+							if distance < Org.PedDist then
+								if v.Type ~= "DeleteCar" then
+									ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder au menu.')
+								else
+									ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour rentrer le véhicule.')
+								end
+								if IsControlJustReleased(1, 51) then
+									ShowMenu(v.Type)
+								end
 							end
-							if IsControlJustReleased(1, 51) then
-								ShowMenu(v.Type)
+						else
+							if InZone[v.Type] then
+								Timing = 2000
+								InZone[v.Type] = false
 							end
-						end
-					else
-						if InZone[v.Type] then
-							Timing = 2000
-							InZone[v.Type] = false
 						end
 					end
-				end
-				for _,v in pairs (Org.Wl.Objects) do
-					local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), GetEntityCoords(v), true)
-					if distance < Org.MarkerDist then
-						Timing = 0
-						InZone[v] = true
-						if distance < Org.PedDist then
-							ESX.ShowHelpNotification("Appuyer sur ~INPUT_PICKUP~ pour enlever l'objets.")
-							if IsControlJustReleased(1, 38) then
-								DeleteEntity(v)
+					for _,v in pairs (Org.Wl.Objects) do
+						local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), GetEntityCoords(v), true)
+						if distance < Org.MarkerDist then
+							Timing = 0
+							InZone[v] = true
+							if distance < Org.PedDist then
+								ESX.ShowHelpNotification("Appuyer sur ~INPUT_PICKUP~ pour enlever l'objets.")
+								if IsControlJustReleased(1, 38) then
+									DeleteEntity(v)
+								end
 							end
-						end
-					else
-						if InZone[v] then
-							Timing = 2000
-							InZone[v] = false
+						else
+							if InZone[v] then
+								Timing = 2000
+								InZone[v] = false
+							end
 						end
 					end
 				end
 			end
 		else
 			PlayerData = ESX.GetPlayerData()
-			ESX.ShowNotification("Personnage chargé")
 		end
 	end
 end)

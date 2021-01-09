@@ -1,9 +1,9 @@
 Mission = {
     State = nil,
     Notif = false,
-    MinInterval = 15 * 60 * 1000, -- 15 Minutes
-    MaxInterval = 45 * 60 * 1000, -- 45 Minutes
-    Timing = math.random(900000, 2700000), -- Entre 15 et 45 minutes
+    MinInterval = --[[15 * 60 *]] 15000, -- 15 Minutes
+    MaxInterval = --[[45 * 60 *]] 45000, -- 45 Minutes
+    Timing = math.random(15000, 45000), -- Entre 15 et 45 minutes
     MarkerScale = 1.0,
     MarkerType = 32,
     CrtPed = {},

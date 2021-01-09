@@ -540,7 +540,6 @@ AddEventHandler('OnDutty', function(State)
 		if thePlayer.job.name == xPlayer.job.name then
 			if State then
 				if json.encode(InService[xPlayer.job.name]) == "[]" then
-					TriggerClientEvent('esx:showNotification', -1, "Un employÃ© : ~o~"..xPlayer.job.label.."~s~ vient de prendre son service")
 					TriggerClientEvent("Dutty:DeleteShop", -1, xPlayer.job.name)
 				end
 				table.insert(InService[xPlayer.job.name], {Player = source})

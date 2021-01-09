@@ -13,6 +13,7 @@ ui_page 'html/ui.html'
 files {
     'html/food.png',
     'html/water.png',
+    'html/drunk.png',
     'html/ui.html',
     'html/script.js',
     'html/main.css'

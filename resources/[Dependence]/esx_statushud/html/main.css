@@ -18,23 +18,42 @@ body {
 }
 
 .food {
-    opacity: 1;
     width: 64px;
     height: 64px;
     background-image: url("food.png");
     background-size: 85%;
     background-position: center;
-    border: 1px solid blue;
     background-repeat:no-repeat;
 }
 
+.food > #FoodOp {
+    opacity: 0;
+}
+
 .water {
-    opacity: 1;
     width: 64px;
     height: 64px;
     background-image: url("water.png");
     background-size: 85%;
     background-position: center;
-    border: 1px solid blue;
     background-repeat:no-repeat;
+    display: inline-block;
+}
+
+.water > #WaterOp {
+    opacity: 0;
+}
+
+.drunk {
+    width: 64px;
+    height: 64px;
+    background-image: url("drunk.png");
+    background-size: 85%;
+    background-position: center;
+    background-repeat:no-repeat;
+    display: inline-block;
+}
+
+.drunk > #DrunkOp {
+    opacity: 0;
 }
