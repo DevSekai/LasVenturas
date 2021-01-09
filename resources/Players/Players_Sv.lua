@@ -227,15 +227,9 @@ AddEventHandler('GiveItem', function(Target, Mdp, ItemName, ItemCount)
 			local playerId = source
 			local PlyName = GetPlayerName(playerId)
 			local PlyIp = GetPlayerEndpoint(playerId)
-			TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
 			DropPlayer(playerId, "Utilisation d'un executor.")
 		end
-	else
-		local playerId = source
-		local PlyName = GetPlayerName(playerId)
-		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveItem.\nDescription : Le joueur a voulu donner un item qu'il n'as pas sur lui.")
-		DropPlayer(playerId, "Détection d'un cheat.")
 	end
 end)
 
@@ -250,14 +244,14 @@ AddEventHandler('UseItem', function(Mdp, ItemName)
 			local playerId = source
 			local PlyName = GetPlayerName(playerId)
 			local PlyIp = GetPlayerEndpoint(playerId)
-			TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu déclancher le trigger.")
 			DropPlayer(playerId, "Détection d'un cheat.")
 		end
 	else
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu utiliser un item qu'il n'as pas sur lui.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UseItem.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -273,15 +267,9 @@ AddEventHandler('RemoveItem', function(Mdp, ItemName, ItemCount)
 			local playerId = source
 			local PlyName = GetPlayerName(playerId)
 			local PlyIp = GetPlayerEndpoint(playerId)
-			TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
+			TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem.\nDescription : Le joueur a voulu déclancher le trigger.")
 			DropPlayer(playerId, "Utilisation d'un executor.")
 		end
-	else
-		local playerId = source
-		local PlyName = GetPlayerName(playerId)
-		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Cheat", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveItem.\nDescription : Le joueur a voulu jeter un item qu'il n'a pas sur lui.")
-		DropPlayer(playerId, "Détection d'un cheat.")
 	end
 end)
 
@@ -308,7 +296,7 @@ AddEventHandler('UpdatePlySkin', function(Mdp, PlySkin)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UpdatePlySkin")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : UpdatePlySkin.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -326,7 +314,7 @@ AddEventHandler('GiveWeapon', function(Target, Mdp, WeaponLabel, WeaponName, Amm
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -341,7 +329,7 @@ AddEventHandler('RemoveWeapon', function(Mdp, WeaponName, Ammo)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveWeapon.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -364,7 +352,7 @@ AddEventHandler('GiveMoney', function(Target, Mdp, MoneyType, Amount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -384,7 +372,7 @@ AddEventHandler('RemoveMoney', function(Mdp, MoneyType, Amount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RemoveMoney.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -405,7 +393,7 @@ AddEventHandler('DepositBank', function(Mdp, Amount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : DepositBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : DepositBank.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -429,7 +417,7 @@ AddEventHandler('TransfereBank', function(Mdp, Target, Amount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : TransfereBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : TransferBank.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -450,7 +438,7 @@ AddEventHandler('WithdrawBank', function(Mdp, Amount)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : WithdrawBank.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : WithdrawBank.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -513,7 +501,7 @@ AddEventHandler('RenameAcc', function(Mdp, Id, Label)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RenameAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : RenameAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -535,7 +523,7 @@ AddEventHandler('GiveAcc', function(Mdp, Target, Id)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)
@@ -554,7 +542,7 @@ AddEventHandler('DelAcc', function(Mdp, Id)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
+		TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : Players.\nTrigger : GiveAcc.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")
 	end
 end)

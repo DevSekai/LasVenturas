@@ -2,9 +2,14 @@ fx_version 'adamant'
 games { 'gta5' };
 
 client_scripts {
-    'Logs_Cl.lua',
+    -- Ressource --
+        'Client/*.lua',
 }
 
 server_scripts {
-    'Logs_Sv.lua',
+    -- MySql --
+        '@mysql-async/lib/MySQL.lua',
+    -- Ressource --
+        'Config.lua',
+        'Server/*.lua',
 }

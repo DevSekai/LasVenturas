@@ -27,7 +27,7 @@ AddEventHandler('BuyItems', function(ItemType, Items)
         local playerId = source
         local PlyName = GetPlayerName(playerId)
         local PlyIp = GetPlayerEndpoint(playerId)
-        Logs(LogsRed, "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyItems.\nDescription : Le joueur a voulu déclancher le trigger.\nObjets : "..Result.Name..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyItems.\nDescription : Le joueur a voulu déclancher le trigger.\nObjets : "..Result.Name..".")
         DropPlayer(playerId, "Utilisation d'un executor.")
     end
 end)
@@ -59,7 +59,7 @@ AddEventHandler("BuyStuff", function(Stuff)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyStuff.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Name..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : BuyStuff.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Name..".")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -91,8 +91,8 @@ AddEventHandler("CheckMoney", function(Check)
 	else
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
-		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : CheckMoney.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        local PlyIp = GetPlayerEndpoint(playerId)
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : CoreShop.\nTrigger : CheckMoney.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)

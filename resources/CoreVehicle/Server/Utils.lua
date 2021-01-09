@@ -160,7 +160,7 @@ AddEventHandler("BuyVehicle", function(Vehicles)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : BuyVehicle.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : BuyVehicle.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -192,7 +192,7 @@ AddEventHandler("OutVehicle", function(Vehicles)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : OutVehicle.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : OutVehicle.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -227,7 +227,7 @@ AddEventHandler("OutFourriere", function(Vehicles)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : OutFourriere.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : OutFourriere.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -262,7 +262,7 @@ AddEventHandler("InVehicle", function(Vehicles)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : InVehicle.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : InVehicle.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
@@ -302,7 +302,7 @@ AddEventHandler("RentCar", function(Vehicles)
 		local playerId = source
 		local PlyName = GetPlayerName(playerId)
 		local PlyIp = GetPlayerEndpoint(playerId)
-		TriggerEvent('Logs', "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : RentCar.\nDescription : Le joueur a voulu déclancher le trigger..\nObjets : "..Result.Type..".")
+        TriggerEvent("Fd_Logs:SendLogs", "Cheat", "Red", "Anti Executor", "Nom : "..PlyName..".\nIp : "..PlyIp..".\nRessource : VehicleCore.\nTrigger : RentCar.\nDescription : Le joueur a voulu déclancher le trigger.")
 		DropPlayer(playerId, "Utilisation d'un executor.")	
 	end
 end)
