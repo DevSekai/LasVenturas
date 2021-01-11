@@ -24,7 +24,7 @@ Citizen.CreateThread(function ()
 	CreateJob()
 	for _,v in pairs (Dutty.Shops) do
 		TriggerServerEvent("Dutty:GetState", v.Type)
-	end       
+	end
 end)
 
 RegisterCommand("die", function(source, args, rawCommand)
@@ -33,6 +33,13 @@ RegisterCommand("die", function(source, args, rawCommand)
 	SetEntityHealth(PlayerPedId(), 100.0)
 	Citizen.Wait(100)
 	SetEntityHealth(PlayerPedId(), 0.0)
+end, false)
+
+RegisterCommand("revive", function(source, args, rawCommand)
+	Coords = GetEntityCoords(PlayerPedId())
+	NetworkResurrectLocalPlayer(Coords.x, Coords.y, Coords.z + 0.98, 0.0, true, false)
+	SetEntityHealth(PlayerPedId(), 200.0)
+	isDead = false
 end, false)
 
 AddEventHandler('esx:onPlayerSpawn', function()

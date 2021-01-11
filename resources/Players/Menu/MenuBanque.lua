@@ -23,7 +23,7 @@ Citizen.CreateThread(function ()
 				if IsControlJustReleased(1, 51) then
 					ESX.TriggerServerCallback('getUserBanque', function(Info)
 						PlyInfo = json.decode(Info)
-						RageUI.Visible(RMenu:Get('Banque', 'Principal'), not RageUI.Visible(RMenu:Get('Banque', 'Principal')))
+						RageUI.Visible(RMenu:Get('Banque', 'Principal'), true)
 			   			FreezeEntityPosition(PlayerPedId(), true)
 					end)
 				end
@@ -32,8 +32,8 @@ Citizen.CreateThread(function ()
 
 		RageUI.IsVisible(RMenu:Get('Banque', 'Principal'), function()
 			RageUI.Item.Separator("[~y~Nom~w~] : "..PlyInfo.LastName.." 	[~y~Prénom~w~] : "..PlyInfo.FirstName)
-			RageUI.Item.Separator("[~y~Compte bancaire~w~] : "..PlyInfo.Accounts.bank)
-			RageUI.Item.Separator("[~y~Cash~w~] : "..PlyInfo.Accounts.money)
+			RageUI.Item.Separator("[~y~Compte bancaire~w~] : ~g~"..PlyInfo.Accounts.bank.." $")
+			RageUI.Item.Separator("[~y~Cash~w~] : ~g~"..PlyInfo.Accounts.money.." $")
 			RageUI.Item.List("Actions", {"~y~Déposer~s~","~y~Transférer~s~","~y~Retirer~s~"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Amount = KeyboardInput("Montant", 20)

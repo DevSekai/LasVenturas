@@ -1,4 +1,10 @@
 ESX = nil
+InMenu = false
+CrtId = nil
+CrtTrigger = nil
+LastMenu = nil
+CrtPed = nil
+LstCoords = nil
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -16,6 +22,12 @@ Citizen.CreateThread(function ()
     end)
     TriggerServerEvent("IsBan")
 end)
+
+RegisterCommand('OpenStaff', function()
+    IsStaff()
+end, false)
+
+RegisterKeyMapping('OpenStaff', 'Menu administration', 'keyboard', 'F11')
 
 function GetJobsLists()
     ESX.TriggerServerCallback('Ld_Staff:GetJobList', function(Jobs)
@@ -142,6 +154,11 @@ AddEventHandler('Fd_Staff:SetTime', function(Hour)
     NetworkOverrideClockTime(Hour, 0, 0)
 end)
 
+RegisterNetEvent('Fd_Staff:SetBlackout')
+AddEventHandler('Fd_Staff:SetBlackout', function(State)
+    SetArtificialLightsState(State)
+end)
+
 function getCamDirection()
     local plyPed = GetPlayerPed(-1)
 	local heading = GetGameplayCamRelativeHeading() + GetEntityPhysicsHeading(plyPed)
@@ -161,13 +178,87 @@ function CreatePlyBlips()
         if NetworkIsPlayerActive(i) then
             local PlyBlips = AddBlipForEntity(GetPlayerPed(i))
             SetBlipNameToPlayerName(PlyBlips, PlayerId(i))
-            table.insert(Staff.PlyBlips, PlyBlips)
+            table.insert(Staff.PlyBlip, PlyBlips)
         end
     end
 end
 
 function DeletePlyBlips()
-    for _,v in pairs (Staff.PlyBlips) do
+    for _,v in pairs (Staff.PlyBlip) do
         RemoveBlip(v)
     end
+end
+
+function IsStaff()
+    ESX.TriggerServerCallback('Fd_Staff:IsStaff', function(Group)
+        if Group ~= "users" then
+            if not Staff.JobsListsReady then
+                GetJobsLists()
+            end
+            OpenMenu()
+        end
+    end)
+end
+
+function Noclip()
+    Staff.Noclip = true
+    while Staff.Noclip do
+        Citizen.Wait(0)
+
+        local plyPed = GetPlayerPed(-1)
+        local plyCoords = GetEntityCoords(plyPed, false)
+		local camCoords = getCamDirection()
+		SetEntityVelocity(plyPed, 0.01, 0.01, 0.01)
+		if IsControlPressed(0, 32) then
+			plyCoords = plyCoords + (1.1 * camCoords)
+		end
+		if IsControlPressed(0, 269) then
+	    	plyCoords = plyCoords - (1.1 * camCoords)
+		end
+		SetEntityCoordsNoOffset(plyPed, plyCoords, true, true, true)
+    end
+end
+
+function PlyName()
+    Staff.PlyName = true
+    while Staff.PlyName do
+        Citizen.Wait(0)
+
+        for i = 0, 256 do
+            if NetworkIsPlayerActive(i) then
+                local GamerTagId = 0
+                local PlayerPed = GetPlayerPed(i)
+                GamerTagId = CreateMpGamerTag(PlayerPed, GetPlayerName(i), false, false, "", 0)
+                if Vdist2(GetEntityCoords(PlayerPed, true), GetEntityCoords(PlayerPedId(), true)) > 5 * 10  then
+                    RemoveMpGamerTag(GamerTagId)
+                end
+            end
+        end
+    end
+end
+
+function Spectate()
+    Staff.Spectate = true
+    while Staff.Spectate do
+        Citizen.Wait(0)
+
+        Coords = GetEntityCoords(CrtPed)
+        SetEntityCoordsNoOffset(PlayerPedId(), Coords, true, true, true)
+    end
+end
+
+function RefreshInfos(Id)
+    ESX.TriggerServerCallback('Ld_Staff:GetPlyInfos', function(Infos)
+        Staff.PlyInfos = Infos
+    end, Id)
+end
+
+function BoostVhc(Vhc)
+    SetVehicleMod(Vhc,  11, 3)
+    SetVehicleMod(Vhc,  12, 3)
+    SetVehicleMod(Vhc,  13, 3)
+    SetVehicleMod(Vhc,  15, 3)
+    SetVehicleMod(Vhc,  16, 3)
+    SetVehicleMod(Vhc,  18, 1)
+    SetVehicleTyresCanBurst(Vhc, false)
 end

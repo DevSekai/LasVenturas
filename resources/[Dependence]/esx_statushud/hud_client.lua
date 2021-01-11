@@ -28,14 +28,27 @@ AddEventHandler("esx_statushud:onTick", function(status)
     end
 end)
 
+AddEventHandler('esx:onPlayerSpawn', function()
+    Citizen.Wait(2000)
+    SendNUIMessage({
+        pauseMenu = IsPauseMenuActive(),
+        food = food,
+        water = water,
+        drunk = drunk
+    })
+    Spawned = true
+end)
+Spawned = false
 Citizen.CreateThread(function()
     while true do 
+        if Spawned then
+            SendNUIMessage({
+                pauseMenu = IsPauseMenuActive(),
+                food = food,
+                water = water,
+                drunk = drunk
+            })
+        end
         Citizen.Wait(2000)
-        SendNUIMessage({
-            pauseMenu = IsPauseMenuActive(),
-            food = food,
-            water = water,
-            drunk = drunk
-        })
     end
 end)

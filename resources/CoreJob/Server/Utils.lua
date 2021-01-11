@@ -318,13 +318,15 @@ end)
 RegisterServerEvent('RevivePly')
 AddEventHandler('RevivePly', function(Trg, Admin)
 	_source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)	
+	local xPlayer = ESX.GetPlayerFromId(_source)
+	local xTaget = ESX.GetPlayerFromId(Trg)	
 	local xTrgPed = GetPlayerPed(Trg)
 
 	if not Admin then
 		local ItemQuantity = xPlayer.getInventoryItem("medikit").count
 		if ItemQuantity >= 1 then
 			xPlayer.removeInventoryItem("medikit", 1)
+			IsDead[xTaget.identifier] = false
 			TriggerClientEvent("Ply:RevivePly", _source, GetPlayerPed(Trg))
 			Citizen.Wait(13500)	
 			TriggerClientEvent("Trg:RevivePly", Trg, GetPlayerPed(Trg))
@@ -337,6 +339,12 @@ AddEventHandler('RevivePly', function(Trg, Admin)
 			TriggerClientEvent("RevivePly", Trg, GetPlayerPed(Trg))
 		end
 	end
+end)
+
+RegisterServerEvent('Commands:Revive')
+AddEventHandler('Commands:Revive', function()
+	local xPlayer = ESX.GetPlayerFromId(source)
+	isDead[xPlayer.identifier] = false
 end)
 
 ESX.RegisterServerCallback('GetJobReport', function(source, cb, Trg)

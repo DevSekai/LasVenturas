@@ -4,7 +4,7 @@ Perms = {
 		Perms = {
 			["GiveItem"] = true,
 			["GiveWeapon"] = true,
-			["GiveCash"] = true,
+			["GiveMoney"] = true,
 			["SetJob"] = true,
 			["SetOrg"] = true,
 			["Revive"] = true,
@@ -21,7 +21,7 @@ Perms = {
 		Perms = {
 			["GiveItem"] = false,
 			["GiveWeapon"] = false,
-			["GiveCash"] = false,
+			["GiveMoney"] = false,
 			["SetJob"] = false,
 			["SetOrg"] = false,
 			["Revive"] = true,
@@ -38,7 +38,7 @@ Perms = {
 		Perms = {
 			["GiveItem"] = false,
 			["GiveWeapon"] = false,
-			["GiveCash"] = false,
+			["GiveMoney"] = false,
 			["SetJob"] = false,
 			["SetOrg"] = false,
 			["Revive"] = false,
@@ -55,6 +55,35 @@ Perms = {
 InJail = {}
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+
+ESX.RegisterServerCallback('Fd_Staff:IsStaff', function(source, cb)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	cb(xPlayer.group)
+end)
+
+ESX.RegisterServerCallback('Ld_Staff:GetPlyInfos', function(source, cb, target)
+    local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(target)
+	local Id = nil
+	MySQL.Async.fetchAll('SELECT FirstName, LastName, Birthday FROM users WHERE identifier = @identifier', {
+		['@identifier'] = xTarget.identifier
+	}, function(ResultId)
+		Id = ResultId
+	end)
+	Infos = {
+		Identity = Id,
+		Job = xTarget.job.label,
+		Grade = xTarget.job.grade_label,
+		Job2 = xTarget.job2.label,
+		Grade2 = xTarget.job2.grade_label,
+		Money = xTarget.getAccount("money").money,
+		Bank = xTarget.getAccount("bank").money,
+		Dirty = xTarget.getAccount("black_money").money,
+		Inventory = xTarget.inventory,
+		Weapons = xTarget.loadout,
+	}
+	cb(Infos)
+end)
 
 ESX.RegisterServerCallback('Ld_Staff:GetPlyWarns', function(source, cb, target)
     local xPlayer = ESX.GetPlayerFromId(source)
@@ -116,8 +145,9 @@ function IsRestrict(Group, Type)
 	end
 end
 
-RegisterServerEvent("GiveItem")
-AddEventHandler("GiveItem", function(Type, Target, ItemName, ItemLabel, ItemCount)
+RegisterServerEvent("Fd_Staff:GiveItem")
+AddEventHandler("Fd_Staff:GiveItem", function(Type, Target, ItemName, ItemLabel, ItemCount)
+	print("test")
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -125,12 +155,12 @@ AddEventHandler("GiveItem", function(Type, Target, ItemName, ItemLabel, ItemCoun
 		if xPlayer.name == xTarget.name then
 			xTarget.name = "lui même"
 		end	
-		TriggerEvent("Fd_Logs:SendLogs", "Staff", "Yellow", "Give item", ""..xPlayer.name.." à donner "..ItemCount.." x "..ItemLabel.." à "..xTarget.name)
+		TriggerEvent("Fd_Logs:SendLogs", "Item", "Yellow", "Staff : Give item", ""..xPlayer.name.." à donner "..ItemCount.." x "..ItemLabel.." à "..xTarget.name)
 	end
 end)
 
-RegisterServerEvent("GiveWeapon")
-AddEventHandler("GiveWeapon", function(Type, Target, WeaponName, WeaponLabel)
+RegisterServerEvent("Fd_Staff:GiveWeapon")
+AddEventHandler("Fd_Staff:GiveWeapon", function(Type, Target, WeaponName, WeaponLabel)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -138,25 +168,25 @@ AddEventHandler("GiveWeapon", function(Type, Target, WeaponName, WeaponLabel)
 		if xPlayer.name == xTarget.name then
 			xTarget.name = "lui même"
 		end	
-		TriggerEvent("Fd_Logs:SendLogs", "Staff", "Red", "Give weapon", ""..xPlayer.name.." à donner "..WeaponLabel.." à "..xTarget.name)
+		TriggerEvent("Fd_Logs:SendLogs", "Weapon", "Red", "Staff : Give weapon", ""..xPlayer.name.." à donner "..WeaponLabel.." à "..xTarget.name)
 	end
 end)
 
-RegisterServerEvent("GiveCash")
-AddEventHandler("GiveCash", function(Type, Target, Amount)
+RegisterServerEvent("Fd_Staff:GiveMoney")
+AddEventHandler("Fd_Staff:GiveMoney", function(Type, Target, Account, Amount)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
-		xTarget.addMoney(Amount)
+		xTarget.addAccountMoney(Account, Amount)
 		if xPlayer.name == xTarget.name then
 			xTarget.name = "lui même"
 		end	
-		TriggerEvent("Fd_Logs:SendLogs", "Staff", "Blue", "Give cash", ""..xPlayer.name.." à donner "..Amount.." $ à "..xTarget.name)
+		TriggerEvent("Fd_Logs:SendLogs", "Cash", "Blue", "Staff : Give money", ""..xPlayer.name.." à donner "..Amount.." $ ("..Account..") à "..xTarget.name)
 	end
 end)
 
-RegisterServerEvent("SetJob")
-AddEventHandler("SetJob", function(Type, Target, JobName, JobGrade, JobLabel)
+RegisterServerEvent("Fd_Staff:SetJob")
+AddEventHandler("Fd_Staff:SetJob", function(Type, Target, JobName, JobGrade, JobLabel)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -168,8 +198,8 @@ AddEventHandler("SetJob", function(Type, Target, JobName, JobGrade, JobLabel)
 	end
 end)
 
-RegisterServerEvent("SetOrg")
-AddEventHandler("SetOrg", function(Type, Target, JobName, JobGrade, JobLabel)
+RegisterServerEvent("Fd_Staff:SetOrg")
+AddEventHandler("Fd_Staff:SetOrg", function(Type, Target, JobName, JobGrade, JobLabel)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -185,8 +215,8 @@ AddEventHandler("SetOrg", function(Type, Target, JobName, JobGrade, JobLabel)
 	end
 end)
 
-RegisterServerEvent("Revive")
-AddEventHandler("Revive", function(Type, Target)
+RegisterServerEvent("Fd_Staff:Revive")
+AddEventHandler("Fd_Staff:Revive", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -198,8 +228,8 @@ AddEventHandler("Revive", function(Type, Target)
 	end
 end)
 
-RegisterServerEvent("Goto")
-AddEventHandler("Goto", function(Type, Target)
+RegisterServerEvent("Fd_Staff:Goto")
+AddEventHandler("Fd_Staff:Goto", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	local xTargetCoords = GetEntityCoords(GetPlayerPed(Target))
@@ -212,8 +242,8 @@ AddEventHandler("Goto", function(Type, Target)
 	end
 end)
 
-RegisterServerEvent("Bring")
-AddEventHandler("Bring", function(Type, Target)
+RegisterServerEvent("Fd_Staff:Bring")
+AddEventHandler("Fd_Staff:Bring", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xPlayerCoords = GetEntityCoords(GetPlayerPed(source))
 	local xTarget = ESX.GetPlayerFromId(Target)
@@ -226,8 +256,8 @@ AddEventHandler("Bring", function(Type, Target)
 	end
 end)
 
-RegisterServerEvent("ClearLoadout")
-AddEventHandler("ClearLoadout", function(Type, Target, JobName, JobGrade, JobLabel)
+RegisterServerEvent("Fd_Staff:ClearLoadout")
+AddEventHandler("Fd_Staff:ClearLoadout", function(Type, Target, JobName, JobGrade, JobLabel)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -241,8 +271,8 @@ AddEventHandler("ClearLoadout", function(Type, Target, JobName, JobGrade, JobLab
 	end
 end)
 
-RegisterServerEvent("ClearInventory")
-AddEventHandler("ClearInventory", function(Type, Target)
+RegisterServerEvent("Fd_Staff:ClearInventory")
+AddEventHandler("Fd_Staff:ClearInventory", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -258,8 +288,8 @@ AddEventHandler("ClearInventory", function(Type, Target)
 	end
 end)
 
-RegisterServerEvent("Jail")
-AddEventHandler("Jail", function(Type, Target)
+RegisterServerEvent("Fd_Staff:Jail")
+AddEventHandler("Fd_Staff:Jail", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -287,8 +317,8 @@ ESX.RegisterServerCallback('Ld_Staff:IsInJail', function(source, cb)
 	end
 end)
 
-RegisterServerEvent("Warns")
-AddEventHandler("Warns", function(Type, Target, Date, Reason)
+RegisterServerEvent("Fd_Staff:Warns")
+AddEventHandler("Fd_Staff:Warns", function(Type, Target, Date, Reason)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -326,8 +356,8 @@ function CheckPlyWarns(Date, Target)
 	end)
 end
 
-RegisterServerEvent("Ban")
-AddEventHandler("Ban", function(Type, Target, Date, Reason)
+RegisterServerEvent("Fd_Staff:Ban")
+AddEventHandler("Fd_Staff:Ban", function(Type, Target, Date, Reason)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
@@ -370,4 +400,16 @@ AddEventHandler("Fd_Staff:SetTime", function(Hour)
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	TriggerClientEvent("Fd_Staff:SetTime", -1, Hour)
 	TriggerEvent("Fd_Logs:SendLogs", "Staff", "Red", "SetTime", ""..xPlayer.name.." à changer le l'heure.")
+end)
+
+RegisterServerEvent("Fd_Staff:SetBlackout")
+AddEventHandler("Fd_Staff:SetBlackout", function(State)
+	_source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
+	TriggerClientEvent("Fd_Staff:SetBlackout", -1, State)
+	if not State then
+		TriggerEvent("Fd_Logs:SendLogs", "Staff", "Red", "SetBlackout", ""..xPlayer.name.." à couper le courant.")
+	else
+		TriggerEvent("Fd_Logs:SendLogs", "Staff", "Red", "SetBlackout", ""..xPlayer.name.." à mis le courant.")
+	end
 end)

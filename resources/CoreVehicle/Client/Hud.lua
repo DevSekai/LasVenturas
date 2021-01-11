@@ -77,12 +77,12 @@ Citizen.CreateThread(function()
             
             CrtFuel = 100 * GetVehicleFuelLevel(vehicle) / GetVehicleHandlingFloat(vehicle,"CHandlingData","fPetrolTankVolume")
             local FuelColor = (CrtFuel >= Hud.FuelLimit) and Hud.FuelOver or Hud.FuelUnder
-            drawTxt(("%.3d"):format(math.ceil(CrtFuel)), 2, FuelColor, 0.8, Hud.X + 0.055, Hud.Y + 0.028)
-            drawTxt("Fuel", 2, FuelColor, 0.4, Hud.X + 0.085, Hud.Y + 0.038)
+            drawTxt(("%.3d"):format(math.ceil(CrtFuel)), 2, FuelColor, 0.8, Hud.X + 0.06, Hud.Y + 0.028)
+            drawTxt("Fuel", 2, FuelColor, 0.4, Hud.X + 0.09, Hud.Y + 0.038)
 
             year ,month ,day ,hour ,minute ,second  = GetLocalTime()
             timeText = ("%.2d"):format((hour +1 == 0) and 24 or hour +1) .. ":" .. ("%.2d"):format( minute)
-            drawTxt(timeText, 4, Hud.ClrTxt, 0.4, Hud.X + 0.01, Hud.Y + 0.078)
+            drawTxt(timeText, 4, Hud.ClrTxt, 0.4, Hud.X + 0.005, Hud.Y + 0.078)
 
             
             if IsControlJustReleased(0, Hud.SeatbeltKey) and vehicleClass ~= 8 then
@@ -147,7 +147,7 @@ Citizen.CreateThread(function()
                 end
             end
             local LimiteurClr = LimiteurState and Hud.LimiteurOn or Hud.LimiteurOff
-            drawTxt("Limiteur", 2, LimiteurClr, 0.4, Hud.X + 0.035, Hud.Y + 0.078)
+            drawTxt("Limiteur", 2, LimiteurClr, 0.4, Hud.X + 0.030, Hud.Y + 0.078)
         else
             Hud.Timing = 2000
             LimiteurState = false

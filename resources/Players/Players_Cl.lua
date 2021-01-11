@@ -1,7 +1,7 @@
 ESX = nil
 InMenu, PlayerSpawn, MdpClien, HasDamaged, HasFaim, HasSoif, HudHiden = false, false, "Ntm", false, false, false, false
 Accessoires = {}
-
+PlayerData = {}
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -13,6 +13,7 @@ Citizen.CreateThread(function ()
 		while ESX.GetPlayerData().job == nil do
 			Citizen.Wait(1)
 		end
+		PlayerData = ESX.GetPlayerData()
     end
 end)
 

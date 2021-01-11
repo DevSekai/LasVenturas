@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : Dim 27 déc. 2020 à 23:30
+-- Généré le : lun. 11 jan. 2021 à 02:14
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.2.30
 
@@ -42,7 +42,10 @@ INSERT INTO `addon_account` (`name`, `label`, `shared`) VALUES
 ('society_ammu', 'Armurier', 1),
 ('society_ballas', 'Ballas', 1),
 ('society_dog', 'Legion Dog', 1),
+('society_families', 'Families', 1),
 ('society_gouv', 'Gouvernement', 1),
+('society_lost', 'Lost MC', 1),
+('society_marabunta', 'Marabunta', 1),
 ('society_mecano', 'Mecnao', 1),
 ('society_police', 'LSPD', 1),
 ('society_tequilala', 'Tequi La La', 1),
@@ -69,16 +72,19 @@ CREATE TABLE `addon_account_data` (
 
 INSERT INTO `addon_account_data` (`id`, `account_name`, `money`, `owner`) VALUES
 (11, 'society_ambulance', 0, NULL),
-(12, 'society_dog', 0, NULL),
+(12, 'society_dog', 718, NULL),
 (13, 'society_gouv', 0, NULL),
 (14, 'society_mecano', 0, NULL),
 (15, 'society_police', 844, NULL),
 (16, 'society_tequilala', 0, NULL),
 (17, 'society_unicorn', 0, NULL),
 (18, 'society_weazel', 841, NULL),
-(19, 'society_ballas', 0, NULL),
+(19, 'society_ballas', 1, NULL),
 (20, 'society_vagos', 0, NULL),
-(21, 'society_ammu', 0, NULL);
+(21, 'society_ammu', 0, NULL),
+(22, 'society_families', 0, NULL),
+(23, 'society_marabunta', 0, NULL),
+(24, 'society_lost', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,7 +107,10 @@ INSERT INTO `addon_inventory` (`name`, `label`, `shared`) VALUES
 ('society_ammu', 'Armurier', 1),
 ('society_ballas', 'Ballas', 1),
 ('society_dog', 'Legion Dog', 1),
+('society_families', 'Families', 1),
 ('society_gouv', 'Gouvernement', 1),
+('society_lost', 'Lost MC', 1),
+('society_marabunta', 'Marabunta', 1),
 ('society_mecano', 'Mecnao', 1),
 ('society_police', 'LSPD', 1),
 ('society_tequilala', 'Tequi La La', 1),
@@ -191,7 +200,6 @@ INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 ('medikit', 'Défibrillateur', 1, 0, 1),
 ('patate', 'Pomme de terre', 1, 0, 1),
 ('phone', 'Téléphone', 1, 0, 1),
-('pistol', 'pistolet', 1, 0, 1),
 ('policeradio', 'Radio pirate : LSPD', 1, 0, 1),
 ('sandiwch', 'Sandwich', 1, 0, 1),
 ('saucisse', 'Saucisse', 1, 0, 1),
@@ -228,7 +236,19 @@ INSERT INTO `job2_grades` (`id`, `job2_name`, `grade`, `name`, `label`, `salary`
 (6, 'vagos', 0, 'recrue', 'Recrue', 0),
 (7, 'vagos', 1, 'medium', 'Novice', 0),
 (8, 'vagos', 2, 'expert', 'Expert', 0),
-(9, 'vagos', 3, 'boss', 'Jefe', 0);
+(9, 'vagos', 3, 'boss', 'Jefe', 0),
+(10, 'marabunta', 0, 'recrue', 'Petite frappe', 0),
+(11, 'marabunta', 1, 'medium', 'Homme de main', 0),
+(12, 'marabunta', 2, 'expert', 'Bras droit', 0),
+(13, 'marabunta', 3, 'boss', 'Jefe', 0),
+(14, 'families', 0, 'recrue', 'Petite frappe', 0),
+(15, 'families', 1, 'medium', 'Homme de main', 0),
+(16, 'families', 2, 'expert', 'Bras droit', 0),
+(17, 'families', 3, 'boss', 'OG', 0),
+(18, 'lost', 0, 'recrue', 'Petite frappe', 0),
+(19, 'lost', 1, 'medium', 'Homme de main', 0),
+(20, 'lost', 2, 'expert', 'Bras droit', 0),
+(21, 'lost', 3, 'boss', 'Directeur', 0);
 
 -- --------------------------------------------------------
 
@@ -274,6 +294,9 @@ CREATE TABLE `jobs2` (
 
 INSERT INTO `jobs2` (`name`, `label`) VALUES
 ('ballas', 'Ballas'),
+('families', 'Families'),
+('lost', 'Lost MC'),
+('marabunta', 'Marabunta'),
 ('unemployed2', 'Unemployed2'),
 ('vagos', 'Vagos');
 
@@ -378,6 +401,14 @@ CREATE TABLE `phone_messages` (
   `owner` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `phone_messages`
+--
+
+INSERT INTO `phone_messages` (`id`, `transmitter`, `receiver`, `message`, `time`, `isRead`, `owner`) VALUES
+(110, 'ambulance', '451-8533', 'De #451-8533 : Signal de détresse reçu, dépéchez vous. -33.728141784668, -546.48016357422', '2020-12-29 00:40:48', 0, 0),
+(109, 'ambulance', '451-8533', 'De #451-8533 : Signal de détresse reçu, dépéchez vous. 343.85342407227, -511.95471191406', '2020-12-29 00:21:48', 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -438,17 +469,6 @@ CREATE TABLE `trunk_inventory` (
   `ItemLabel` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `trunk_inventory`
---
-
-INSERT INTO `trunk_inventory` (`Id`, `Plate`, `ItemName`, `ItemCount`, `ItemLabel`) VALUES
-(24, '66BBU125', 'water', 0, 'Eau'),
-(25, '63GCQ354', 'water', 0, 'Eau'),
-(26, '28YTE718', 'water', 0, 'Eau'),
-(27, '66MCM102', 'water', 1, 'Eau'),
-(28, '89DKH838', 'water', 2, 'Eau');
-
 -- --------------------------------------------------------
 
 --
@@ -499,7 +519,6 @@ CREATE TABLE `users` (
   `identifier` varchar(40) NOT NULL,
   `accounts` longtext DEFAULT NULL,
   `group` varchar(50) DEFAULT 'user',
-  `Statut` varchar(255) NOT NULL DEFAULT '{"Hunger":100,"Thrist":100}',
   `Sexe` varchar(6) DEFAULT NULL,
   `Skin` longtext DEFAULT NULL,
   `FirstName` varchar(20) DEFAULT NULL,
@@ -513,15 +532,16 @@ CREATE TABLE `users` (
   `job2_grade` int(11) NOT NULL DEFAULT 0,
   `loadout` longtext DEFAULT NULL,
   `position` varchar(255) DEFAULT '{"x":-1042.571,"y":-2746.193,"z":21.359,"heading":327.772}',
-  `phone_number` varchar(10) DEFAULT NULL
+  `phone_number` varchar(10) DEFAULT NULL,
+  `status` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`identifier`, `accounts`, `group`, `Statut`, `Sexe`, `Skin`, `FirstName`, `LastName`, `Birthday`, `Taille`, `inventory`, `job`, `job_grade`, `job2`, `job2_grade`, `loadout`, `position`, `phone_number`) VALUES
-('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"bank\":4000,\"money\":4115,\"black_money\":0}', 'admin', '{\"Hunger\":100,\"Thrist\":100}', 'Homme', '{\"ArmsIndex\":2,\"ChaussureIndex2\":4,\"DadIndex\":2,\"ChaussureIndex\":7,\"TshirtIndex2\":7,\"PantalonIndex2\":9,\"PantalonIndex\":9,\"VesteIndex2\":3,\"VesteIndex\":6,\"TshirtIndex\":6,\"BarbeIndex\":3,\"PedIndex\":\"mp_m_freemode_01\",\"OeilIndex\":3,\"MotherIndex\":2,\"CouleurIndex\":2,\"CheuveuxIndex\":4}', 'Yan', 'Labray', '15/03/1996', 186, '{\"policeradio\":1,\"phone\":1,\"water\":897,\"pistol\":448}', 'police', 4, 'ballas', 0, '{\"weapon_nightstick\":{\"ammo\":250},\"WEAPON_PISTOL\":{\"ammo\":122},\"weapon_flashlight\":{\"ammo\":250},\"WEAPON_RPG\":{\"ammo\":0}}', '{\"x\":375.1,\"heading\":152.1,\"z\":103.4,\"y\":319.2}', '451-8533');
+INSERT INTO `users` (`identifier`, `accounts`, `group`, `Sexe`, `Skin`, `FirstName`, `LastName`, `Birthday`, `Taille`, `inventory`, `job`, `job_grade`, `job2`, `job2_grade`, `loadout`, `position`, `phone_number`, `status`) VALUES
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', '{\"bank\":3880,\"black_money\":1500,\"money\":27888}', 'admin', 'Homme', '{\"ArmsIndex\":2,\"ChaussureIndex2\":4,\"DadIndex\":2,\"ChaussureIndex\":7,\"TshirtIndex2\":7,\"PantalonIndex2\":9,\"PantalonIndex\":9,\"VesteIndex2\":3,\"VesteIndex\":6,\"TshirtIndex\":6,\"BarbeIndex\":3,\"PedIndex\":\"mp_m_freemode_01\",\"OeilIndex\":3,\"MotherIndex\":2,\"CouleurIndex\":2,\"CheuveuxIndex\":4}', 'Yan', 'Labray', '15/03/1996', 186, '{\"corde\":1,\"medikit\":15,\"bread\":14}', 'gouv', 3, 'lost', 0, '{\"weapon_crowbar\":{\"ammo\":250},\"WEAPON_PISTOL\":{\"ammo\":250},\"WEAPON_PISTOL50\":{\"ammo\":250}}', '{\"heading\":63.9,\"z\":29.4,\"y\":-992.1,\"x\":137.7}', '451-8533', '[{\"name\":\"hunger\",\"val\":183400,\"percent\":18.34},{\"name\":\"thirst\",\"val\":225550,\"percent\":22.555},{\"name\":\"drunk\",\"val\":0,\"percent\":0.0}]');
 
 -- --------------------------------------------------------
 
@@ -547,10 +567,27 @@ CREATE TABLE `users_bans` (
   `Id` int(11) NOT NULL,
   `Date` varchar(30) NOT NULL,
   `Identifier` varchar(255) NOT NULL,
-  `Banned` tinyint(1) NOT NULL,
   `Reason` varchar(255) NOT NULL,
   `BannedBy` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users_state`
+--
+
+CREATE TABLE `users_state` (
+  `identifier` varchar(255) NOT NULL,
+  `statut` varchar(255) NOT NULL DEFAULT '{"Hunger":100,"Thrist":100,"Health":200.0}'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `users_state`
+--
+
+INSERT INTO `users_state` (`identifier`, `statut`) VALUES
+('3b2fee7e9c7169d893241dded5753d8d6ddd0e1a', ' {\"Hunger\":100,\"Thrist\":100,\"Health\":200.0}');
 
 -- --------------------------------------------------------
 
@@ -768,6 +805,12 @@ ALTER TABLE `users_bans`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Index pour la table `users_state`
+--
+ALTER TABLE `users_state`
+  ADD PRIMARY KEY (`identifier`);
+
+--
 -- Index pour la table `users_tatoo`
 --
 ALTER TABLE `users_tatoo`
@@ -799,7 +842,7 @@ ALTER TABLE `users_warns`
 -- AUTO_INCREMENT pour la table `addon_account_data`
 --
 ALTER TABLE `addon_account_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT pour la table `addon_inventory_items`
@@ -823,7 +866,7 @@ ALTER TABLE `billing`
 -- AUTO_INCREMENT pour la table `job2_grades`
 --
 ALTER TABLE `job2_grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pour la table `job_grades`
@@ -847,7 +890,7 @@ ALTER TABLE `phone_calls`
 -- AUTO_INCREMENT pour la table `phone_messages`
 --
 ALTER TABLE `phone_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT pour la table `phone_users_contacts`
@@ -865,7 +908,7 @@ ALTER TABLE `police_report`
 -- AUTO_INCREMENT pour la table `trunk_inventory`
 --
 ALTER TABLE `trunk_inventory`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT pour la table `twitter_accounts`
@@ -895,7 +938,7 @@ ALTER TABLE `users_accessories`
 -- AUTO_INCREMENT pour la table `users_bans`
 --
 ALTER TABLE `users_bans`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `users_tatoo`
@@ -919,7 +962,7 @@ ALTER TABLE `users_vehicles`
 -- AUTO_INCREMENT pour la table `users_warns`
 --
 ALTER TABLE `users_warns`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- Contraintes pour les tables déchargées

@@ -445,7 +445,7 @@ Job = {
 						if DoesEntityExist(Vehicle) then
 							TaskStartScenarioInPlace(PlayerPedId(), 'PROP_HUMAN_BUM_BIN', 0, true)
 							Citizen.Wait(10000)
-							SetVehicleDirtLevel(vehicle, 0)
+							SetVehicleDirtLevel(Vehicle, 0)
 							ClearPedTasksImmediately(PlayerPedId())
 							ESX.ShowNotification("Le véhicule est propre.")
 						else

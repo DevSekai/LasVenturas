@@ -32,10 +32,6 @@ RMenu.Add('Personnal', 'Vehicle', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'P
 RMenu:Get('Personnal', 'Vehicle'):SetSubtitle("~y~Gestion du véhicule")
 RMenu:Get('Personnal', 'Vehicle'):DisplayGlare(false);
 
-RMenu.Add('Personnal', 'Divers', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
-RMenu:Get('Personnal', 'Divers'):SetSubtitle("~y~Divers")
-RMenu:Get('Personnal', 'Divers'):DisplayGlare(false);
-
 RMenu.Add('Personnal', 'Clothe', RageUI.CreateSubMenu(RMenu:Get('Personnal', 'Principal'), "", ""))
 RMenu:Get('Personnal', 'Clothe'):SetSubtitle("~y~Vêtements")
 RMenu:Get('Personnal', 'Clothe'):DisplayGlare(false);
@@ -53,7 +49,6 @@ Citizen.CreateThread(function ()
 			RageUI.Visible(RMenu:Get('Personnal', 'Inventory')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Weaponry')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Wallet')) or
-			RageUI.Visible(RMenu:Get('Personnal', 'Divers')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'SimCard')) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Vehicle')) and IsPedSittingInAnyVehicle(PlayerPedId()) or
 			RageUI.Visible(RMenu:Get('Personnal', 'Clothe'))
@@ -177,8 +172,6 @@ function OpenPersonalMenu()
 	        RageUI.Item.Button("Gestion du véhicule", "", {}, true, {
 	        },RMenu:Get('Personnal', 'Vehicle'))
         end
-	    RageUI.Item.Button("Divers", "", {}, true, {
-	    },RMenu:Get('Personnal', 'Divers'))
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Inventory'), function()
@@ -335,9 +328,9 @@ function OpenPersonalMenu()
     end)
 
 	RageUI.IsVisible(RMenu:Get('Personnal', 'Wallet'), function()
-		RageUI.Item.Separator("[~y~Métier~s~] : "..ESX.PlayerData.job.label.." [~y~Grade~s~] : "..ESX.PlayerData.job.grade_label)
+		RageUI.Item.Separator("[~y~Métier~s~] : "..PlayerData.job.label.." [~y~Grade~s~] : "..PlayerData.job.grade_label)
 		if ESX.PlayerData.job2.name ~= "unemployed2" then
-			RageUI.Item.Separator("[~y~Métier~s~] : "..ESX.PlayerData.job2.label.." [~y~Grade~s~] : "..ESX.PlayerData.job2.grade_label)
+			RageUI.Item.Separator("[~y~Métier~s~] : "..PlayerData.job2.label.." [~y~Grade~s~] : "..PlayerData.job2.grade_label)
 		end
 	    for _,v in pairs (invBank) do
 		    RageUI.Item.Separator("[~y~"..v.label.."~s~] : "..v.amount.." $")
@@ -551,46 +544,4 @@ function OpenPersonalMenu()
 		})
     end)
 
-	RageUI.IsVisible(RMenu:Get('Personnal', 'Divers'), function()
-		RageUI.Item.Checkbox("[~y~Afficher/Cacher HUD~s~]", "", false, {}, {
-			onSelected = function(Index)
-				if not Display then
-					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
-			        SendNUIMessage({
-			        	Display = true,
-			        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
-						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
-						Hunger = PlyStatut.Hunger,
-						Thrist = PlyStatut.Thrist
-			        })
-			        DisplayRadar(false)
-			        HudHiden = true
-			        Display = true
-			    else
-					Annee, Mois, Jour, Heure, Minute, Seconde = GetLocalTime()
-			        SendNUIMessage({
-			        	Display = false,
-			        	ServId = "Votre ID : "..GetPlayerServerId(PlayerId()),
-						DateTime = "Date : "..Jour.."/"..Mois.."/"..Annee.." Heure : "..Heure + 2 ..":"..Minute,
-						Hunger = PlyStatut.Hunger,
-						Thrist = PlyStatut.Thrist
-			        })
-			        DisplayRadar(true)
-			        HudHiden = false
-			        Display = false
-			    end
-			end,
-		})
-		RageUI.Item.Checkbox("[~y~Afficher/Cacher blips~s~]", "", true, {}, {
-			onSelected = function(Index)
-				if not Blip then
-			    	TriggerEvent('DeleteAllBlip')
-			    	Blip = true
-			    else
-					TriggerEvent('ShowAllBlip')
-			        Blip = false
-			    end
-			end,
-		})
-    end)
 end
