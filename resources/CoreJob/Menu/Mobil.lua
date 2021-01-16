@@ -1,28 +1,42 @@
 -- Création du menu --
-RMenu.Add("Job", "Mobil", RageUI.CreateMenu("", "Intéraction", nil, nil, "root_cause", "Banner"), true)
+RMenu.Add("Job", "Mobil", RageUI.CreateMenu("", "Menu métier", nil, nil, "root_cause", "Banner"), true)
+RMenu:Get("Job", "Mobil").Closed = function()
+    RageUI.CloseAll()
+    InMenu = false
+end
 RMenu.Add("Job", "Mobil_Society", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Gestion de l'entreprise"))
 RMenu.Add("Job", "Mobil_Report", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Dossiers"))
 RMenu.Add("Job", "Mobil_TrgInv", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Inventaire de la personne"))
 RMenu.Add("Job", "Mobil_TrgIdt", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité de la personne"))
 RMenu.Add("Job", "Mobil_CarOwner", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité du propriétaire"))
 
-Citizen.CreateThread(function ()
-    while true do
-        Citizen.Wait(0)
 
-        if IsControlJustReleased(1, 167) then
-            if PlayerData.job.name ~= "unemployed" then
-                RageUI.Visible(RMenu:Get("Job", "Mobil"), not RageUI.Visible(RMenu:Get("Job", "Mobil")))
-            end
+RegisterCommand('OpenJob', function()
+    if not InMenu then
+        if PlayerData.job.name ~= "unemployed" then
+            OpenJobMenu()
         end
+    else
+        InMenu = false
+        RageUI.CloseAll()
+    end
+end, false)
+
+RegisterKeyMapping('OpenJob', 'Menu job', 'keyboard', 'F6')
+
+function OpenJobMenu()
+    InMenu = true
+    RageUI.Visible(RMenu:Get("Job", "Mobil"), true)
+    while InMenu do
+        Citizen.Wait(0)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil"), function()
             Job.Wl.JobBtn()
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_Society"), function()
-            RageUI.Item.Separator("Compte : ~g~"..Job.Wl.Society_Money.." $~s~")
-            RageUI.Item.Button("Recruter l'employer", "", {}, true, {
+            RageUI.Item.Separator("Compte : ~g~"..Job.Wl.Society_Money.." $")
+            RageUI.Item.Button("Recruter l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -32,7 +46,7 @@ Citizen.CreateThread(function ()
                     end
                 end,
             })
-            RageUI.Item.Button("Promouvoir l'employer", "", {}, true, {
+            RageUI.Item.Button("Promouvoir l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -42,7 +56,7 @@ Citizen.CreateThread(function ()
                     end
                 end,
             })
-            RageUI.Item.Button("Virer l'employer", "", {}, true, {
+            RageUI.Item.Button("Virer l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -52,7 +66,7 @@ Citizen.CreateThread(function ()
                     end
                 end,
             })
-            RageUI.Item.Button("Rétrograder l'employer", "", {}, true, {
+            RageUI.Item.Button("Rétrograder l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -72,37 +86,37 @@ Citizen.CreateThread(function ()
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgInv"), function()
-            RageUI.Item.Separator("↓↓       ~g~Cash~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Cash       ↓↓")
             for _,v in pairs (Job.Wl.Trg.Account) do
-                RageUI.Item.Button("~g~"..v.label.." $", "", {}, true, {
+                RageUI.Item.Button("~g~"..v.label.." $", nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       ~y~Objets~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Objets       ↓↓")
             for _,v in pairs (Job.Wl.Trg.Inventory) do
-                RageUI.Item.Button(""..v.label.." "..v.amount, "", {}, true, {
+                RageUI.Item.Button(""..v.label.." x "..v.amount, nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       ~o~Armes~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Armes       ↓↓")
             for _,v in pairs (Job.Wl.Trg.Loadout) do
-                RageUI.Item.Button(""..v.label.." "..v.amount, "", {}, true, {
+                RageUI.Item.Button(""..v.label.." "..v.amount, nil, {}, true, {
                 })
             end
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgIdt"), function()
-            RageUI.Item.Separator("↓↓       ~y~Identité~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Identité       ↓↓")
             RageUI.Item.Separator("[Nom] : "..Job.Wl.TrgIdentity.LastName)
             RageUI.Item.Separator("[Prénom] : "..Job.Wl.TrgIdentity.FirstName)
-            RageUI.Item.Separator("↓↓       ~y~Informations~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Informations       ↓↓")
             RageUI.Item.Separator("[Age] : "..Job.Wl.TrgIdentity.Birthday)
             RageUI.Item.Separator("[Métier] : "..Job.Wl.TrgIdentity.Job)
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_CarOwner"), function()
-            RageUI.Item.Separator("↓↓       ~y~Identité~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Identité       ↓↓")
             RageUI.Item.Separator("[Nom] : "..Job.Wl.CarOwner.LastName)
             RageUI.Item.Separator("[Prénom] : "..Job.Wl.CarOwner.FirstName)
-            RageUI.Item.Separator("↓↓       ~y~Informations~s~       ↓↓")
+            RageUI.Item.Separator("↓↓       Informations       ↓↓")
             RageUI.Item.Separator("[Age] : "..Job.Wl.CarOwner.Plate)
             if Job.Wl.CarOwner.Ensured then
                 RageUI.Item.Separator("[Assurer]")
@@ -112,4 +126,4 @@ Citizen.CreateThread(function ()
             end
         end)
     end
-end)
+end

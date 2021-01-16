@@ -3,6 +3,9 @@ TokenGen = {}
 InMenu = false
 FinalPrice = 0
 Timing = 2000
+InZone = {}
+LtdPed = {}
+CrtStore = nil
 
 Citizen.CreateThread(function ()
     while ESX == nil do
@@ -18,6 +21,7 @@ AddEventHandler("SendShopToken", function(Token)
 end)
 
 Citizen.CreateThread(function ()
+	me = PlayerPedId()
 	while true do
 		Citizen.Wait(Timing)
 
@@ -26,6 +30,7 @@ Citizen.CreateThread(function ()
 				local distanceShops = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), v.x, v.y, v.z, true)
 				if distanceShops < Shops.MarkerDist then
 					Timing = 0
+					InZone[v.Name] = true
 					DrawMarker(Shops.MarkerType, v.x, v.y, v.z + 0.98, 0, 0, 0, 0, 0, 0, Shops.MarkerScale, Shops.MarkerScale, Shops.MarkerScale, Shops.MarkerR, Shops.MarkerG, Shops.MarkerB, Shops.MarkerA, false, true, 2, true, nil, false)
 					if distanceShops < Shops.PedDist then
 						ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder a la boutique.')
@@ -51,13 +56,37 @@ Citizen.CreateThread(function ()
 							end
 							ShowMenu(v.Type)
 						end
-					else
-						if not InMenu then
-							Timing = 2000
-						end
+					end
+				else
+					if InZone[v.Name] then
+						Timing = 2000
+						InZone[v.Name] = false
 					end
 				end
 			end
 		end
 	end
 end)
+
+loadDict = function(dict)
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Wait(10)
+    end
+end
+
+function DrawText3D(coords, text)
+    local onScreen, _x, _y = World3dToScreen2d(coords.x, coords.y, coords.z)
+    local pX, pY, pZ = table.unpack(GetGameplayCamCoords())
+  
+    SetTextScale(0.4, 0.4)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    SetTextColour(255, 255, 255, 255)
+    SetTextOutline()
+  
+    AddTextComponentString(text)
+    DrawText(_x, _y)
+end

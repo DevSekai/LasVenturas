@@ -24,7 +24,12 @@ Citizen.CreateThread(function ()
 end)
 
 RegisterCommand('OpenStaff', function()
-    IsStaff()
+    if not InMenu then
+        IsStaff()
+    else
+        InMenu = false
+        RageUI.CloseAll()
+    end
 end, false)
 
 RegisterKeyMapping('OpenStaff', 'Menu administration', 'keyboard', 'F11')
@@ -99,6 +104,8 @@ AddEventHandler('Fd_Staff:Revive', function()
 	RespawnPed(PlayerPedId(), coords, heading)
 
 	StopScreenEffect('DeathFailOut')
+    TriggerServerEvent("Players:setDeathStatus", false)
+    DisplayRadar(true)
 	DoScreenFadeIn(800)
 end)
 
@@ -238,12 +245,19 @@ function PlyName()
 end
 
 function Spectate()
+    FreezeEntityPosition(GetPlayerPed(-1), true)
+    SetEntityVisible(GetPlayerPed(-1), false)
+    SetEntityCollision(GetPlayerPed(-1), false, false)
     Staff.Spectate = true
     while Staff.Spectate do
         Citizen.Wait(0)
 
         Coords = GetEntityCoords(CrtPed)
-        SetEntityCoordsNoOffset(PlayerPedId(), Coords, true, true, true)
+        SetEntityCoordsNoOffset(PlayerPedId(), Coords, false, false, false)
+        if IsControlJustReleased(1, 51) then
+            z = Coords.z
+            SetEntityCoordsNoOffset(CrtPed, Coords.x, Coords.y, z + 1, false, false, false)
+        end
     end
 end
 

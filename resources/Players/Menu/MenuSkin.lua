@@ -3,34 +3,27 @@ DadNumber = {"Benjamin", "Daniel", "Joshua", "Noah", "Andrew", "Juan", "Alex", "
 MotherNumber = {"Adelyn", "Emily", "Abigail", "Beverly", "Kristen", "Hailey", "June", "Daisy", "Elizabeth", "Addison", "Ava", "Cameron", "Samantha", "Madison", "Amber", "Heather", "Hillary", "Courtney", "Ashley", "Alyssa", "Mia", "Brittany"}
 MdpSkin = "Ntm"
 
-RMenu.Add('CrationPerso', 'Skin', RageUI.CreateMenu("", "", nil, nil, "root_cause", "Banner"), true)
-RMenu:Get('CrationPerso', 'Skin'):SetSubtitle("~y~Création de l'apparence")
-RMenu:Get('CrationPerso', 'Skin'):DisplayInstructionalButton(false)
+RMenu.Add('CrationPerso', 'Skin', RageUI.CreateMenu("", "Création de l'apparence", nil, nil, "root_cause", "Banner"), true)
 RMenu:Get('CrationPerso', 'Skin'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'Skin').Closable = false;
 
-RMenu.Add('CrationPerso', 'Sexe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", ""))
-RMenu:Get('CrationPerso', 'Sexe'):SetSubtitle("~y~Sexe")
+RMenu.Add('CrationPerso', 'Sexe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", "Sexe"))
 RMenu:Get('CrationPerso', 'Sexe'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'Sexe').Closable = false;
 
-RMenu.Add('CrationPerso', 'MumDad', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", ""))
-RMenu:Get('CrationPerso', 'MumDad'):SetSubtitle("~y~Hérédité")
+RMenu.Add('CrationPerso', 'MumDad', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", "Hérédité"))
 RMenu:Get('CrationPerso', 'MumDad'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'MumDad').Closable = false;
 
-RMenu.Add('CrationPerso', 'Head', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", ""))
-RMenu:Get('CrationPerso', 'Head'):SetSubtitle("~y~Tête")
+RMenu.Add('CrationPerso', 'Head', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", "Tête"))
 RMenu:Get('CrationPerso', 'Head'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'Head').Closable = false;
 
-RMenu.Add('CrationPerso', 'HighClothe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", ""))
-RMenu:Get('CrationPerso', 'HighClothe'):SetSubtitle("~y~Hauts")
+RMenu.Add('CrationPerso', 'HighClothe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", "Hauts"))
 RMenu:Get('CrationPerso', 'HighClothe'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'HighClothe').Closable = false;
 
-RMenu.Add('CrationPerso', 'LowClothe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", ""))
-RMenu:Get('CrationPerso', 'LowClothe'):SetSubtitle("~y~Bas")
+RMenu.Add('CrationPerso', 'LowClothe', RageUI.CreateSubMenu(RMenu:Get('CrationPerso', 'Skin'), "", "Bas"))
 RMenu:Get('CrationPerso', 'LowClothe'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'LowClothe').Closable = false;
 
@@ -38,33 +31,34 @@ Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
 		RageUI.IsVisible(RMenu:Get('CrationPerso', 'Skin'), function()
-		    RageUI.Item.Button("Sexe", "", {}, true, {
-		        onSelected = function()
+		    RageUI.Item.Button("Sexe", nil, {RightLabel = "→→→"}, true, {
+				onSelected = function()
+					PedIndex = "mp_m_freemode_01"
 		        	HighCam()
 		        end,
 		    },RMenu:Get('CrationPerso', 'Sexe'))
-		    RageUI.Item.Button("Hérédité", "", {}, true, {
+		    RageUI.Item.Button("Hérédité", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	FaceCam()
 		        end,
 		    },RMenu:Get('CrationPerso', 'MumDad'))
-		    RageUI.Item.Button("Tête", "", {}, true, {
+		    RageUI.Item.Button("Tête", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	FaceCam()
 		        end,
 		    },RMenu:Get('CrationPerso', 'Head'))
-		    RageUI.Item.Button("Haut", "", {}, true, {
+		    RageUI.Item.Button("Haut", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	HighCam()
 		        end,
 		    },RMenu:Get('CrationPerso', 'HighClothe'))
-		    RageUI.Item.Button("Bas", "", {}, true, {
+		    RageUI.Item.Button("Bas", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	LowCam()
 		        end,
 		    },RMenu:Get('CrationPerso', 'LowClothe'))
 		    if SkinReady then
-			    RageUI.Item.Button("Valider", "", {}, true, {
+			    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 			        onSelected = function()
 				        PlySkin = {
 				        	PedIndex = PedIndex, 
@@ -92,7 +86,7 @@ Citizen.CreateThread(function ()
 	    end)
 
 		RageUI.IsVisible(RMenu:Get('CrationPerso', 'Sexe'), function()
-		    RageUI.Item.Button("Homme", "", {}, true, {
+		    RageUI.Item.Button("Homme", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 					while not HasModelLoaded("mp_m_freemode_01") do
 						RequestModel("mp_m_freemode_01")
@@ -106,7 +100,7 @@ Citizen.CreateThread(function ()
 	               	PedIndex = "mp_m_freemode_01"
 		        end,
 		    })
-		    RageUI.Item.Button("Femme", "", {}, true, {
+		    RageUI.Item.Button("Femme", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 					while not HasModelLoaded("mp_f_freemode_01") do
 						RequestModel("mp_f_freemode_01")
@@ -120,7 +114,7 @@ Citizen.CreateThread(function ()
 	               	PedIndex = "mp_f_freemode_01"
 		        end,
 		    })
-		    RageUI.Item.Button("Valider", "", {}, true, {
+		    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	RageUI.GoBack()
 		        end,
@@ -143,7 +137,7 @@ Citizen.CreateThread(function ()
 					SetPedHeadBlendData(PlayerPedId(), DadIndex, MotherIndex, nil, DadIndex, MotherIndex, nil, 0.5, 0.5, nil, true)
 	            end,
 	        })
-		    RageUI.Item.Button("Valider", "", {}, true, {
+		    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	RageUI.GoBack()
 		        	SkinReady = true
@@ -194,7 +188,7 @@ Citizen.CreateThread(function ()
 		            SetPedHeadOverlayColor(PlayerPedId(), 1, 1, CouleurIndex, CouleurIndex)
 	            end,
 		    })
-		    RageUI.Item.Button("Valider", "", {}, true, {
+		    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	RageUI.GoBack()
 		        	SkinReady = true
@@ -253,7 +247,7 @@ Citizen.CreateThread(function ()
 					SetPedComponentVariation(PlayerPedId(), 3, ArmsIndex, 0, 2)
 				end,
 			})
-		    RageUI.Item.Button("Valider", "", {}, true, {
+		    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	RageUI.GoBack()
 		        	SkinReady = true
@@ -302,7 +296,7 @@ Citizen.CreateThread(function ()
 		            SetPedComponentVariation(PlayerPedId(), 6, ChaussureIndex, ChaussureIndex2, 2)
 				end,
 			})
-		    RageUI.Item.Button("Valider", "", {}, true, {
+		    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 		        onSelected = function()
 		        	RageUI.GoBack()
 		        	SkinReady = true

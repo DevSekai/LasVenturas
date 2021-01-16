@@ -142,7 +142,7 @@ Job = {
 			{JobName = "dog", JobLabel = "Legion Dog"},
 		},
 		JobBtn = function()
-            RageUI.Item.Checkbox("Prise/Fin de service", "", Job.Wl.DuttyState, {}, {
+            RageUI.Item.Checkbox("Prise/Fin de service", nil, Job.Wl.DuttyState, {}, {
                 onSelected = function(Index, Items)
                     Job.Wl.DuttyState = not Job.Wl.DuttyState
                     TriggerServerEvent("OnDutty", Job.Wl.DuttyState)
@@ -158,7 +158,7 @@ Job = {
 						end,
 					},RMenu:Get("Job", "Mobil_Society"))
 				end
-                RageUI.Item.Button("Facturation", "", {}, true, {
+                RageUI.Item.Button("Facturation", nil, {}, true, {
                     onSelected = function(Index, Items)
                         local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                         if closestPlayer == -1 or closestDistance > 1.5 then
@@ -178,7 +178,7 @@ Job = {
 		end,
 		["ambulance"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~g~Soins~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Soins       ↓↓")
 				RageUI.Item.Button("Soigner la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -209,7 +209,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.Button("Ecrire dans le dossier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -411,7 +411,7 @@ Job = {
 		},
 		["mecano"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~g~Réparations~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Réparations       ↓↓")
 				RageUI.Item.Button("Réparer le véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Vehicle   = ESX.Game.GetVehicleInDirection()
@@ -453,7 +453,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.Button("Mettre en fourrière", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Vehicle   = ESX.Game.GetVehicleInDirection()
@@ -637,7 +637,7 @@ Job = {
 		},
 		["police"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~g~Intéraction~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Intéraction       ↓↓")
 				RageUI.Item.Button("Fouiller la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -744,7 +744,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.Button("Ecrire dans le cassier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
@@ -776,10 +776,10 @@ Job = {
 					end,
 				})
 				RageUI.Item.List("Demande de renfort", {
-					{Name = "~g~Code 1~s~", Value = "Low"},
-					{Name = "~y~Code 2~s~", Value = "Mid"},
-					{Name = "~o~Code 3~s~", Value = "High"},
-					{Name = "~r~Code 4~s~", Value = "Xtrem"},
+					{Name = "Code 1", Value = "Low"},
+					{Name = "~y~Code 2", Value = "Mid"},
+					{Name = "Code 3", Value = "High"},
+					{Name = "~r~Code 4", Value = "Xtrem"},
 				}, Job.ListIndex, nil, {}, true, {
 					onSelected = function(Index, Items)
 						Job.ListIndex = Index
@@ -1083,7 +1083,7 @@ Job = {
 				["Perche"] = false,
 			},
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.Button("Diffuser une annonce", nil, {}, true, {
 					onSelected = function(Index, Items)
 						Desc = KeyboardInput("Description de l'annonce", "", 255)
@@ -1259,7 +1259,7 @@ Job = {
 		},
 		["unicorn"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.List("Objets", {
 					{Name = "Rubalise", Value = "vw_prop_vw_barrier_rope_01a"},
 				}, Job.ListIndex, nil, {}, true, {
@@ -1440,7 +1440,7 @@ Job = {
 		},
 		["tequilala"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.List("Objets", {
 					{Name = "Rubalise", Value = "vw_prop_vw_barrier_rope_01a"},
 				}, Job.ListIndex, nil, {}, true, {
@@ -1621,7 +1621,7 @@ Job = {
 		},
 		["gouv"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       ~o~Utilitaires~s~       ↓↓")
+				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
 				RageUI.Item.Button("Diffuser une annonce", nil, {}, true, {
 					onSelected = function(Index, Items)
 						Desc = KeyboardInput("Description de l'annonce", "", 255)
@@ -1937,7 +1937,7 @@ Job = {
 			},
 		},
 		Btn = function()
-			RageUI.Item.Separator("↓↓       ~o~Ingrédients~s~       ↓↓")
+			RageUI.Item.Separator("↓↓       Ingrédients       ↓↓")
 			for _,v in pairs (Job.Crafting.List[PlayerData.job.name]) do
 				if v.First then
 					RageUI.Item.Button(v.Name, nil, {}, true, {
@@ -1947,7 +1947,7 @@ Job = {
 					})
 				end
 			end
-			RageUI.Item.Separator("↓↓       ~o~Recette~s~       ↓↓")
+			RageUI.Item.Separator("↓↓       Recette       ↓↓")
 			for _,v in pairs (Job.Crafting.List[PlayerData.job.name]) do
 				if not v.First then
 					RageUI.Item.Button(v.Name, nil, {}, true, {
@@ -2062,7 +2062,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Primary, Secondary = GetVehicleColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, "", {}, true, {
+				RageUI.Item.Button(v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Primary ~= v.Value then
 							SetVehicleColours(CrtVhc , v.Value, Secondary)
@@ -2080,7 +2080,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Primary, Secondary = GetVehicleColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, "", {}, true, {
+				RageUI.Item.Button(v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Secondary ~= v.Value then
 							SetVehicleColours(CrtVhc , Primary, v.Value)
@@ -2098,7 +2098,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Pearl, Wheel = GetVehicleExtraColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, "", {}, true, {
+				RageUI.Item.Button(v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Pearl ~= v.Value then
 							SetVehicleExtraColours(CrtVhc, v.Value, Wheel)
@@ -2116,7 +2116,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Pearl, Wheel = GetVehicleExtraColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, "", {}, true, {
+				RageUI.Item.Button(v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Pearl ~= v.Value then
 							SetVehicleExtraColours(CrtVhc, Pearl, v.Value)
@@ -2130,9 +2130,9 @@ Job = {
 			end
 		end,
 		Btn = function()
-			RageUI.Item.Button("Estéthique", "", {}, true, {
+			RageUI.Item.Button("Estéthique", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Custom'))
-			RageUI.Item.Button("Performance", "", {}, true, {
+			RageUI.Item.Button("Performance", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Perfs'))
 		end,
 		WheelsBtn = function()
@@ -2174,7 +2174,7 @@ Job = {
 			CrtWheelFront = GetVehicleMod(CrtVhc, 23)
 			CrtWheelBack = GetVehicleMod(CrtVhc, 24)
 			for _,v in pairs (Job.Stand.Wheels.Found) do
-				RageUI.Item.Button(v.Name, "", {}, true, {
+				RageUI.Item.Button(v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if CrtWheelFront ~= v.Value then
 							SetVehicleMod(CrtVhc, 23, v.Value, false)
@@ -2358,9 +2358,9 @@ Job = {
 		CustomBtn = function()
 			CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
 			CrtVhcClass = GetVehicleClass(CrtVhc)
-			RageUI.Item.Button("Peinture", "", {}, true, {
+			RageUI.Item.Button("Peinture", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Color'))
-			RageUI.Item.Button("Roue", "", {}, true, {
+			RageUI.Item.Button("Roue", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Wheels'))
 			RageUI.Item.List("Fenêtres", Job.Stand.Windows.Table, Job.Stand.Windows.Index, nil, {}, true, {
 				onSelected = function(Index, Items)

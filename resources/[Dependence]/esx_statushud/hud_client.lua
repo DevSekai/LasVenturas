@@ -1,5 +1,5 @@
 ESX = nil
-local food, water = 0, 0
+local food, water, drunk = nil, nil, nil
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -13,39 +13,37 @@ AddEventHandler("esx_statushud:onTick", function(status)
     local FoodId, WaterId, DrunkId = nil, nil, nil
     for _,v in pairs (status) do
         if v.name == "hunger" then
-            FoodId = _
+            food = (status[_].percent / 100)
         elseif v.name == "thirst" then
-            WaterId = _
+            water = (status[_].percent / 100)
         elseif v.name == "drunk" then
-            DrunkId = _
+            drunk = (status[_].percent / 100)
         end
     end
-    food, water, drunk = (status[FoodId].percent / 100), (status[WaterId].percent / 100), (status[DrunkId].percent / 100)
-    if (status[FoodId].percent / 100) < 0.3 then
+    if food < 0.3 then
         ESX.ShowNotification("Vous avez faim.")
-    elseif (status[WaterId].percent / 100) < 0.3 then
+    elseif water < 0.3 then
         ESX.ShowNotification("Vous avez soif.")
     end
 end)
 
-AddEventHandler('esx:onPlayerSpawn', function()
-    Citizen.Wait(2000)
-    SendNUIMessage({
-        pauseMenu = IsPauseMenuActive(),
-        food = food,
-        water = water,
-        drunk = drunk
-    })
-    Spawned = true
-end)
-Spawned = false
 Citizen.CreateThread(function()
     while true do 
-        if Spawned then
+        if food then
             SendNUIMessage({
                 pauseMenu = IsPauseMenuActive(),
-                food = food,
-                water = water,
+                food = food
+            })
+        end
+        if water then
+            SendNUIMessage({
+                pauseMenu = IsPauseMenuActive(),
+                water = water
+            })
+        end
+        if drunk then
+            SendNUIMessage({
+                pauseMenu = IsPauseMenuActive(),
                 drunk = drunk
             })
         end

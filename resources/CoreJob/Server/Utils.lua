@@ -344,7 +344,7 @@ end)
 RegisterServerEvent('Commands:Revive')
 AddEventHandler('Commands:Revive', function()
 	local xPlayer = ESX.GetPlayerFromId(source)
-	isDead[xPlayer.identifier] = false
+	IsDead[xPlayer.identifier] = false
 end)
 
 ESX.RegisterServerCallback('GetJobReport', function(source, cb, Trg)

@@ -75,7 +75,7 @@ function ShowMenu(Type)
 		Citizen.Wait(0)
 
 		RageUI.IsVisible(RMenu:Get('Ltd', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..FinalPrice.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..FinalPrice.." $")
 			for _,v in pairs (Shops.Ltd.Items) do
 				MxQte = {}
 				for i = 0 , v.MaxNbr, 1 do
@@ -91,7 +91,7 @@ function ShowMenu(Type)
 					end,
 				})
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
 				onSelected = function()
 					Timing = 2000
 					FreezeEntityPosition(PlayerPedId(), false)
@@ -103,7 +103,7 @@ function ShowMenu(Type)
 		end)
 
 		RageUI.IsVisible(RMenu:Get('Weapon', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..FinalPrice.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..FinalPrice.." $")
 			RageUI.Item.List("Armes contendante", Shops.Weapon.ItemsMelee, 1, nil, {}, true, {
 				onListChange = function(Index, Items)
 					FinalPrice = Items.Price
@@ -123,7 +123,7 @@ function ShowMenu(Type)
 					ESX.ShowNotification(json.encode(TokenGen))
 				end,
 			})
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
 				onSelected = function()
 					Timing = 2000
 					FreezeEntityPosition(PlayerPedId(), false)
@@ -135,7 +135,7 @@ function ShowMenu(Type)
 		end)
 
 		RageUI.IsVisible(RMenu:Get('BlackMarket', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..FinalPrice.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..FinalPrice.." $")
             for _,v in pairs (Config.BlackMarket.Items) do
                  MxQte = {}
                 for i = 0 , v.MaxNbr, 1 do
@@ -151,7 +151,7 @@ function ShowMenu(Type)
                     end
                 })
             end
-            RageUI.Item.Button("Retour", "", {}, true, {
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
                 onSelected = function()
 					InMenu = false
 					FreezeEntityPosition(PlayerPedId(), false)
@@ -161,11 +161,11 @@ function ShowMenu(Type)
 	    end)
 
 		RageUI.IsVisible(RMenu:Get('Clothe', 'Principal'), function()
-            RageUI.Item.Button("Acheter des vêtements", "", {}, true, {
+            RageUI.Item.Button("Acheter des vêtements", nil, {RightLabel = "👕"}, true, {
             },RMenu:Get('Clothe', 'Vetements'))
-            RageUI.Item.Button("Acheter des accessoires", "", {}, true, {
+            RageUI.Item.Button("Acheter des accessoires", nil, {RightLabel = "💎"}, true, {
             },RMenu:Get('Clothe', 'Accessorie'))
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
 				onSelected = function()
 					Timing = 2000
                     ESX.TriggerServerCallback('GetPlySkin', function(Skin)
@@ -180,14 +180,14 @@ function ShowMenu(Type)
 		end)
 		
 		RageUI.IsVisible(RMenu:Get('Clothe', 'Vetements'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Clothe.Price.Vet.." $")
-            RageUI.Item.Button("Tshirt", "", {}, true, {
+			RageUI.Item.Separator("[Prix] : ~g~"..Shops.Clothe.Price.Vet.." $")
+            RageUI.Item.Button("Tshirt", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Tshirt'))
-            RageUI.Item.Button("Vestes", "", {}, true, {
+            RageUI.Item.Button("Vestes", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Vestes'))
-            RageUI.Item.Button("Pantalons", "", {}, true, {
+            RageUI.Item.Button("Pantalons", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Pantalons'))
-            RageUI.Item.Button("Chaussures", "", {}, true, {
+            RageUI.Item.Button("Chaussures", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Chaussures'))
 	    end)
 
@@ -212,10 +212,15 @@ function ShowMenu(Type)
 					SetPedComponentVariation(PlayerPedId(), 8, Shops.Clothe.TshirtIndex, Shops.Clothe.TshirtIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Tshirt", Index = Shops.Clothe.TshirtIndex, Color = Shops.Clothe.TshirtIndex2, Price = Shops.Clothe.Price.Vet}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -241,10 +246,15 @@ function ShowMenu(Type)
 					SetPedComponentVariation(PlayerPedId(), 11, Shops.Clothe.VesteIndex, Shops.Clothe.VesteIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Vestes", Index = Shops.Clothe.VesteIndex, Color = Shops.Clothe.VesteIndex2, Price = Shops.Clothe.Price.Vet}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -270,10 +280,15 @@ function ShowMenu(Type)
 					SetPedComponentVariation(PlayerPedId(), 4, Shops.Clothe.PantalonIndex, Shops.Clothe.PantalonIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Pantalons", Index = Shops.Clothe.PantalonIndex, Color = Shops.Clothe.PantalonIndex, Price = Shops.Clothe.Price.Vet}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -299,26 +314,29 @@ function ShowMenu(Type)
 		            SetPedComponentVariation(PlayerPedId(), 6, Shops.Clothe.ChaussureIndex, Shops.Clothe.ChaussureIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Chaussures", Index = Shops.Clothe.ChaussureIndex, Color = Shops.Clothe.ChaussureIndex2, Price = Shops.Clothe.Price.Vet}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
                 end,
             })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
+                end,
+            })
 	    end)
 
 		RageUI.IsVisible(RMenu:Get('Clothe', 'Accessorie'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Clothe.Price.Acc.." $")
-            RageUI.Item.Button("Lunettes", "", {}, true, {
+			RageUI.Item.Separator("[Prix] : ~g~"..Shops.Clothe.Price.Acc.." $")
+            RageUI.Item.Button("Lunettes", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Lunettes'))
-            RageUI.Item.Button("Chaines", "", {}, true, {
+            RageUI.Item.Button("Chaines", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Chaines'))
-            RageUI.Item.Button("Chapeaux", "", {}, true, {
+            RageUI.Item.Button("Chapeaux", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Chapeaux'))
-            RageUI.Item.Button("Boucles d'oreille", "", {}, true, {
+            RageUI.Item.Button("Boucles d'oreille", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get('Clothe', 'Boucles'))
-			RageUI.Item.Button("Retour", "", {}, true, {
-			},RMenu:Get('Clothe', 'Principal'))
 		end)
 		
 		RageUI.IsVisible(RMenu:Get('Clothe', 'Lunettes'), function()
@@ -342,10 +360,15 @@ function ShowMenu(Type)
 					SetPedPropIndex(PlayerPedId(), 1, Shops.Clothe.LunetteIndex, Shops.Clothe.LunetteIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Lunettes", Index = Shops.Clothe.LunetteIndex, Color = Shops.Clothe.LunetteIndex2, Price = Shops.Clothe.Price.Acc}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -371,10 +394,15 @@ function ShowMenu(Type)
 					SetPedComponentVariation(PlayerPedId(), 7, Shops.Clothe.ChainesIndex, Shops.Clothe.ChainesIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Chaines", Index = Shops.Clothe.ChainesIndex, Color = Shops.Clothe.ChainesIndex2, Price = Shops.Clothe.Price.Acc}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -400,10 +428,15 @@ function ShowMenu(Type)
 					SetPedPropIndex(PlayerPedId(), 0, Shops.Clothe.ChapeauxIndex, Shops.Clothe.ChapeauxIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Chapeaux", Index = Shops.Clothe.ChapeauxIndex, Color = Shops.Clothe.ChapeauxIndex2, Price = Shops.Clothe.Price.Acc}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
+                end,
+            })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
                 end,
             })
 	    end)
@@ -429,16 +462,21 @@ function ShowMenu(Type)
 					SetPedPropIndex(PlayerPedId(), 2, Shops.Clothe.BouclesIndex, Shops.Clothe.BouclesIndex2, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
                 onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Boucles", Index = Shops.Clothe.BouclesIndex, Color = Shops.Clothe.BouclesIndex2, Price = Shops.Clothe.Price.Acc}
 					TriggerServerEvent("BuyStuff", json.encode(Stuff))
                 end,
             })
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
+                onSelected = function()
+					RageUI.GoBack()
+                end,
+            })
 	    end)
 
 		RageUI.IsVisible(RMenu:Get('Barber', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Barber.Price.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..Shops.Barber.Price.." $")
 	        Coiffure = {}
 	        for i = 0 , GetNumberOfPedDrawableVariations(PlayerPedId(), 2)-1, 1 do
 	            Coiffure[i] = i
@@ -471,13 +509,13 @@ function ShowMenu(Type)
 		            SetPedHeadOverlayColor(PlayerPedId(), 1, 1, Shops.Barber.Color, Shops.Barber.Color)
 		        end,
 		    })
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
 				onSelected = function()
 					Check = {Token = json.encode(TokenGen), Type = "Barber", Price = Shops.Barber.Price}
                     TriggerServerEvent('CheckMoney', json.encode(Check))
                 end,
             })
-            RageUI.Item.Button("Retour", "", {}, true, {
+            RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
                 onSelected = function()
 					DoScreenFadeOut(1500)
 					Citizen.Wait(750)
@@ -498,7 +536,7 @@ function ShowMenu(Type)
 		end)
 		
 		RageUI.IsVisible(RMenu:Get('Tatoo', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Tatoo.Price.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..Shops.Tatoo.Price.." $")
 			RageUI.Item.List("Tête", TatooList.HeadTatooList, 1, nil, {}, true, {
 				onListChange = function(Index, Items)
 					ClearPedDecorations(PlayerPedId())
@@ -689,7 +727,7 @@ function ShowMenu(Type)
 					TriggerServerEvent('CheckMoney', json.encode(Check))
 				end
 			})
-		    RageUI.Item.Button("Retour", "", {}, true, {
+		    RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
 		    	onSelected = function ()
 					DoScreenFadeOut(1500)
 					Citizen.Wait(750)
@@ -715,7 +753,7 @@ function ShowMenu(Type)
         end)
 
 		RageUI.IsVisible(RMenu:Get('Mask', 'Principal'), function()
-			RageUI.Item.Separator("[~y~Prix~s~] : ~g~"..Shops.Mask.Price.." $")
+			RageUI.Item.Separator("[Prix] : ~g~"..Shops.Mask.Price.." $")
 			MaskFound = {}
 			for i = 0 , GetNumberOfPedDrawableVariations(PlayerPedId(), 1) - 1, 1 do
 				MaskFound[i] = i
@@ -740,13 +778,13 @@ function ShowMenu(Type)
 					SetPedComponentVariation(PlayerPedId(), 1, Shops.Mask.Index, Shops.Mask.Color, 2)
 				end,
 			})
-            RageUI.Item.Button("Acheter", "", {}, true, {
+            RageUI.Item.Button("Acheter", nil, {RightLabel = "→→→"}, true, {
 				onSelected = function()
 					Stuff = {Token = json.encode(TokenGen), Name = "Masque", Index = Shops.Mask.Index, Color = Shops.Mask.Color, Price = Shops.Mask.Price}
                 	TriggerServerEvent("BuyStuff", json.encode(Stuff))
                 end,
             })
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {RightLabel = "←←←"}, true, {
 				onSelected = function()
 					Timing = 2000
 					SetPedComponentVariation(PlayerPedId(), 1, 0, 0, 2)

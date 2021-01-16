@@ -1,7 +1,7 @@
-RMenu.Add("Trunk", "Main", RageUI.CreateMenu("Coffre", "Intéractions", nil, nil), true)
+RMenu.Add("Trunk", "Main", RageUI.CreateMenu("", "Coffre", nil, nil), true)
 RMenu:Get("Trunk", "Main").Closable = false;
-RMenu.Add("Trunk", "Vhc_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "Coffre du véhicule", "Retirer"))
-RMenu.Add("Trunk", "Ply_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "Coffre du véhicule", "Déposer"))
+RMenu.Add("Trunk", "Vhc_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "", "Retirer"))
+RMenu.Add("Trunk", "Ply_Inv", RageUI.CreateSubMenu(RMenu:Get("Trunk", "Main"), "", "Déposer"))
 
 Timing = 2000
 OnTrunk = false
@@ -18,12 +18,12 @@ Citizen.CreateThread(function ()
             if IsControlJustReleased(1, 182) then
                 local Coords    = GetEntityCoords(PlayerPedId())
                 if IsPedSittingInAnyVehicle(PlayerPedId()) then
-                    TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Vous ne pouvez pas le faire depuis le véhicule.", "CHAR_STRETCH", 1)
+                    --TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Vous ne pouvez pas le faire depuis le véhicule.", "CHAR_STRETCH", 1)
                 elseif DoesEntityExist(Vehicle) then
                 local Plate = GetVehicleNumberPlateText(Vehicle)
                     ESX.TriggerServerCallback('Trunk:IsOpen', function(Opened)
                         if Opened then
-                            TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Le coffre est déjà utiliser.", "CHAR_STRETCH", 1)
+                            --TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Le coffre est déjà utiliser.", "CHAR_STRETCH", 1)
                         else
                             Storage.Vhc_Inv = {}
                             ESX.TriggerServerCallback('Trunk:GetVhcInv', function(TrunkInv)
@@ -37,7 +37,7 @@ Citizen.CreateThread(function ()
                         end
                     end, Plate)
                 else
-                    TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Il n'y a pas de véhicule autour.", "CHAR_STRETCH", 1)
+                    --TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Il n'y a pas de véhicule autour.", "CHAR_STRETCH", 1)
                 end
             end
         else
@@ -48,8 +48,8 @@ Citizen.CreateThread(function ()
         end
 
         RageUI.IsVisible(RMenu:Get("Trunk", "Main"), function()
-            RageUI.Item.Separator("[Capacité] : ~b~"..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).."~s~ KG")
-            RageUI.Item.Button("Déposer dans le coffre", nil, { RightLabel = "→→"}, true, {
+            RageUI.Item.Separator("[Capacité] : "..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).." KG")
+            RageUI.Item.Button("Déposer dans le coffre", nil, { RightLabel = "→→→"}, true, {
                 onSelected = function(Index, Items)
                     Storage.Pressed = false
 					Storage.Ply_Inv = {}
@@ -63,7 +63,7 @@ Citizen.CreateThread(function ()
 					end)
                 end,
             },RMenu:Get("Trunk", "Ply_Inv"))
-            RageUI.Item.Button("Retirer du coffre", nil, { RightLabel = "→→"}, true, {
+            RageUI.Item.Button("Retirer du coffre", nil, { RightLabel = "→→→"}, true, {
                 onSelected = function(Index, Items)
                     local Plate = GetVehicleNumberPlateText(Vehicle)
                     VhcClass = GetVehicleClass(Vehicle)
@@ -73,12 +73,12 @@ Citizen.CreateThread(function ()
                         if TrunkInv then
                             Storage.Vhc_Inv = TrunkInv
                         else
-                            TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Le coffre est vide.", "CHAR_STRETCH", 1)
+                            --TriggerEvent('esx:showAdvancedNotification', "Dymia ~g~V", "~y~Véhicule", "Le coffre est vide.", "CHAR_STRETCH", 1)
                         end
                     end, Plate)
                 end,
             },RMenu:Get("Trunk", "Vhc_Inv"))
-            RageUI.Item.Button("~r~Fermer le coffre", nil, {}, true, {
+            RageUI.Item.Button("Fermer le coffre", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local Plate = GetVehicleNumberPlateText(Vehicle)
                     TriggerServerEvent("Trunk:Leave", Plate)
@@ -89,13 +89,13 @@ Citizen.CreateThread(function ()
         end)
 
         RageUI.IsVisible(RMenu:Get("Trunk", "Ply_Inv"), function()
-            RageUI.Item.Separator("[Capacité] : ~b~"..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).."~s~ KG")
+            RageUI.Item.Separator("[Capacité] : "..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).." KG")
             for _,v in pairs (Storage.Ply_Inv) do
                 IndexFound = {}
                 for i = 1 , v.Count, 1 do
                     IndexFound[i] = i
                 end
-                RageUI.Item.List(v.Label.." ~b~Max : "..v.Count.. " Poids : "..(Storage.Trunk.Weight[v.Value] / 1000).." KG", IndexFound, v.Index or 1, nil, {}, true, {
+                RageUI.Item.List(v.Label.."Max : "..v.Count.. " Poids : "..(Storage.Trunk.Weight[v.Value] / 1000).." KG", IndexFound, v.Index or 1, nil, {}, true, {
                     onSelected = function(Index, Items)
                         local Plate = GetVehicleNumberPlateText(Vehicle)
                         VhcClass = GetVehicleClass(Vehicle)
@@ -115,14 +115,14 @@ Citizen.CreateThread(function ()
         end)
 
         RageUI.IsVisible(RMenu:Get("Trunk", "Vhc_Inv"), function()
-            RageUI.Item.Separator("[Capacité] : ~b~"..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).."~s~ KG")
+            RageUI.Item.Separator("[Capacité] : "..ESX.Math.Round((Storage.Trunk.MaxWeight[VhcClass] - Storage.CrtWeight) / 1000).." KG")
             for _,v in pairs (Storage.Vhc_Inv) do
                 if v.ItemCount >= 1 then
                     IndexFound = {}
                     for i = 1 , v.ItemCount, 1 do
                         IndexFound[i] = i
                     end
-                    RageUI.Item.List(v.ItemLabel.." ~b~Max : "..v.ItemCount.. " Poids : "..(Storage.Trunk.Weight[v.ItemName] / 1000).." KG", IndexFound, v.Index or 1, nil, {}, true, {
+                    RageUI.Item.List(v.ItemLabel.." Max : "..v.ItemCount.. " Poids : "..(Storage.Trunk.Weight[v.ItemName] / 1000).." KG", IndexFound, v.Index or 1, nil, {}, true, {
                         onSelected = function(Index, Items)
                             local Plate = GetVehicleNumberPlateText(Vehicle)
                             if not Storage.Pressed then

@@ -43,7 +43,7 @@ function ShowMenu(Type)
 		Citizen.Wait(0)
 
 		RageUI.IsVisible(RMenu:Get('Org', 'Chest'), function()
-            RageUI.Item.Separator("Compte : ~g~"..Org.Wl.Society_Money.." $~s~")
+            RageUI.Item.Separator("Compte : ~g~"..Org.Wl.Society_Money.." $")
 			RageUI.Item.Button("Déposer de l'argent", "", {}, true, {
 				onSelected = function()
 					Input = KeyboardInput("Somme à déposer", "", 20)

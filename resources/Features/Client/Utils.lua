@@ -92,23 +92,6 @@ function getNearPlayer()
     return closestPlayer, closestDistance
 end
 
-function loadAnimDict(dict)
-	while ( not HasAnimDictLoaded(dict)) do
-		RequestAnimDict(dict)
-		Citizen.Wait(0)
-	end
-end
-
-function CheckWeapon(newWeap)
-	for i = 1, #Weapons do
-		if GetHashKey(Weapons[i]) == newWeap then
-			return true
-        else
-            return false
-        end
-	end
-end
-
 function DrawText3D(coords, text)
     local onScreen, _x, _y = World3dToScreen2d(coords.x, coords.y, coords.z)
     local pX, pY, pZ = table.unpack(GetGameplayCamCoords())

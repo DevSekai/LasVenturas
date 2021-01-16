@@ -220,6 +220,7 @@ AddEventHandler("Fd_Staff:Revive", function(Type, Target)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
+		TriggerClientEvent("Refresh:DeathState", Target)
 		TriggerClientEvent("Fd_Staff:Revive", Target)
 		if xPlayer.name == xTarget.name then
 			xTarget.name = "lui même"

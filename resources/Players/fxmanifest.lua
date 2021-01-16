@@ -2,33 +2,49 @@ fx_version 'adamant'
 games { 'gta5' };
 
 client_scripts {
-    "RageUI/RMenu.lua",
-    "RageUI/menu/RageUI.lua",
-    "RageUI/menu/Menu.lua",
-    "RageUI/menu/MenuController.lua",
+    -- Resource --
+        'Config.lua',
+        'Players_Cl.lua',
+    -- RageUI --
+        "@RageUI/RMenu.lua",
+        "@RageUI/menu/RageUI.lua",
+        "@RageUI/menu/Menu.lua",
+        "@RageUI/menu/MenuController.lua",
 
-    "RageUI/components/*.lua",
+        "@RageUI/menu/items/UIButton.lua",
+        "@RageUI/menu/items/UICheckBox.lua",
+        "@RageUI/menu/items/UIList.lua",
+        "@RageUI/menu/items/UIProgress.lua",
+        "@RageUI/menu/items/UISeparator.lua",
+        "@RageUI/menu/items/UISlider.lua",
+        "@RageUI/menu/items/UISliderHeritage.lua",
+        "@RageUI/menu/items/UISliderProgress.lua",
 
-    "RageUI/menu/elements/*.lua",
+        "@RageUI/components/Audio.lua",
+        "@RageUI/components/Enum.lua",
+        "@RageUI/components/Keys.lua",
+        "@RageUI/components/Rectangle.lua",
+        "@RageUI/components/Sprite.lua",
+        "@RageUI/components/Text.lua",
+        "@RageUI/components/Visual.lua",
 
-    "RageUI/menu/items/*.lua",
+        "@RageUI/menu/elements/ItemsBadge.lua",
+        "@RageUI/menu/elements/ItemsColour.lua",
+        "@RageUI/menu/elements/PanelColour.lua",
 
-    "RageUI/menu/panels/*.lua",
+        "@RageUI/menu/panels/UIButtonPanel.lua",
+        "@RageUI/menu/panels/UIColourPanel.lua",
+        "@RageUI/menu/panels/UIGridPanel.lua",
+        "@RageUI/menu/panels/UIGridPanelHorizontal.lua",
+        "@RageUI/menu/panels/UIGridPanelVertical.lua",
+        "@RageUI/menu/panels/UIPercentagePanel.lua",
+        "@RageUI/menu/panels/UIStatisticsPanel.lua",
 
-    "RageUI/menu/panels/*.lua",
-    "RageUI/menu/windows/*.lua",
-
+        "@RageUI/menu/windows/UIHeritage.lua",
+        -- Menu --
+        'Menu/*.lua',
 }
 
-client_scripts {
-    'Menu/MenuTest.lua',
-    'Menu/MenuIdentity.lua',
-    'Menu/MenuSkin.lua',
-    'Menu/MenuPersonal.lua',
-    'Menu/MenuBanque.lua',
-    'Config.lua',
-	'Players_Cl.lua',
-}
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
 	'Players_Sv.lua',

@@ -32,7 +32,7 @@ Org = {
 					end,
 				},RMenu:Get("Org", "Mobil_Society"))
 			end
-			RageUI.Item.Separator("↓↓       ~g~Intéraction~s~       ↓↓")
+			RageUI.Item.Separator("↓↓       Intéraction       ↓↓")
 			RageUI.Item.Button("Fouiller la personne", nil, {}, true, {
 				onSelected = function(Index, Items)
 					local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()

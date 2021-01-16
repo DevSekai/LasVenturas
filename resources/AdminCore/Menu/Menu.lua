@@ -1,38 +1,36 @@
 RMenu.Add('Staff', 'Main', RageUI.CreateMenu("", "Menu administration", nil, nil, "root_cause", "Banner"), true)
-RMenu:Get('Staff', 'Main'):DisplayGlare(false);
 RMenu:Get('Staff', 'Main').Closed = function()
     InMenu = false
 end
     RMenu.Add("Staff", "Personal", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Actions personnel"))
     RMenu.Add("Staff", "Environement", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Actions environement"))
-    RMenu.Add("Staff", "Vehicule", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Actions véhicules"))
-        RMenu.Add("Staff", "CarsList", RageUI.CreateSubMenu(RMenu:Get("Staff", "Vehicule"), "", "Véhicules disponnible"))
+    RMenu.Add("Staff", "Vehicule", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Actions véhicule"))
+        RMenu.Add("Staff", "CarsList", RageUI.CreateSubMenu(RMenu:Get("Staff", "Vehicule"), "", "Véhicule disponnible"))
 
-    RMenu.Add("Staff", "ItemsList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Items disponnible"))
-    RMenu.Add("Staff", "WeaponList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Armes disponnible"))
-    RMenu.Add("Staff", "JobsList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Jobs disponnible"))
-    RMenu.Add("Staff", "Jobs2List2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Jobs2 disponnible"))
-RMenu.Add("Staff", "PlyList", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Joueurs connecté"))
+    RMenu.Add("Staff", "ItemsList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Personal"), "", "Items disponnible"))
+    RMenu.Add("Staff", "WeaponList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Personal"), "", "Armes disponnible"))
+    RMenu.Add("Staff", "JobsList2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Personal"), "", "Jobs disponnible"))
+    RMenu.Add("Staff", "Jobs2List2", RageUI.CreateSubMenu(RMenu:Get("Staff", "Personal"), "", "Orgs disponnible"))
+RMenu.Add("Staff", "PlyList", RageUI.CreateSubMenu(RMenu:Get("Staff", "Main"), "", "Joueurs connecter"))
 RMenu:Get("Staff", "PlyList").Closed = function()
     Staff.PlyListIndex = 1
 end
     RMenu.Add("Staff", "PlyWarmList", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyList"), "", "Avertissements"))
-    RMenu.Add("Staff", "PlyInfos", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyList"), "", "Avertissements"))
+    RMenu.Add("Staff", "PlyInfos", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyList"), "", "Informations"))
     RMenu.Add("Staff", "ItemsList", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyInfos"), "", "Items disponnible"))
     RMenu.Add("Staff", "WeaponList", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyInfos"), "", "Armes disponnible"))
     RMenu.Add("Staff", "JobsList", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyInfos"), "", "Jobs disponnible"))
-    RMenu.Add("Staff", "Jobs2List", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyInfos"), "", "Jobs2 disponnible"))
+    RMenu.Add("Staff", "Jobs2List", RageUI.CreateSubMenu(RMenu:Get("Staff", "PlyInfos"), "", "Orgs disponnible"))
 
 
 function OpenMenu()
-    Timing = 2000
-    RageUI.Visible(RMenu:Get("Staff", "Main"), not RageUI.Visible(RMenu:Get("Staff", "Main")))
     InMenu = true
+    RageUI.Visible(RMenu:Get("Staff", "Main"), not RageUI.Visible(RMenu:Get("Staff", "Main")))
     while InMenu do
         Citizen.Wait(0)
         
         RageUI.IsVisible(RMenu:Get("Staff", "Main"), function()
-            RageUI.Item.Checkbox("StaffMode", "", Staff.AdminState, {}, {
+            RageUI.Item.Checkbox("StaffMode", "Permet d'avoir accés aux actions admin\nNoclip, Spectate ect...", Staff.AdminState, {}, {
                 onSelected = function()
                     if not Staff.AdminState then
                         Staff.AdminState = true
@@ -48,11 +46,11 @@ function OpenMenu()
                 end,
             })
             if Staff.AdminState then
-                RageUI.Item.Button("Personnel", "", {RightLabel = "→→→"}, true, {
+                RageUI.Item.Button("Personnel", "Actions personnels : Revive, Setjob, Setorg ect...", {RightLabel = "→→→"}, true, {
                 },RMenu:Get("Staff", "Personal"))
-                RageUI.Item.Button("Véhicule", "", {RightLabel = "→→→"}, true, {
+                RageUI.Item.Button("Véhicule", "Actions véhicule : Réparer, Nettoyer, Booster ect...", {RightLabel = "→→→"}, true, {
                 },RMenu:Get("Staff", "Vehicule"))
-                RageUI.Item.Button("Liste des joueurs", "", {RightLabel = "→→→"}, true, {
+                RageUI.Item.Button("Joueurs", "Actions joueurs : Ban, Warn, Jail ect...", {RightLabel = "→→→"}, true, {
                     onSelected = function()
                         Staff.PlyList = {}
                         for i = 0, 256 do
@@ -62,14 +60,14 @@ function OpenMenu()
                         end
                     end,
                 },RMenu:Get("Staff", "PlyList"))
-                RageUI.Item.Button("Environement", "", {RightLabel = "→→→"}, true, {
+                RageUI.Item.Button("Environement", "Actions joueurs : Settime, Setweather, blackout ect...", {RightLabel = "→→→"}, true, {
                 },RMenu:Get("Staff", "Environement"))
             end
         end)
         
         RageUI.IsVisible(RMenu:Get("Staff", "Personal"), function()
-            RageUI.Item.Separator("↓      Utilitaire      ↓")
-            RageUI.Item.Checkbox("Noclip", "", false, {}, {
+            RageUI.Item.Separator("Utilitaire")
+            RageUI.Item.Checkbox("Noclip", "Active/Désactive le no-clip", false, {}, {
                 onSelected = function()
                     if not Staff.Noclip then
                         ActionTiming = 0
@@ -86,7 +84,7 @@ function OpenMenu()
                     end
                 end,
             })
-            RageUI.Item.Checkbox("Blips", "", false, {}, {
+            RageUI.Item.Checkbox("Blips", "Active/Désactive les blips des joueurs", false, {}, {
                 onSelected = function()
                     if not Staff.PlyBlips then
                         Staff.PlyBlips = true
@@ -101,7 +99,7 @@ function OpenMenu()
                     end
                 end,
             })
-            RageUI.Item.Checkbox("Nom", "", false, {}, {
+            RageUI.Item.Checkbox("Nom", "Active/Désactive les nom des joueurs", false, {}, {
                 onSelected = function()
                     if not Staff.PlyName then
                         PlyName()
@@ -114,10 +112,10 @@ function OpenMenu()
                     end
                 end,
             })
-            RageUI.Item.Separator("↓      Intéraction      ↓")
+            RageUI.Item.Separator("Intéraction")
             for _,v in pairs (Staff.PlyActions) do
                 if not v.Menu then
-                    RageUI.Item.Button(v.Name, "", {RightLabel = "→→→"}, true, {
+                    RageUI.Item.Button(v.Name, v.Desc, {RightLabel = "→→→"}, true, {
                         onSelected = function()
                             CrtTrigger = v.Value
                             CrtId = GetPlayerServerId(PlayerId())
@@ -134,7 +132,7 @@ function OpenMenu()
                         end,
                     })
                 else
-                    RageUI.Item.Button(v.Name, "", {RightLabel = "→→→"}, true, {
+                    RageUI.Item.Button(v.Name, nil, {RightLabel = "→→→"}, true, {
                         onSelected = function()
                             CrtTrigger = v.Value
                             CrtId = GetPlayerServerId(PlayerId())
@@ -207,7 +205,7 @@ function OpenMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Spawn un véhicule", "", {RightLabel = "→→→"}, true, {
+            RageUI.Item.Button("Spawn un véhicule", nil, {RightLabel = "→→→"}, true, {
             },RMenu:Get("Staff", "CarsList"))
         end)
         
@@ -257,6 +255,7 @@ function OpenMenu()
                         Staff.PlyListIndex = Index
                         CrtTrigger = Items.Value
                         CrtId = GetPlayerServerId(v)
+                        CrtPed = GetPlayerPed(v)
                         if not Items.Menu then
                             if Items.Value == "WarnsList" then
                                 ESX.TriggerServerCallback('Ld_Staff:GetPlyWarns', function(Warns)
@@ -283,21 +282,17 @@ function OpenMenu()
                                 if LstCoords ~= GetEntityCoords(PlayerPedId()) then
                                     LstCoords = GetEntityCoords(PlayerPedId())
                                 end
-                                if CrtPed ~= GetPlayerPed(v) then
-                                    CrtPed = GetPlayerPed(v)
-                                    Spectate()
+                                if not Staff.Spectate then
                                     Citizen.Wait(10)
-                                    FreezeEntityPosition(PlayerPedId(), true)
-                                    SetEntityVisible(PlayerPedId(), false)
-                                    SetEntityCollision(PlayerPedId(), false, false)
+                                    Spectate()
                                 else
+                                    FreezeEntityPosition(GetPlayerPed(-1), false)
+                                    SetEntityVisible(GetPlayerPed(-1), true)
+                                    SetEntityCollision(GetPlayerPed(-1), true, true)
+                                    SetEntityCoords(PlayerPedId(), LstCoords)
                                     CrtPed = nil
                                     Staff.Spectate = false
                                     Citizen.Wait(10)
-                                    FreezeEntityPosition(PlayerPedId(), false)
-                                    SetEntityVisible(PlayerPedId(), true)
-                                    SetEntityCollision(PlayerPedId(), true, true)
-                                    SetEntityCoords(PlayerPedId(), LstCoords)
                                     LstCoords = nil
                                 end
                             else
@@ -317,7 +312,7 @@ function OpenMenu()
         end)
 
         RageUI.IsVisible(RMenu:Get("Staff", "PlyInfos"), function()
-            RageUI.Item.Separator("↓      Informations      ↓")
+            RageUI.Item.Separator("[HP] : ~g~"..ESX.Math.Round(GetEntityHealth(CrtPed) / 2).."%")
             RageUI.Item.Separator("[Cash] : ~g~"..Staff.PlyInfos.Money.." $")
             RageUI.Item.Separator("[Bank] : ~y~"..Staff.PlyInfos.Bank.." $")
             RageUI.Item.Separator("[Sale] : ~r~"..Staff.PlyInfos.Dirty.." $")
@@ -348,7 +343,7 @@ function OpenMenu()
                     CrtTrigger = "SetOrg"
                 end,
             },RMenu:Get("Staff", "Jobs2List"))
-            RageUI.Item.Separator("↓      Inventaire      ↓")
+            RageUI.Item.Separator("Inventaire")
             for _,v in pairs (Staff.PlyInfos.Inventory) do
                 if v.count >= 1 then
                     RageUI.Item.Separator("[Objet] : "..v.label.." x "..v.count)
@@ -365,7 +360,7 @@ function OpenMenu()
                     Staff.PlyInfos.Inventory = {}
                 end,
             })
-            RageUI.Item.Separator("↓      Armes      ↓")
+            RageUI.Item.Separator("Armes")
             for _,v in pairs (Staff.PlyInfos.Weapons) do
                 RageUI.Item.Separator("[Armes] : "..v.label.." - [Munitions] : "..v.ammo)
             end
@@ -384,7 +379,10 @@ function OpenMenu()
 
         RageUI.IsVisible(RMenu:Get("Staff", "PlyWarmList"), function()
             for _, v in pairs(Staff.PlyWamrs) do
-                RageUI.Item.Button(v.Date, v.Reason, {RightLabel = "Par : "..v.WarnedBy}, true, {
+                RageUI.Item.Button(v.Date, nil, {RightLabel = "Par : "..v.WarnedBy}, true, {
+                    onSelected = function(Index, Items)
+                        ESX.ShowNotification(v.Reason)
+                    end,
                 })
             end
         end)

@@ -59,7 +59,7 @@ function ShowMenu(Type)
 
         RageUI.IsVisible(RMenu:Get('Rental', 'Principal'), function()
             for _,v in pairs (Storage.RentalCars) do
-                RageUI.Item.Button(v.Label, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Label, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -69,7 +69,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -89,7 +89,7 @@ function ShowMenu(Type)
         RageUI.IsVisible(RMenu:Get('Fourriere', 'Principal'), function()
             for _,v in pairs (Storage.PlayerCars) do
                 if not v.Stored then
-                    RageUI.Item.Button(v.Label.." "..v.Plate, "", {}, true, {
+                    RageUI.Item.Button(v.Label.." "..v.Plate, nil, {RightLabel = "→→→"}, true, {
                         onSelected = function()
                             Choose = {Token = json.encode(TokenGen), Vhc = v}
                             TriggerServerEvent('OutFourriere', json.encode(Choose))
@@ -97,7 +97,7 @@ function ShowMenu(Type)
                     })
                 end
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     Position.Timing = 2000
 					FreezeEntityPosition(PlayerPedId(), false)
@@ -111,7 +111,7 @@ function ShowMenu(Type)
         RageUI.IsVisible(RMenu:Get('Garage', 'Principal'), function()
             for _,v in pairs (Storage.PlayerCars) do
                 if v.Stored then
-                    RageUI.Item.Button(v.Label.." "..v.Plate, "", {}, true, {
+                    RageUI.Item.Button(v.Label.." "..v.Plate, nil, {RightLabel = "→→→"}, true, {
                         onSelected = function()
                             SpawnCoords = vector3(Storage.CarOut.x, Storage.CarOut.y, Storage.CarOut.z)
                             ESX.Game.SpawnVehicle(v.Hash, SpawnCoords, Storage.CarOut.h, function(Vehicle)
@@ -138,7 +138,7 @@ function ShowMenu(Type)
                     })
                 end
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     Position.Timing = 2000
 					FreezeEntityPosition(PlayerPedId(), false)
@@ -150,9 +150,9 @@ function ShowMenu(Type)
         end)
 
 		RageUI.IsVisible(RMenu:Get('Super', 'Principal'), function()
-            RageUI.Item.Separator("--- SuperCar ---")
+            RageUI.Item.Separator("↓↓      SuperCar      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Super) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -166,9 +166,9 @@ function ShowMenu(Type)
                     end,
                 })
             end
-            RageUI.Item.Separator("--- CarClassique ---")
+            RageUI.Item.Separator("↓↓      CarClassique      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Classique) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -182,7 +182,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -200,9 +200,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Sportive', 'Principal'), function()
-            RageUI.Item.Separator("--- Sportives ---")
+            RageUI.Item.Separator("↓↓      Sportives      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Sport) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -216,9 +216,9 @@ function ShowMenu(Type)
                     end,
                 })
             end
-            RageUI.Item.Separator("--- Sedans ---")
+            RageUI.Item.Separator("↓↓      Sedans      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Sedans) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -232,7 +232,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -250,9 +250,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Muscle', 'Principal'), function()
-            RageUI.Item.Separator("--- Muscle ---")
+            RageUI.Item.Separator("↓↓      Muscle      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Muscle) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -266,9 +266,9 @@ function ShowMenu(Type)
                     end,
                 })
             end
-            RageUI.Item.Separator("--- Vans ---")
+            RageUI.Item.Separator("↓↓      Vans      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Vans) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -282,7 +282,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -300,9 +300,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('OffRoad', 'Principal'), function()
-            RageUI.Item.Separator("--- OffRoad ---")
+            RageUI.Item.Separator("↓↓      OffRoad      ↓↓")
             for _,v in pairs (Storage.CarChoosen.OffRoad) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -316,7 +316,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -334,9 +334,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Suv', 'Principal'), function()
-            RageUI.Item.Separator("--- Suv ---")
+            RageUI.Item.Separator("↓↓      Suv      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Suv) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -350,7 +350,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -368,9 +368,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Compact', 'Principal'), function()
-            RageUI.Item.Separator("--- Compacts ---")
+            RageUI.Item.Separator("↓↓      Compacts      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Compacts) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -384,7 +384,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -402,9 +402,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Moto', 'Principal'), function()
-            RageUI.Item.Separator("--- Moto ---")
+            RageUI.Item.Separator("↓↓      Moto      ↓↓")
             for _,v in pairs (Storage.CarChoosen.Moto) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -418,7 +418,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)
@@ -436,9 +436,9 @@ function ShowMenu(Type)
         end)
 
         RageUI.IsVisible(RMenu:Get('Velo', 'Principal'), function()
-            RageUI.Item.Separator("--- Vélo ---")
+            RageUI.Item.Separator("↓↓      Vélo      ↓↓")
             for _,v in pairs (VehicleList.Velo) do
-                RageUI.Item.Button(v.Name, "", {RightLabel = "~g~"..v.Price.." $"}, true, {
+                RageUI.Item.Button(v.Name, nil, {RightLabel = "~g~"..v.Price.." $"}, true, {
                     onActive = function()
                         SpawnCar(v.Value)
                     end,
@@ -452,7 +452,7 @@ function ShowMenu(Type)
                     end,
                 })
             end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("Retour", nil, {}, true, {
 				onSelected = function()
                     for _,v in pairs (Storage.LastVhc) do
                         DeleteEntity(v)

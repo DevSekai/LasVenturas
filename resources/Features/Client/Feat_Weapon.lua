@@ -464,40 +464,6 @@ end
 
 
 
-RegisterCommand('vinfo', function(source, args)
-
-    playerPed = PlayerPedId()
-
-	if playerPed then
-
-		local weapon = GetSelectedPedWeapon(playerPed, true)
-
-		nameWeapon(weapon)
-
-	end
-
-end)
-
-
-
-RegisterCommand('cinfo', function(source, args)
-
-    playerPed = PlayerPedId()
-
-	if playerPed then
-
-		getCustomization()
-
-	end
-
-end)
-
-
-
--- do not edit !!
-
-
-
 allweaponslist = {
 
 	"WEAPON_MICROSMG",

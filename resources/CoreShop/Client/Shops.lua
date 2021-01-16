@@ -113,13 +113,6 @@ function CreateShop()
 			BeginTextCommandSetBlipName("STRING")
 			AddTextComponentString(Shops.Ltd.BlipLabel)
 			EndTextCommandSetBlipName(Blips)
-			RequestModel(Shops.Ltd.Ped)
-			while not HasModelLoaded(Shops.Ltd.Ped) do
-				RequestModel(Shops.Ltd.Ped)
-				Citizen.Wait(10)
-			end
-			Peds = CreatePed(1, Shops.Ltd.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
-			SetEntityHeading(Peds, v.h)
 		elseif v.Type == "Weapon" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Weapon.BlipSprite)
@@ -137,6 +130,8 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Weapon.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
+			FreezeEntityPosition(Peds, true)
+			SetEntityInvincible(Peds, true)
 		elseif v.Type == "Clothe" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Clothe.BlipSprite)
@@ -154,6 +149,8 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Clothe.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
+			FreezeEntityPosition(Peds, true)
+			SetEntityInvincible(Peds, true)
 		elseif v.Type == "Tatoo" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Tatoo.BlipSprite)
@@ -171,6 +168,8 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Tatoo.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
+			FreezeEntityPosition(Peds, true)
+			SetEntityInvincible(Peds, true)
 		elseif v.Type == "Barber" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Barber.BlipSprite)
@@ -188,6 +187,8 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Barber.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
+			FreezeEntityPosition(Peds, true)
+			SetEntityInvincible(Peds, true)
 		elseif v.Type == "Mask" then
 			local Blips = AddBlipForCoord(v.x, v.y, v.z)
 			SetBlipSprite (Blips, Shops.Mask.BlipSprite)
@@ -205,9 +206,9 @@ function CreateShop()
 			end
 			Peds = CreatePed(1, Shops.Mask.Ped, v.x, v.y, v.z - 0.98, 0.0, false, true)
 			SetEntityHeading(Peds, v.h)
+			FreezeEntityPosition(Peds, true)
+			SetEntityInvincible(Peds, true)
 		end
-		FreezeEntityPosition(Peds, true)
-		SetEntityInvincible(Peds, true)
 		SetBlockingOfNonTemporaryEvents(Peds, true)
 		RequestAnimDict(Shops.AnimDict)
 		while not HasAnimDictLoaded(Shops.AnimDict) do

@@ -3,10 +3,8 @@ SexeChoose = {"Homme", "Femme"}
 SexeIndex = 1
 MdpIdentity = "Ntm"
 
-RMenu.Add('CrationPerso', 'Identity', RageUI.CreateMenu("", "", 600, nil, "root_cause", "Banner"), true)
-RMenu:Get('CrationPerso', 'Identity'):SetSubtitle("~y~Création de l'identité")
+RMenu.Add('CrationPerso', 'Identity', RageUI.CreateMenu("", "Création de l'identité", 600, nil, "root_cause", "Banner"), true)
 RMenu:Get('CrationPerso', 'Identity'):SetSizeWidth(200)
-RMenu:Get('CrationPerso', 'Identity'):DisplayInstructionalButton(false)
 RMenu:Get('CrationPerso', 'Identity'):DisplayGlare(false);
 RMenu:Get('CrationPerso', 'Identity').Closable = false;
 
@@ -14,7 +12,7 @@ Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(0)
 		RageUI.IsVisible(RMenu:Get('CrationPerso', 'Identity'), function()
-	       	RageUI.Item.Separator("[~y~Sexe~s~] : "..SexeChoosen.."")
+	       	RageUI.Item.Separator("[Sexe] : "..SexeChoosen.."")
 	       	if not InRecap then
 		        RageUI.Item.List("Sexe", SexeChoose, SexeIndex, nil, {}, true, {
 		            onListChange = function(Index, Items)
@@ -27,9 +25,9 @@ Citizen.CreateThread(function ()
 		            end,
 		        })
 		    end
-	       	RageUI.Item.Separator("[~y~Nom~s~] : "..LastName.."	[~y~Prénom~s~] : "..FirstName.."")
+	       	RageUI.Item.Separator("[Nom] : "..LastName.."	[Prénom] : "..FirstName.."")
 	       	if not InRecap then
-		        RageUI.Item.Button("Nom", "", {}, true, {
+		        RageUI.Item.Button("Nom", nil, {RightLabel = "→→→"}, true, {
 		            onSelected = function()
 		            	Input = KeyboardInput("Quel est votre nom ?", 20)
 		            	if Input ~= nil then
@@ -40,7 +38,7 @@ Citizen.CreateThread(function ()
 		            	end
 		            end,
 		        })
-		        RageUI.Item.Button("Prénom", "", {}, true, {
+		        RageUI.Item.Button("Prénom", nil, {RightLabel = "→→→"}, true, {
 		            onSelected = function()
 		            	Input = KeyboardInput("Quel est votre prénom ?", 20)
 		            	if Input ~= nil then
@@ -52,9 +50,9 @@ Citizen.CreateThread(function ()
 		            end,
 		        })
 		    end
-	       	RageUI.Item.Separator("[~y~Date de naissance~s~] : "..Birthday.."")
+	       	RageUI.Item.Separator("[Date de naissance] : "..Birthday.."")
 	       	if not InRecap then
-		        RageUI.Item.Button("Date de naissance", "", {}, true, {
+		        RageUI.Item.Button("Date de naissance", nil, {RightLabel = "→→→"}, true, {
 		            onSelected = function()
 		            	Input = KeyboardInput("Quel est votre date de naissance ?", 20)
 		            	if DateIsCorrect(Input) then
@@ -66,9 +64,9 @@ Citizen.CreateThread(function ()
 		            end,
 		        })
 	       	end
-	       	RageUI.Item.Separator("[~y~Taille~s~] : "..Height.."")
+	       	RageUI.Item.Separator("[Taille] : "..Height.."")
 	       	if not InRecap then
-		        RageUI.Item.Button("Taille", "", {}, true, {
+		        RageUI.Item.Button("Taille", nil, {RightLabel = "→→→"}, true, {
 		            onSelected = function()
 		            	Input = KeyboardInput("Combien mesurez vous (en cm) ?", 20)
 		            	if tonumber(Input) < 200 then
@@ -83,7 +81,7 @@ Citizen.CreateThread(function ()
 		    		if LastName ~= "Non renseigner" then
 		    			if Brithday ~= "JJ/MM/AAAA" then
 	        				if Height ~= "Non renseigner" then
-							    RageUI.Item.Button("Valider", "", {}, true, {
+							    RageUI.Item.Button("Valider", nil, {RightLabel = "→→→"}, true, {
 							        onSelected = function()
 							        	InRecap = true
 						            end,
@@ -95,7 +93,7 @@ Citizen.CreateThread(function ()
 	       	end
 	        if InRecap then
 	       		RageUI.Item.Separator("Es-ce que les informations ci dessus sont correct ?")
-		        RageUI.Item.Button("Créer son identité", "", {Color = {BackgroundColor = {0, 150, 0}}}, true, {
+		        RageUI.Item.Button("Créer son identité", nil, {RightLabel = "→→→"}, true, {
 		            onSelected = function()
 		            	Identity = {
 		            		Sexe = SexeChoosen,
@@ -108,7 +106,7 @@ Citizen.CreateThread(function ()
 		            	CreateSkinPed()
 		            end,
 		        })
-		        RageUI.Item.Button("Modifier son identité", "", {Color = {BackgroundColor = {150, 0, 0}}}, true, {
+		        RageUI.Item.Button("Modifier son identité", nil, {RightLabel = "←←←"}, true, {
 		            onSelected = function()
 		            	InRecap = false
 		            end,
