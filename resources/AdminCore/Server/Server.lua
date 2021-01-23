@@ -58,6 +58,7 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 ESX.RegisterServerCallback('Fd_Staff:IsStaff', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
+	print(xPlayer.group)
 	cb(xPlayer.group)
 end)
 
@@ -221,7 +222,7 @@ AddEventHandler("Fd_Staff:Revive", function(Type, Target)
 	local xTarget = ESX.GetPlayerFromId(Target)
 	if IsRestrict(xPlayer.group, Type) then
 		TriggerClientEvent("Refresh:DeathState", Target)
-		TriggerClientEvent("Fd_Staff:Revive", Target)
+		TriggerClientEvent("Trg:RevivePly", Target)
 		if xPlayer.name == xTarget.name then
 			xTarget.name = "lui même"
 		end	

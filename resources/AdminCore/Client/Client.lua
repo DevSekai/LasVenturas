@@ -93,33 +93,6 @@ function KeyboardInput(TextEntry, ExampleText, MaxStringLength)
     end
 end
 
-RegisterNetEvent('Fd_Staff:Revive')
-AddEventHandler('Fd_Staff:Revive', function()
-    local coords = GetEntityCoords(PlayerPedId())
-    local heading = GetEntityHeading(PlayerPedId())
-	DoScreenFadeOut(800)
-	while not IsScreenFadedOut() do
-		Citizen.Wait(50)
-	end
-	RespawnPed(PlayerPedId(), coords, heading)
-
-	StopScreenEffect('DeathFailOut')
-    TriggerServerEvent("Players:setDeathStatus", false)
-    DisplayRadar(true)
-	DoScreenFadeIn(800)
-end)
-
-function RespawnPed(ped, coords, heading)
-	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
-	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, true, false)
-	SetPlayerInvincible(ped, false)
-	ClearPedBloodDamage(ped)
-
-	TriggerServerEvent('esx:onPlayerSpawn')
-	TriggerEvent('esx:onPlayerSpawn')
-	TriggerEvent('playerSpawned') -- compatibility with old scripts, will be removed soon
-end
-
 RegisterNetEvent('Fd_Staff:Goto')
 AddEventHandler('Fd_Staff:Goto', function(Coords)
     SetEntityCoords(PlayerPedId(), Coords)
@@ -198,7 +171,7 @@ end
 
 function IsStaff()
     ESX.TriggerServerCallback('Fd_Staff:IsStaff', function(Group)
-        if Group ~= "users" then
+        if Group ~= "user" then
             if not Staff.JobsListsReady then
                 GetJobsLists()
             end
