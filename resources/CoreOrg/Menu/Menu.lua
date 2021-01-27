@@ -44,7 +44,7 @@ function ShowMenu(Type)
 
 		RageUI.IsVisible(RMenu:Get('Org', 'Chest'), function()
             RageUI.Item.Separator("Compte : ~g~"..Org.Wl.Society_Money.." $")
-			RageUI.Item.Button("Déposer de l'argent", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Déposer de l'argent", "", {}, true, {
 				onSelected = function()
 					Input = KeyboardInput("Somme à déposer", "", 20)
 					if tonumber(Input) ~= nil then
@@ -55,7 +55,7 @@ function ShowMenu(Type)
 					end
 				end,
 			})
-			RageUI.Item.Button("Déposer un objet", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Déposer un objet", "", {}, true, {
 				onSelected = function()
 					Org.Wl.PlyInv = {}
 					ESX.TriggerServerCallback('getPlayerInventory', function(inventory)
@@ -69,7 +69,7 @@ function ShowMenu(Type)
 				end,
 			},RMenu:Get('Org', 'Chest_Item_Ply'))
 			if PlayerData.job2.grade_name == "boss" then
-				RageUI.Item.Button("Retirer de l'argent", "", {}, true, {
+				RageUI.Item.Button("~r~>~s~  Retirer de l'argent", "", {}, true, {
 					onSelected = function()
 						Input = KeyboardInput("Somme à retirer", "", 20)
 						if tonumber(Input) ~= nil then
@@ -80,7 +80,7 @@ function ShowMenu(Type)
 						end
 					end,
 				})
-				RageUI.Item.Button("Retirer un objet", "", {}, true, {
+				RageUI.Item.Button("~r~>~s~  Retirer un objet", "", {}, true, {
 					onSelected = function()
 						Org.Wl.SctInv = {}
 						ESX.TriggerServerCallback('getStockItems2', function(Sitems)
@@ -93,7 +93,7 @@ function ShowMenu(Type)
 					end,
 				},RMenu:Get('Org', 'Chest_Item_Sct'))
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", "", {}, true, {
 				onSelected = function()
 					FreezeEntityPosition(PlayerPedId(), false)
 					Timing = 2000
@@ -106,7 +106,7 @@ function ShowMenu(Type)
 		RageUI.IsVisible(RMenu:Get('Org', 'Chest_Item_Ply'), function()
 			if Org.Wl.PlyInv then
 				for _,v in pairs (Org.Wl.PlyInv) do
-					RageUI.Item.Button(v.label, "", {}, true, {
+					RageUI.Item.Button("~r~>~s~  "..v.label, "", {}, true, {
 						onSelected = function()
 							Input = KeyboardInput("Quantité à déposer", "", 20)
 							if tonumber(Input) ~= nil then
@@ -119,7 +119,7 @@ function ShowMenu(Type)
 					})
 				end
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", "", {}, true, {
 				onSelected = function()
 					RageUI.GoBack()
 				end,
@@ -129,7 +129,7 @@ function ShowMenu(Type)
 		RageUI.IsVisible(RMenu:Get('Org', 'Chest_Item_Sct'), function()
 			if Org.Wl.SctInv then
 				for _,v in pairs (Org.Wl.SctInv) do
-						RageUI.Item.Button(v.label, "", {}, true, {
+						RageUI.Item.Button("~r~>~s~  "..v.label, "", {}, true, {
 							onSelected = function()
 								Input = KeyboardInput("Quantité à retirer", "", 20)
 								if tonumber(Input) ~= nil then
@@ -142,7 +142,7 @@ function ShowMenu(Type)
 						})
 				end
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", "", {}, true, {
 				onSelected = function()
 					RageUI.GoBack()
 				end,
@@ -152,14 +152,14 @@ function ShowMenu(Type)
 		RageUI.IsVisible(RMenu:Get('Org', 'Garage'), function()
 			if Org.Wl[PlayerData.job2.name].Vehicle[PlayerData.job2.grade_name].Value then
 				for _,v in pairs (Org.Wl[PlayerData.job2.name].Vehicle[PlayerData.job2.grade_name].Value) do
-					RageUI.Item.Button(v.Label, "", {}, true, {
+					RageUI.Item.Button("~r~>~s~  "..v.Label, "", {}, true, {
 						onSelected = function()
 							SpawnOrgCar(v.Value, Org.Wl[PlayerData.job2.name].Vehicle.Spawn)
 						end,
 					})
 				end
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", "", {}, true, {
 				onSelected = function()
 					FreezeEntityPosition(PlayerPedId(), false)
 					Timing = 2000
@@ -172,14 +172,14 @@ function ShowMenu(Type)
 		RageUI.IsVisible(RMenu:Get('Org', 'Cloackroom'), function()
 			if Org.Wl[PlayerData.job2.name].Clothe[PlayerData.job2.grade_name].Value then
 				for _,v in pairs (Org.Wl[PlayerData.job2.name].Clothe[PlayerData.job2.grade_name].Value) do
-					RageUI.Item.Button(v.Label, "", {}, true, {
+					RageUI.Item.Button("~r~>~s~  "..v.Label, "", {}, true, {
 						onSelected = function()
 							TriggerEvent("ApplySkin", PlayerPedId(), json.encode(v.Value))
 						end,
 					})
 				end
 			end
-			RageUI.Item.Button("Retour", "", {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", "", {}, true, {
 				onSelected = function()
 					FreezeEntityPosition(PlayerPedId(), false)
 					Timing = 2000

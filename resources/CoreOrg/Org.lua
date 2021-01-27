@@ -32,8 +32,8 @@ Org = {
 					end,
 				},RMenu:Get("Org", "Mobil_Society"))
 			end
-			RageUI.Item.Separator("↓↓       Intéraction       ↓↓")
-			RageUI.Item.Button("Fouiller la personne", nil, {}, true, {
+			RageUI.Item.Separator("Intéraction")
+			RageUI.Item.Button("~r~>~s~  Fouiller la personne", nil, {}, true, {
 				onSelected = function(Index, Items)
 					local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 					if closestPlayer == -1 or closestDistance > 1.5 then
@@ -77,7 +77,7 @@ Org = {
 				end,
 			},
 			RMenu:Get("Job", "Mobil_TrgInv"))
-			RageUI.Item.Button("Menotter/Démenotter la personne", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Menotter/Démenotter la personne", nil, {}, true, {
 				onSelected = function(Index, Items)
 					local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 					if closestPlayer == -1 or closestDistance > 1.5 then
@@ -87,7 +87,7 @@ Org = {
 					end
 				end,
 			})
-			RageUI.Item.Button("Mettre dans le véhicule", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Mettre dans le véhicule", nil, {}, true, {
 				onSelected = function(Index, Items)
 					local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 					if closestPlayer == -1 or closestDistance > 1.5 then
@@ -97,7 +97,7 @@ Org = {
 					end
 				end,
 			})
-			RageUI.Item.Button("Sortir du véhicule", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Sortir du véhicule", nil, {}, true, {
 				onSelected = function(Index, Items)
 					local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 					if closestPlayer == -1 or closestDistance > 1.5 then
@@ -107,7 +107,7 @@ Org = {
 					end
 				end,
 			})
-			RageUI.Item.List("Objets", {
+			RageUI.Item.List("~r~>~s~  Objets", {
 				{Name = "Cône de signalisation", Value = "prop_roadcone02a"},
 				{Name = "Barrière", Value = "prop_barrier_work05"},
 				{Name = "Herses", Value = "p_ld_stinger_s"},

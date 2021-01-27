@@ -1,9 +1,18 @@
 fx_version 'adamant'
 games { 'gta5' };
 
+ui_page 'html/ui.html'
+
+files {
+    'html/idcard.png',
+    'html/ui.html',
+    'html/script.js',
+    'html/main.css'
+}
+
 client_scripts {
     -- Resource --
-        'Config.lua',
+        'bankPos.lua',
         'Players_Cl.lua',
     -- RageUI --
         "@RageUI/RMenu.lua",

@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css?family=Exo&display=swap');
+
+html, body {
+    margin: 0;
+}
+
+.IdCard {
+    font-family: 'Exo', sans-serif;
+    position: absolute;
+    height: 45%;
+    width: 30%;
+    left: 30%;
+    top: 1%;
+    background-image: url("idcard.png");
+    background-size: 100%;
+    color: white;
+    display: none;
+}
+
+.IdCard h1 {
+    font-family: 'Ubuntu', sans-serif;
+    position: relative;
+    top: 20%;
+    left: 29%;
+    opacity: 0.7;
+}
+
+.IdCard h2 {
+    font-family: 'Ubuntu', sans-serif;
+    position: relative;
+    top: 12%;
+    left: 70%;
+    font-size: 75%;    
+    opacity: 0.7;
+}
+
+.Data {
+    font-family: 'Ubuntu', sans-serif;
+    position: relative;
+    top: 25%;
+    left: 50%;
+}
+.Data .name {
+    opacity: 0.7;
+}
+
+.Data .birthday {
+    margin-top: 3%;
+    margin-left: -3.5%;
+    opacity: 0.7;
+}
+
+.Data .job {
+    margin-top: 7%;
+    margin-left: -9%;
+    opacity: 0.7;
+}

@@ -58,7 +58,6 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 ESX.RegisterServerCallback('Fd_Staff:IsStaff', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	print(xPlayer.group)
 	cb(xPlayer.group)
 end)
 

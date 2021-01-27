@@ -1,3 +1,41 @@
+MenuColour = {
+	Banner = {
+		R = 13,
+		G = 24,
+		B = 33,
+		A = 255,
+    },
+    Background = {
+        R = 13,
+        G = 24,
+        B = 33,
+        A = 200,
+    },
+	Selection = {
+		R = 123,
+		G = 137,
+		B = 138,
+		A = 125,
+	},
+	Desc = {
+		R = 13,
+		G = 24,
+		B = 33,
+		A = 150,
+	},
+	Txt = {
+		R = 191,
+		G = 204,
+		B = 148,
+		A = 255,
+	},
+}
+MenuFont = {
+	Txt = 6,
+	Title = 6,
+	SubTitle = 6,
+	Desc = 6,
+}
 MenuTheme = {
     Default = {
         Banner = {

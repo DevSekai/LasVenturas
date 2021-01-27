@@ -142,7 +142,7 @@ Job = {
 			{JobName = "dog", JobLabel = "Legion Dog"},
 		},
 		JobBtn = function()
-            RageUI.Item.Checkbox("Prise/Fin de service", nil, Job.Wl.DuttyState, {}, {
+            RageUI.Item.Checkbox("~r~>~s~  Prise/Fin de service", nil, Job.Wl.DuttyState, {}, {
                 onSelected = function(Index, Items)
                     Job.Wl.DuttyState = not Job.Wl.DuttyState
                     TriggerServerEvent("OnDutty", Job.Wl.DuttyState)
@@ -150,7 +150,7 @@ Job = {
             })
             if Job.Wl.DuttyState then
 				if PlayerData.job.grade_name == "boss" then
-					RageUI.Item.Button("Actions entreprise", nil, {}, true, {
+					RageUI.Item.Button("~r~>~s~  Actions entreprise", nil, {}, true, {
 						onSelected = function(Index, Items)
 							ESX.TriggerServerCallback('esx_society:getSocietyMoney', function(Money)
 								Job.Wl.Society_Money = Money
@@ -158,7 +158,7 @@ Job = {
 						end,
 					},RMenu:Get("Job", "Mobil_Society"))
 				end
-                RageUI.Item.Button("Facturation", nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  Facturation", nil, {}, true, {
                     onSelected = function(Index, Items)
                         local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                         if closestPlayer == -1 or closestDistance > 1.5 then
@@ -178,8 +178,8 @@ Job = {
 		end,
 		["ambulance"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Soins       ↓↓")
-				RageUI.Item.Button("Soigner la personne", nil, {}, true, {
+				RageUI.Item.Separator("Soins")
+				RageUI.Item.Button("~r~>~s~  Soigner la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -194,7 +194,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Réanimer la personne", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Réanimer la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -209,8 +209,8 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.Button("Ecrire dans le dossier de la personne", nil, {}, true, {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.Button("~r~>~s~  Ecrire dans le dossier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -227,7 +227,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Consulter le dossier de la personne", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Consulter le dossier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -240,7 +240,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.List("Objets", {
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Trousse de soin", Value = "xm_prop_x17_bag_med_01a"},
 					{Name = "Sac mortuaire", Value = "xm_prop_body_bag"},
 				}, Job.ListIndex, nil, {}, true, {
@@ -411,8 +411,8 @@ Job = {
 		},
 		["mecano"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Réparations       ↓↓")
-				RageUI.Item.Button("Réparer le véhicule", nil, {}, true, {
+				RageUI.Item.Separator("Réparations")
+				RageUI.Item.Button("~r~>~s~  Réparer le véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Vehicle   = ESX.Game.GetVehicleInDirection()
 						local Coords    = GetEntityCoords(PlayerPedId())
@@ -434,7 +434,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Nettoyer le véhicule", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Nettoyer le véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Vehicle   = ESX.Game.GetVehicleInDirection()
 						local Coords    = GetEntityCoords(PlayerPedId())
@@ -453,8 +453,8 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.Button("Mettre en fourrière", nil, {}, true, {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.Button("~r~>~s~  Mettre en fourrière", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Vehicle   = ESX.Game.GetVehicleInDirection()
 						local Coords    = GetEntityCoords(PlayerPedId())
@@ -470,7 +470,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.List("Objets", {
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Caisse a outils", Value = "prop_toolchest_01"},
 					{Name = "Cône de signalisation", Value = "prop_roadcone02a"},
 				}, Job.ListIndex, nil, {}, true, {
@@ -637,8 +637,8 @@ Job = {
 		},
 		["police"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Intéraction       ↓↓")
-				RageUI.Item.Button("Fouiller la personne", nil, {}, true, {
+				RageUI.Item.Separator("Intéraction")
+				RageUI.Item.Button("~r~>~s~  Fouiller la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -681,7 +681,7 @@ Job = {
 						end
 					end,
 				},RMenu:Get("Job", "Mobil_TrgInv"))
-				RageUI.Item.Button("Vérifier l'identité", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Vérifier l'identité", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -694,7 +694,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Menotter/Démenotter la personne", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Menotter/Démenotter la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -704,7 +704,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Mettre dans le véhicule", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Mettre dans le véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -714,7 +714,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Sortir du véhicule", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Sortir du véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -724,7 +724,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Vérifier le véhicule", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Vérifier le véhicule", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local Coords = GetEntityCoords(PlayerPedId())
 						if IsAnyVehicleNearPoint(Coords, 5.0) then
@@ -744,8 +744,8 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.Button("Ecrire dans le cassier de la personne", nil, {}, true, {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.Button("~r~>~s~  Ecrire dans le cassier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -762,7 +762,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.Button("Consulter le cassier de la personne", nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  Consulter le cassier de la personne", nil, {}, true, {
 					onSelected = function(Index, Items)
 						local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 						if closestPlayer == -1 or closestDistance > 1.5 then
@@ -775,7 +775,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.List("Demande de renfort", {
+				RageUI.Item.List("~r~>~s~  Demande de renfort", {
 					{Name = "Code 1", Value = "Low"},
 					{Name = "~y~Code 2", Value = "Mid"},
 					{Name = "Code 3", Value = "High"},
@@ -787,7 +787,7 @@ Job = {
 						TriggerServerEvent("JobRenfort", Coords, Items.Value)
 					end,
 				})
-				RageUI.Item.List("Objets", {
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Cône de signalisation", Value = "prop_roadcone02a"},
 					{Name = "Barrière", Value = "prop_barrier_work05"},
 					{Name = "Herses", Value = "p_ld_stinger_s"},
@@ -1083,8 +1083,8 @@ Job = {
 				["Perche"] = false,
 			},
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.Button("Diffuser une annonce", nil, {}, true, {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.Button("~r~>~s~  Diffuser une annonce", nil, {}, true, {
 					onSelected = function(Index, Items)
 						Desc = KeyboardInput("Description de l'annonce", "", 255)
 						if Desc then
@@ -1092,7 +1092,7 @@ Job = {
 						end
 					end,
 				})
-				RageUI.Item.List("Objets", {
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Caméra", Model = "prop_v_cam_01", Dict = "missfinale_c2mcs_1", Anim = "fin_c2_mcs_1_camman"},
 					{Name = "Micro", Model = "p_ing_microphonel_01", Dict = "missheistdocksprep1hold_cellphone", Anim = "hold_cellphone"},
 					{Name = "Perche", Model = "prop_v_bmike_01", Dict = "missfra1", Anim = "mcs2_crew_idle_m_boom"},
@@ -1259,8 +1259,8 @@ Job = {
 		},
 		["unicorn"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.List("Objets", {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Rubalise", Value = "vw_prop_vw_barrier_rope_01a"},
 				}, Job.ListIndex, nil, {}, true, {
 					onSelected = function(Index, Items)
@@ -1440,8 +1440,8 @@ Job = {
 		},
 		["tequilala"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.List("Objets", {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.List("~r~>~s~  Objets", {
 					{Name = "Rubalise", Value = "vw_prop_vw_barrier_rope_01a"},
 				}, Job.ListIndex, nil, {}, true, {
 					onSelected = function(Index, Items)
@@ -1621,8 +1621,8 @@ Job = {
 		},
 		["gouv"] = {
 			Btn = function()
-				RageUI.Item.Separator("↓↓       Utilitaires       ↓↓")
-				RageUI.Item.Button("Diffuser une annonce", nil, {}, true, {
+				RageUI.Item.Separator("Utilitaires")
+				RageUI.Item.Button("~r~>~s~  Diffuser une annonce", nil, {}, true, {
 					onSelected = function(Index, Items)
 						Desc = KeyboardInput("Description de l'annonce", "", 255)
 						if Desc then
@@ -1937,27 +1937,27 @@ Job = {
 			},
 		},
 		Btn = function()
-			RageUI.Item.Separator("↓↓       Ingrédients       ↓↓")
+			RageUI.Item.Separator("Ingrédients")
 			for _,v in pairs (Job.Crafting.List[PlayerData.job.name]) do
 				if v.First then
-					RageUI.Item.Button(v.Name, nil, {}, true, {
+					RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 						onSelected = function(Index, Items)
 							TriggerServerEvent("Job:Craft", v)
 						end,
 					})
 				end
 			end
-			RageUI.Item.Separator("↓↓       Recette       ↓↓")
+			RageUI.Item.Separator("Recette")
 			for _,v in pairs (Job.Crafting.List[PlayerData.job.name]) do
 				if not v.First then
-					RageUI.Item.Button(v.Name, nil, {}, true, {
+					RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 						onSelected = function(Index, Items)
 							TriggerServerEvent("Job:Craft", v)
 						end,
 					})
 				end
 			end
-			RageUI.Item.Button("Retour", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Retour", nil, {}, true, {
 				onSelected = function(Index, Items)
 					FreezeEntityPosition(PlayerPedId(), false)
 					RageUI.CloseAll()
@@ -2038,19 +2038,19 @@ Job = {
 			["Headlight"] = 500,
 		},
 		ColorBtn = function()
-			RageUI.Item.List("Couleur principale", Job.Stand.Color.Table, 1, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Couleur principale", Job.Stand.Color.Table, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Job.Stand.Color.Found = Job.Stand.Color[Items.Name]
 					RageUI.Visible(RMenu:Get("Job", "Primary_Color"), true)
 				end,
 			})
-			RageUI.Item.List("Couleur secondaire", Job.Stand.Color.Table, 1, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Couleur secondaire", Job.Stand.Color.Table, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Job.Stand.Color.Found = Job.Stand.Color[Items.Name]
 					RageUI.Visible(RMenu:Get("Job", "Secondary_Color"), true)
 				end,
 			})
-			RageUI.Item.List("Nacrage", Job.Stand.Color.Table, 1, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Nacrage", Job.Stand.Color.Table, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Job.Stand.Color.Found = Job.Stand.Color[Items.Name]
 					RageUI.Visible(RMenu:Get("Job", "Pearless_Color"), true)
@@ -2062,7 +2062,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Primary, Secondary = GetVehicleColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Primary ~= v.Value then
 							SetVehicleColours(CrtVhc , v.Value, Secondary)
@@ -2080,7 +2080,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Primary, Secondary = GetVehicleColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Secondary ~= v.Value then
 							SetVehicleColours(CrtVhc , Primary, v.Value)
@@ -2098,7 +2098,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Pearl, Wheel = GetVehicleExtraColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Pearl ~= v.Value then
 							SetVehicleExtraColours(CrtVhc, v.Value, Wheel)
@@ -2116,7 +2116,7 @@ Job = {
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			Pearl, Wheel = GetVehicleExtraColours(CrtVhc)
 			for _,v in pairs (Job.Stand.Color.Found) do
-				RageUI.Item.Button(v.Name, nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if Pearl ~= v.Value then
 							SetVehicleExtraColours(CrtVhc, Pearl, v.Value)
@@ -2130,15 +2130,15 @@ Job = {
 			end
 		end,
 		Btn = function()
-			RageUI.Item.Button("Estéthique", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Estéthique", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Custom'))
-			RageUI.Item.Button("Performance", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Performance", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Perfs'))
 		end,
 		WheelsBtn = function()
 			CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
 			CrtVhcClass = GetVehicleClass(CrtVhc)
-			RageUI.Item.List("Type de roue", {
+			RageUI.Item.List("~r~>~s~  Type de roue", {
 					{Name = "Sport", Value = 0},
 					{Name = "Suv", Value = 3},
 					{Name = "Offroad", Value = 4},
@@ -2153,14 +2153,14 @@ Job = {
 					RageUI.Visible(RMenu:Get("Job", "Wheels_Found"), not RageUI.Visible(RMenu:Get("Job", "Wheels_Found")))
 				end,
 			})
-			RageUI.Item.List("Couleur des jantes", Job.Stand.Color.Table, 1, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Couleur des jantes", Job.Stand.Color.Table, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Job.Stand.Color.Found = Job.Stand.Color[Items.Name]
 					RageUI.Visible(RMenu:Get("Job", "Wheels_Color"), true)
 					TriggerServerEvent('RefreshPrice', (Job.Stand.Price["Wheels"] / Job.Stand.Divide[CrtVhcClass]))
 				end,
 			})
-			RageUI.Item.List("Couleur de la fumée", Job.Stand.Wheels.Smoke, 1, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Couleur de la fumée", Job.Stand.Wheels.Smoke, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					ToggleVehicleMod(CrtVhc, 20, true)
 					SetVehicleTyreSmokeColor(CrtVhc, Items.Value[1], Items.Value[2], Items.Value[3])
@@ -2174,7 +2174,7 @@ Job = {
 			CrtWheelFront = GetVehicleMod(CrtVhc, 23)
 			CrtWheelBack = GetVehicleMod(CrtVhc, 24)
 			for _,v in pairs (Job.Stand.Wheels.Found) do
-				RageUI.Item.Button(v.Name, nil, {}, true, {
+				RageUI.Item.Button("~r~>~s~  "..v.Name, nil, {}, true, {
 					onActive = function(Index, Items)
 						if CrtWheelFront ~= v.Value then
 							SetVehicleMod(CrtVhc, 23, v.Value, false)
@@ -2358,11 +2358,11 @@ Job = {
 		CustomBtn = function()
 			CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
 			CrtVhcClass = GetVehicleClass(CrtVhc)
-			RageUI.Item.Button("Peinture", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Peinture", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Color'))
-			RageUI.Item.Button("Roue", nil, {}, true, {
+			RageUI.Item.Button("~r~>~s~  Roue", nil, {}, true, {
 			},RMenu:Get('Job', 'Stand_Wheels'))
-			RageUI.Item.List("Fenêtres", Job.Stand.Windows.Table, Job.Stand.Windows.Index, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Fenêtres", Job.Stand.Windows.Table, Job.Stand.Windows.Index, nil, {}, true, {
 				onSelected = function(Index, Items)
 					SetVehicleWindowTint(CrtVhc, Items.Value) 
 					TriggerServerEvent('RefreshPrice', (Job.Stand.Price["Windows"] / Job.Stand.Divide[CrtVhcClass]))
@@ -2371,7 +2371,7 @@ Job = {
 					SetVehicleWindowTint(CrtVhc, Items.Value) 
 				end,
 			})
-			RageUI.Item.List("Klaxon", Job.Stand.Horn.Table, Job.Stand.Horn.Index, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Klaxon", Job.Stand.Horn.Table, Job.Stand.Horn.Index, nil, {}, true, {
 				onSelected = function(Index, Items)
 					SetVehicleMod(CrtVhc, 14, Items.Value, false) 
 					TriggerServerEvent('RefreshPrice', (Job.Stand.Price["Horn"] / Job.Stand.Divide[CrtVhcClass]))
@@ -2380,7 +2380,7 @@ Job = {
 					SetVehicleMod(CrtVhc, 14, Items.Value, false) 
 				end,
 			})
-			RageUI.Item.List("Couleur des plaques", Job.Stand.Plate.Table, Job.Stand.Plate.Index, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Couleur des plaques", Job.Stand.Plate.Table, Job.Stand.Plate.Index, nil, {}, true, {
 				onSelected = function(Index, Items)
 					SetVehicleNumberPlateTextIndex(CrtVhc, Items.Value)
 					TriggerServerEvent('RefreshPrice', (Job.Stand.Price["Plate"] / Job.Stand.Divide[CrtVhcClass]))
@@ -2389,7 +2389,7 @@ Job = {
 					SetVehicleNumberPlateTextIndex(CrtVhc, Items.Value)
 				end,
 			})
-			RageUI.Item.List("Phares", Job.Stand.Headlight.Table, Job.Stand.Headlight.Index, nil, {}, true, {
+			RageUI.Item.List("~r~>~s~  Phares", Job.Stand.Headlight.Table, Job.Stand.Headlight.Index, nil, {}, true, {
 				onSelected = function(Index, Items)
 					ToggleVehicleMod(CrtVhc,  22, Items.Value)
 					TriggerServerEvent('RefreshPrice', (Job.Stand.Price["Headlight"] / Job.Stand.Divide[CrtVhcClass]))
@@ -2409,7 +2409,7 @@ Job = {
 						Mods[i] = {Value = i, Name = modelName}
 					end
 				end
-				RageUI.Item.List(v.Name, Mods, v.Index or 0, nil, {}, true, {
+				RageUI.Item.List("~r~>~s~  "..v.Name, Mods, v.Index or 0, nil, {}, true, {
 					onSelected = function(Index, Items)
 						v.Index = Index
 						SetVehicleMod(CrtVhc,  v.Value, Items.Value)
@@ -2426,7 +2426,7 @@ Job = {
 			CrtVhc = GetVehiclePedIsIn(PlayerPedId(), false)
 			CrtVhcClass = GetVehicleClass(CrtVhc)
 			for _,v in pairs (Job.Stand.Mods.Perfs) do
-				RageUI.Item.List(v.Name, v.Table, v.Index or 1, nil, {}, true, {
+				RageUI.Item.List("~r~>~s~  "..v.Name, v.Table, v.Index or 1, nil, {}, true, {
 					onSelected = function(Index, Items)
 						v.Index = Index
 						SetVehicleMod(CrtVhc,  v.Value, Items.Value)

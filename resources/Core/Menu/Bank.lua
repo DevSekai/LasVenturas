@@ -16,7 +16,7 @@ Citizen.CreateThread(function ()
 		Citizen.Wait(BankTiming)
 
 		local playerCoords = GetEntityCoords(PlayerPedId())
-		for _,v in pairs (Config.Bank.Pos) do
+		for _,v in pairs (Bank.Pos) do
 		local distanceBanque = GetDistanceBetweenCoords(playerCoords, v.x, v.y, v.z, true)
 			if distanceBanque < 25 then
 				BankTiming = 0
@@ -24,7 +24,7 @@ Citizen.CreateThread(function ()
 				if distanceBanque < 2.5 then
 					ESX.ShowHelpNotification('Appuyer sur ~INPUT_CONTEXT~ pour acceder au votre compte bancaire.')
 					if IsControlJustReleased(1, 51) then
-						ESX.TriggerServerCallback('getUserBanque', function(Info)
+						ESX.TriggerServerCallback('xPlayer:getUserBanque', function(Info)
 							PlyInfo = json.decode(Info)
 							RageUI.Visible(RMenu:Get('Banque', 'Principal'), true)
 							FreezeEntityPosition(PlayerPedId(), true)
@@ -41,8 +41,12 @@ Citizen.CreateThread(function ()
 
 		RageUI.IsVisible(RMenu:Get('Banque', 'Principal'), function()
 			RageUI.Item.Separator("[Nom] : "..PlyInfo.LastName.." 	[Prénom] : "..PlyInfo.FirstName)
-			RageUI.Item.Separator("[Compte bancaire] : ~g~"..PlyInfo.Accounts.bank.." $")
-			RageUI.Item.Separator("[Cash] : ~g~"..PlyInfo.Accounts.money.." $")
+			if PlyInfo.Accounts.bank then
+				RageUI.Item.Separator("[Compte bancaire] : ~g~"..PlyInfo.Accounts.bank.." $")
+			end
+			if PlyInfo.Accounts.money then
+				RageUI.Item.Separator("[Cash] : ~g~"..PlyInfo.Accounts.money.." $")
+			end
 			RageUI.Item.List("Actions", {"Déposer","Transférer","Retirer"}, 1, nil, {}, true, {
 				onSelected = function(Index, Items)
 					Amount = KeyboardInput("Montant", 20)
@@ -51,7 +55,7 @@ Citizen.CreateThread(function ()
 								if tonumber(Amount) <= PlyInfo.Accounts.money then
 									PlyInfo.Accounts.bank = math.round(PlyInfo.Accounts.bank + Amount)
 									PlyInfo.Accounts.money = math.round(PlyInfo.Accounts.money - Amount)
-									TriggerServerEvent('DepositBank', MdpBanque, tonumber(Amount))
+									TriggerServerEvent('DepositBank', tonumber(Amount))
 								else
 									ESX.ShowNotification("Montant invalide.")
 								end
@@ -60,7 +64,7 @@ Citizen.CreateThread(function ()
 									PlyId = KeyboardInput("Id du joueur", 20)
 									if tonumber(PlyId) ~= nil then
 										PlyInfo.Accounts.bank = math.round(PlyInfo.Accounts.bank - Amount)
-										TriggerServerEvent('TransfereBank', MdpBanque, tonumber(PlyId), tonumber(Amount))
+										TriggerServerEvent('TransfereBank', tonumber(PlyId), tonumber(Amount))
 									else
 										ESX.ShowNotification("Usage invalide.")
 									end
@@ -71,7 +75,7 @@ Citizen.CreateThread(function ()
 								if tonumber(Amount) <= PlyInfo.Accounts.bank then
 									PlyInfo.Accounts.money = math.round(PlyInfo.Accounts.money + Amount)
 									PlyInfo.Accounts.bank = math.round(PlyInfo.Accounts.bank - Amount)
-									TriggerServerEvent('WithdrawBank', MdpBanque, tonumber(Amount))
+									TriggerServerEvent('WithdrawBank', tonumber(Amount))
 								else
 									ESX.ShowNotification("Montant invalide.")
 								end

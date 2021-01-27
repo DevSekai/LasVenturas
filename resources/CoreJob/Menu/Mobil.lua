@@ -4,11 +4,11 @@ RMenu:Get("Job", "Mobil").Closed = function()
     RageUI.CloseAll()
     InMenu = false
 end
-RMenu.Add("Job", "Mobil_Society", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Gestion de l'entreprise"))
+RMenu.Add("Job", "Mobil_Society", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Gestion"))
 RMenu.Add("Job", "Mobil_Report", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Dossiers"))
-RMenu.Add("Job", "Mobil_TrgInv", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Inventaire de la personne"))
-RMenu.Add("Job", "Mobil_TrgIdt", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité de la personne"))
-RMenu.Add("Job", "Mobil_CarOwner", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité du propriétaire"))
+RMenu.Add("Job", "Mobil_TrgInv", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Inventaire"))
+RMenu.Add("Job", "Mobil_TrgIdt", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Identité"))
+RMenu.Add("Job", "Mobil_CarOwner", RageUI.CreateSubMenu(RMenu:Get("Job", "Mobil"),"", "Informations"))
 
 
 RegisterCommand('OpenJob', function()
@@ -36,7 +36,7 @@ function OpenJobMenu()
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_Society"), function()
             RageUI.Item.Separator("Compte : ~g~"..Job.Wl.Society_Money.." $")
-            RageUI.Item.Button("Recruter l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Recruter l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -46,7 +46,7 @@ function OpenJobMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Promouvoir l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Promouvoir l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -56,7 +56,7 @@ function OpenJobMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Virer l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Virer l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -66,7 +66,7 @@ function OpenJobMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Rétrograder l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Rétrograder l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -86,37 +86,37 @@ function OpenJobMenu()
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgInv"), function()
-            RageUI.Item.Separator("↓↓       Cash       ↓↓")
+            RageUI.Item.Separator("Cash")
             for _,v in pairs (Job.Wl.Trg.Account) do
-                RageUI.Item.Button("~g~"..v.label.." $", nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  ~g~"..v.label.." $", nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       Objets       ↓↓")
+            RageUI.Item.Separator("Objets")
             for _,v in pairs (Job.Wl.Trg.Inventory) do
-                RageUI.Item.Button(""..v.label.." x "..v.amount, nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  "..v.label.." x "..v.amount, nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       Armes       ↓↓")
+            RageUI.Item.Separator("Armes")
             for _,v in pairs (Job.Wl.Trg.Loadout) do
-                RageUI.Item.Button(""..v.label.." "..v.amount, nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  "..v.label.." "..v.amount, nil, {}, true, {
                 })
             end
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_TrgIdt"), function()
-            RageUI.Item.Separator("↓↓       Identité       ↓↓")
+            RageUI.Item.Separator("Identité")
             RageUI.Item.Separator("[Nom] : "..Job.Wl.TrgIdentity.LastName)
             RageUI.Item.Separator("[Prénom] : "..Job.Wl.TrgIdentity.FirstName)
-            RageUI.Item.Separator("↓↓       Informations       ↓↓")
+            RageUI.Item.Separator("Informations")
             RageUI.Item.Separator("[Age] : "..Job.Wl.TrgIdentity.Birthday)
             RageUI.Item.Separator("[Métier] : "..Job.Wl.TrgIdentity.Job)
         end)
 
         RageUI.IsVisible(RMenu:Get("Job", "Mobil_CarOwner"), function()
-            RageUI.Item.Separator("↓↓       Identité       ↓↓")
+            RageUI.Item.Separator("Identité")
             RageUI.Item.Separator("[Nom] : "..Job.Wl.CarOwner.LastName)
             RageUI.Item.Separator("[Prénom] : "..Job.Wl.CarOwner.FirstName)
-            RageUI.Item.Separator("↓↓       Informations       ↓↓")
+            RageUI.Item.Separator("Informations")
             RageUI.Item.Separator("[Age] : "..Job.Wl.CarOwner.Plate)
             if Job.Wl.CarOwner.Ensured then
                 RageUI.Item.Separator("[Assurer]")

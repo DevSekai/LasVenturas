@@ -32,7 +32,7 @@ function OpenOrgMenu()
 
         RageUI.IsVisible(RMenu:Get("Org", "Mobil_Society"), function()
             RageUI.Item.Separator("Compte : ~g~"..Org.Wl.Society_Money.." $~s~")
-            RageUI.Item.Button("Recruter l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Recruter l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -42,7 +42,7 @@ function OpenOrgMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Promouvoir l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Promouvoir l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -52,7 +52,7 @@ function OpenOrgMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Virer l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Virer l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -62,7 +62,7 @@ function OpenOrgMenu()
                     end
                 end,
             })
-            RageUI.Item.Button("Rétrograder l'employer", nil, {}, true, {
+            RageUI.Item.Button("~r~>~s~  Rétrograder l'employer", nil, {}, true, {
                 onSelected = function(Index, Items)
                     local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
                     if closestPlayer == -1 or closestDistance > 1.5 then
@@ -75,19 +75,19 @@ function OpenOrgMenu()
         end)
 
         RageUI.IsVisible(RMenu:Get("Org", "Mobil_TrgInv"), function()
-            RageUI.Item.Separator("↓↓       Cash       ↓↓")
+            RageUI.Item.Separator("Cash")
             for _,v in pairs (Org.Wl.Trg.Account) do
-                RageUI.Item.Button("~g~"..v.label.." $", nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  ~g~"..v.label.." $", nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       Objets       ↓↓")
+            RageUI.Item.Separator("Objets")
             for _,v in pairs (Org.Wl.Trg.Inventory) do
-                RageUI.Item.Button(""..v.label.." x "..v.amount, nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  "..v.label.." x "..v.amount, nil, {}, true, {
                 })
             end
-            RageUI.Item.Separator("↓↓       Armes       ↓↓")
+            RageUI.Item.Separator("Armes")
             for _,v in pairs (Org.Wl.Trg.Loadout) do
-                RageUI.Item.Button(""..v.label.." "..v.amount, nil, {}, true, {
+                RageUI.Item.Button("~r~>~s~  "..v.label.." "..v.amount, nil, {}, true, {
                 })
             end
         end)
