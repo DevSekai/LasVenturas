@@ -53,6 +53,43 @@ function LoadPropDict(model)
 	end
 end
 
+function RefreshInv()
+	invItems = {}
+	ESX.TriggerServerCallback('xPlayer:getUserInventory', function(data)
+		for i=1, #data, 1 do
+			local item = data[i]
+			if item.count > 0 then
+				table.insert(invItems, {label = item.label, count = item.count, type = 'item_standard', value = item.name, usable = item.usable, removable = item.canRemove})
+			end
+		end
+	end)
+	PlySim = {}
+	ESX.TriggerServerCallback("esx_cartesim:GetList", function(Data)
+		for _,v in pairs(Data) do
+			table.insert(PlySim, {label = tostring(v.number), value = v})
+		end
+	end)
+	ESX.TriggerServerCallback("xPlayer:getAccessoire", function(Acces)
+		Accessoires = Acces
+	end)
+end
+
+function RefreshWeap()
+	invWeapon = {}
+	ESX.TriggerServerCallback('xPlayer:getUserLoadout', function(data)
+		for i=1, #data, 1 do
+			local weapon = data[i]
+			table.insert(invWeapon, {label = ESX.GetWeaponLabel(weapon.name), value = weapon.name, itemType = 'item_weapon', amount = weapon.ammo})
+		end
+	end)
+end
+
+function RefreshWallet()
+	ESX.TriggerServerCallback('xPlayer:getUserAccounts', function(data)
+		invWallet = data
+	end)
+end
+
 function AccessoiresOn(Type, Index, Index2)
 	if Type == "Masque" then
 		local dict = 'missfbi4'

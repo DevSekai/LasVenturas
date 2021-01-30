@@ -124,19 +124,22 @@ function OpenPersonalMenu()
                     if v.usable then
                         RageUI.Item.Button("   ~y~>~s~ Utiliser", nil, {}, true, {
                             onSelected = function(Index, Items)
-                                TriggerServerEvent('xPlayer:UseItem', itemName)
+								TriggerServerEvent('xPlayer:UseItem', itemName)
+								RefreshInv()
                             end,
                         })
                     end
 					if v.removable then
                         RageUI.Item.Button("   ~y~>~s~ Donner", nil, {}, true, {
                             onSelected = function(Index, Items)
-                                TriggerServerEvent('xPlayer:GiveItem', GetPlayerServerId(closestPlayer), itemName, crtIndex[itemName])
+								TriggerServerEvent('xPlayer:GiveItem', GetPlayerServerId(closestPlayer), itemName, crtIndex[itemName])
+								RefreshInv()
                             end,
                         })
                         RageUI.Item.Button("   ~y~>~s~ Jeter", nil, {}, true, {
                             onSelected = function(Index, Items)
-                                TriggerServerEvent('xPlayer:RemoveItem', itemName, crtIndex[itemName])
+								TriggerServerEvent('xPlayer:RemoveItem', itemName, crtIndex[itemName])
+								RefreshInv()
                             end,
                         })
                     end
@@ -157,7 +160,8 @@ function OpenPersonalMenu()
                 if onItems[v.value] then
                     RageUI.Item.Button("   ~y~>~s~ Utiliser", nil, {}, true, {
                         onSelected = function(Index, Items)
-                            TriggerServerEvent('esx_cartesim:sim_use', v.value.number)
+							TriggerServerEvent('esx_cartesim:sim_use', v.value.number)
+							RefreshInv()
                             ESX.ShowNotification("Vous avez ~g~activé la carte SIM avec le numéro : ~p~" .. v.value.number)
                             Citizen.Wait(1000)
                             TriggerServerEvent('gcPhone:allUpdate')
@@ -170,6 +174,7 @@ function OpenPersonalMenu()
 								ESX.ShowNotification('~r~Aucun joueur à proximité !')
 							else
 								TriggerServerEvent('esx_cartesim:sim_give', v.value.number, GetPlayerServerId(closestPlayer))
+								RefreshInv()
 							end
 							Citizen.Wait(1000)
 							TriggerServerEvent('gcPhone:allUpdate')
@@ -177,7 +182,8 @@ function OpenPersonalMenu()
                     })
                     RageUI.Item.Button("   ~y~>~s~ Jeter", nil, {}, true, {
                         onSelected = function(Index, Items)
-                            TriggerServerEvent('esx_cartesim:sim_delete', v.value.number)
+							TriggerServerEvent('esx_cartesim:sim_delete', v.value.number)
+							RefreshInv()
 							ESX.ShowNotification("Vous avez ~r~jeté la carte SIM avec le numéro : ~p~" .. v.value.number)
 							Citizen.Wait(1000)
 							TriggerServerEvent('gcPhone:allUpdate')
@@ -221,6 +227,7 @@ function OpenPersonalMenu()
                             NewLabel = KeyboardInput("Nouveau nom", 20)
 							if NewLabel ~= nil then
 								TriggerServerEvent('xPlayer:RenameAcc', Id, NewLabel)
+								RefreshInv()
 								RageUI.GoBack()
 							else
 								ESX.ShowNotification("Usage invalide.")
@@ -234,6 +241,7 @@ function OpenPersonalMenu()
 	
 							if closestPlayer ~= -1 and closestDistance < 3.0 then
 								TriggerServerEvent('xPlayer:GiveAcc', GetPlayerServerId(closestPlayer), Id)
+								RefreshInv()
 								RageUI.GoBack()
 							else
 								ESX.ShowNotification("Aucun joueurs aux alentours.")
@@ -242,7 +250,8 @@ function OpenPersonalMenu()
                     })
                     RageUI.Item.Button("   ~y~>~s~ Jeter", nil, {}, true, {
                         onSelected = function(Index, Items)
-                            TriggerServerEvent('xPlayer:DelAcc', Id)
+							TriggerServerEvent('xPlayer:DelAcc', Id)
+							RefreshInv()
 							RageUI.GoBack()
                         end,
                     })
@@ -268,6 +277,7 @@ function OpenPersonalMenu()
 							local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 							if closestDistance ~= -1 and closestDistance <= 3 then
 								TriggerServerEvent('xPlayer:GiveWeapon', GetPlayerServerId(closestDistance), v.label, v.value, v.amount)
+								RefreshWeap()
 								RageUI.GoBack()
 							else
 								ESX.ShowNotification('Il n\'y a personne aux alentours.')
@@ -277,6 +287,7 @@ function OpenPersonalMenu()
                     RageUI.Item.Button("   ~y~>~s~ Jeter", nil, {}, true, {
                         onSelected = function(Index, Items)
 							TriggerServerEvent('xPlayer:RemoveWeapon', v.value, v.amount)
+							RefreshWeap()
 							RageUI.GoBack()
                         end,
                     })
@@ -304,7 +315,7 @@ function OpenPersonalMenu()
 									local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
 									if closestDistance ~= -1 and closestDistance <= 3 then
 										TriggerServerEvent('xPlayer:GiveMoney', GetPlayerServerId(closestDistance), v.name, cashIndex)
-										RageUI.GoBack()
+										RefreshWallet()
 									else
 										ESX.ShowNotification('Il n\'y a personne aux alentours.')
 									end
@@ -313,7 +324,7 @@ function OpenPersonalMenu()
 							RageUI.Item.Button("   ~y~>~s~ Jeter", nil, {}, true, {
 								onSelected = function(Index, Items)
 									TriggerServerEvent('xPlayer:RemoveMoney', v.name, cashIndex)
-									RageUI.GoBack()
+									RefreshWallet()
 								end,
 							})
 						end
