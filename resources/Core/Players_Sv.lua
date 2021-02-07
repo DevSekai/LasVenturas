@@ -4,9 +4,12 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 AddEventHandler('playerDropped', function()
     local src = source
-    local identifier = GetPlayerIdentifier(src, 0)
-    if string.match(identifier, 'license:') then
-        identifier = string.sub(identifier, 9)
+    local identifier = nil
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
     end
     local xCoords = GetEntityCoords(GetPlayerPed(src))
     local xHead = GetEntityHeading(GetPlayerPed(src))
@@ -22,9 +25,12 @@ end)
 RegisterServerEvent("xPlayer:Init:Spawn")
 AddEventHandler("xPlayer:Init:Spawn", function()
     local src = source
-    local identifier = GetPlayerIdentifier(src, 0)
-    if string.match(identifier, 'license:') then
-        identifier = string.sub(identifier, 9)
+    local identifier = nil
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
     end
     MySQL.Async.fetchScalar('SELECT Skin FROM users WHERE identifier = @identifier', {
 		['@identifier'] = identifier
@@ -90,9 +96,12 @@ end)
 
 ESX.RegisterServerCallback("xPlayer:Get:Tatoo", function(source, cb)
     local src = source
-    local identifier = GetPlayerIdentifier(src, 0)
-    if string.match(identifier, 'license:') then
-        identifier = string.sub(identifier, 9)
+    local identifier = nil
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
     end
 	MySQL.Async.fetchAll('SELECT * FROM users_tatoo WHERE Identifier = @Identifier', {
 		['@Identifier'] = identifier
@@ -106,9 +115,12 @@ end)
 RegisterServerEvent("xPlayer:Create:Player")
 AddEventHandler("xPlayer:Create:Player", function(Identity, Skin)
     local src = source
-    local identifier = GetPlayerIdentifier(src, 0)
-    if string.match(identifier, 'license:') then
-        identifier = string.sub(identifier, 9)
+    local identifier = nil
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
     end
     MySQL.Async.execute(
 	    'UPDATE users SET Skin = @Skin, FirstName = @FirstName, LastName = @LastName, Birthday = @Birthday, Taille = @Taille WHERE identifier=@identifier',
@@ -125,9 +137,12 @@ end)
 
 ESX.RegisterServerCallback('xPlayer:getUserBanque', function(source, cb)
     local src = source
-    local identifier = GetPlayerIdentifier(src, 0)
-    if string.match(identifier, 'license:') then
-        identifier = string.sub(identifier, 9)
+    local identifier = nil
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
+        if string.match(v, 'license:') then
+            identifier = string.sub(v, 9)
+            break
+        end
     end
 	MySQL.Async.fetchScalar('SELECT accounts FROM users WHERE identifier = @identifier', {
 		['@identifier'] = identifier
